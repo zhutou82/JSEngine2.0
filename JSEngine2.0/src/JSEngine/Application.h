@@ -2,6 +2,8 @@
 #include "Core.h"
 
 
+
+
 namespace JSEngine
 {
     class JSENGINE_API Application
@@ -9,7 +11,7 @@ namespace JSEngine
     public:
         Application();
         virtual ~Application();
-        void Initialize();
+        void Init();
         void Load();
         void Run();
         void Unload();
