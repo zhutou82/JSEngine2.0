@@ -1,0 +1,6 @@
+[submodule "JSEngine2.0/vendor/spdlog"]
+	path = JSEngine2.0/vendor/spdlog
+	url = https://github.com/gabime/spdlog
+[submodule "JSEngine2.0/vendor/GLFW"]
+	path = JSEngine2.0/vendor/GLFW
+	url = https://github.com/TheCherno/GLFW
