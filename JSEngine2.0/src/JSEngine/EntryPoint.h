@@ -3,6 +3,7 @@
 #include "Log.h"
 #ifdef JSENGINE_PLATFORM_WINDOWS
 
+
 extern JSEngine::Application* JSEngine::CreateApplication();
 
 int main(int argc, char** argv)

@@ -15,7 +15,10 @@ namespace JSEngine
         unsigned int GetWidth() const override { return m_Data.Width; }
         unsigned int GetHeight() const override { return m_Data.Height; }
 
+        unsigned int GetFrameBufferWidth() const {  return static_cast<unsigned int>(m_Data.FrameBufferWidth); }
+        unsigned int GetFrameBufferHeight() const { return static_cast<unsigned int>(m_Data.FrameBufferHeight); }
 
+        double GetSystemCurrentTime() const override { return glfwGetTime(); }
 
         void AddCallBackFn(const EventCallBackFn& eventCallBkFn) override {
             m_Data.EventCallBackFunction
@@ -23,10 +26,9 @@ namespace JSEngine
         }
         bool IsVSync() const override { return m_Data.VSync; }
         void SetVSync(bool b) override;
-
-
+        
+        
     private:
-
         void Init(const WindowsProp& wp);
         void ShutDown();
 
@@ -34,12 +36,14 @@ namespace JSEngine
         {
             unsigned int Width;
             unsigned int Height;
+            int FrameBufferWidth;
+            int FrameBufferHeight;
             bool VSync;
             std::string Title;
             EventCallBackFn EventCallBackFunction;
         };
-
-        WindowData m_Data;
         GLFWwindow* m_Window;
+        WindowData m_Data;
+       
     };
 }

@@ -3,6 +3,7 @@
 #include "Event/Event.h"
 #include <functional>
 #include <string>
+#include "SingletonBaseClass.h"
 namespace JSEngine
 {
     struct WindowsProp
@@ -23,6 +24,7 @@ namespace JSEngine
     {
       
     public:
+
         using EventCallBackFn = std::function<void(Event&)>;
         
         virtual ~Window() {}
@@ -35,7 +37,10 @@ namespace JSEngine
         virtual bool IsVSync() const = 0;
         virtual void SetVSync(bool b) = 0;
 
+        virtual double GetSystemCurrentTime() const = 0;
+
         static Window* Create(const WindowsProp& wp = WindowsProp());
 
+    private:
     };
 }

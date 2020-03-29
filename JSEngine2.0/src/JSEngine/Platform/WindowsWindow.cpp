@@ -3,7 +3,7 @@
 #include "JSEngine/Event/ApplicationEvent.h"
 #include "JSEngine/Event/MouseEvent.h"
 #include "JSEngine/Event/KeyEvent.h"
-
+#include "glad/glad.h"
 
 namespace JSEngine
 {
@@ -13,11 +13,11 @@ namespace JSEngine
     {
         return new WindowsWindow(wp);
     }
+
     WindowsWindow::WindowsWindow(const WindowsProp& wp)
     {
         Init(wp);
     }
-
     void WindowsWindow::OnUpdate()
     {
         glfwPollEvents();
@@ -46,8 +46,13 @@ namespace JSEngine
         JS_CORE_INFO("Window created {0} {1} {2}", m_Data.Title, m_Data.Width, m_Data.Height);
         m_Window = glfwCreateWindow((int)m_Data.Width, (int)m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
         glfwMakeContextCurrent(m_Window);
+        int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+        JS_CORE_ASSERT(status, "Failed to initialized Glad");
+
         glfwSetWindowUserPointer(m_Window, &m_Data);
         SetVSync(true);
+
+        
 
         //Set glfw call back functions
         glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
@@ -55,6 +60,7 @@ namespace JSEngine
                 WindowData data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
                 data.Height = height;
                 data.Width = width;
+                glfwGetFramebufferSize(window, &data.FrameBufferWidth, &data.FrameBufferHeight);
                 WindowReSizeEvent event(height, width);
                 data.EventCallBackFunction(event);
             }

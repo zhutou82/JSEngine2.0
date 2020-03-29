@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Event">
-      <UniqueIdentifier>{E70B220D-5320-4ABE-1CA2-ED1D887546EF}</UniqueIdentifier>
-    </Filter>
     <Filter Include="JSEngine">
       <UniqueIdentifier>{B848D164-A415-2C70-CD2E-1A18B95A61FE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="JSEngine\Event">
+      <UniqueIdentifier>{09744825-F541-3C2B-DED5-AC51CA421890}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="JSEngine\Platform">
+      <UniqueIdentifier>{0CD408DC-78EA-0672-C161-92932DB7D7F9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="JSEngine\Platform\Opengl">
+      <UniqueIdentifier>{00FCC47C-EC20-14FD-156C-F98C01F0121B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="JSEngine\imGui">
+      <UniqueIdentifier>{0278CE27-EE45-C22D-D7D9-3254C3469E92}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -19,26 +28,64 @@
     <ClInclude Include="src\JSEngine\EntryPoint.h">
       <Filter>JSEngine</Filter>
     </ClInclude>
+    <ClInclude Include="src\JSEngine\Event\ApplicationEvent.h">
+      <Filter>JSEngine\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JSEngine\Event\Event.h">
+      <Filter>JSEngine\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JSEngine\Event\KeyEvent.h">
+      <Filter>JSEngine\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JSEngine\Event\MouseEvent.h">
+      <Filter>JSEngine\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JSEngine\Layer.h">
+      <Filter>JSEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JSEngine\LayerStack.h">
+      <Filter>JSEngine</Filter>
+    </ClInclude>
     <ClInclude Include="src\JSEngine\Log.h">
       <Filter>JSEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JSEngine\PCH.h">
+      <Filter>JSEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JSEngine\Platform\Opengl\OpenglRenderer.h">
+      <Filter>JSEngine\Platform\Opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JSEngine\Platform\WindowsWindow.h">
+      <Filter>JSEngine\Platform</Filter>
     </ClInclude>
     <ClInclude Include="src\JSEngine\SingletonBaseClass.h">
       <Filter>JSEngine</Filter>
     </ClInclude>
-    <ClInclude Include="src\JSEngine\Window.h" />
-    <ClInclude Include="src\JSEngine\Platform\WindowsWindow.h" />
-    <ClInclude Include="src\JSEngine\Event\MouseEvent.h" />
-    <ClInclude Include="src\JSEngine\Event\ApplicationEvent.h" />
-    <ClInclude Include="src\JSEngine\Event\Event.h" />
-    <ClInclude Include="src\JSEngine\Event\KeyEvent.h" />
+    <ClInclude Include="src\JSEngine\Window.h">
+      <Filter>JSEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JSEngine\imGui\imguiLayer.h">
+      <Filter>JSEngine\imGui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\JSEngine\Application.cpp">
       <Filter>JSEngine</Filter>
     </ClCompile>
+    <ClCompile Include="src\JSEngine\LayerStack.cpp">
+      <Filter>JSEngine</Filter>
+    </ClCompile>
     <ClCompile Include="src\JSEngine\Log.cpp">
       <Filter>JSEngine</Filter>
     </ClCompile>
-    <ClCompile Include="src\JSEngine\Platform\WindowsWindow.cpp" />
+    <ClCompile Include="src\JSEngine\Platform\Opengl\OpenglRenderer.cpp">
+      <Filter>JSEngine\Platform\Opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\JSEngine\Platform\WindowsWindow.cpp">
+      <Filter>JSEngine\Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="src\JSEngine\imGui\imguiLayer.cpp">
+      <Filter>JSEngine\imGui</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

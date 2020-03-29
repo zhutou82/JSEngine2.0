@@ -10,9 +10,12 @@ namespace JSEngine
         {}
         int GetMouseButton() const { return m_MouseButton; }
         EVENT_CATEGORY_TYPE( INPUT | MOUSE_BUTTON)
-
+        
+            
+        bool m_MouseButtonJustPressed[5] = { false, false, false, false, false };
     protected:
         int m_MouseButton;
+        
     };
 
     class JSENGINE_API MouseButtonPressEvent : public MouseButtonEvent

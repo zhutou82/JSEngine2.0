@@ -62,8 +62,9 @@ virtual int GetCategoryFlag() const override { return cat; }
         virtual const char* GetName() const = 0;
         virtual std::string ToString() const { return GetName(); }
         bool IsInCategory(EventCategory cat) { return GetCategoryFlag() & cat; }
+        bool IsHanlded() { return m_Handled; }
 
-    protected:
+    protected:  
         bool m_Handled = false;
 
     };
