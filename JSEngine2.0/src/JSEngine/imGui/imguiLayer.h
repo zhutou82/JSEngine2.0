@@ -25,14 +25,21 @@ namespace JSEngine
 
         void OnEvent(Event& e) override;
         
-        void Init();
-        void Shutdonw();
+
+    private:
+        bool MousePressedEvent(MouseButtonPressEvent& e);
+        bool MouseReleasedEvent(MouseButtonReleaseEvent& e);
+        bool MouseScrolledEvent(MouseScrollEvent& e);
+        bool MouseMovedEvent(MouseMoveEvent& e);
+        bool KeyPressedEvent(KeyPressEvent& e);
+        bool KeyReleasedEvent(KeyReleseEvent& e);
+        bool KeyTypedEvent(KeyCharEvent& e);
+        bool WindowReziedEvent(WindowReSizeEvent& e);
+
+
     private:
         
-        bool MousePressEventHandler(MouseButtonPressEvent& e);
-
         float m_imguiLayerTime;
-
 
     };
 

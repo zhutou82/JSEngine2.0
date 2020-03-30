@@ -39,6 +39,7 @@ namespace JSEngine
         bool m_Running = true;
 
     };
+
 #if DEBUG_ENGINE  1
     Application* CreateApplication() { return new Application; }
 #else

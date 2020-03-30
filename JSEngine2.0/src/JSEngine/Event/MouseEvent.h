@@ -56,8 +56,8 @@ namespace JSEngine
         MouseMoveEvent(float xCoor, float yCoor) : 
             m_Xcoor(xCoor), m_Ycoor(yCoor)
         {}
-        int GetMouseXCoordinate() const { return m_Xcoor; }
-        int GetMouseYCoordinate() const { return m_Ycoor; }
+        float GetMouseXCoordinate() const { return m_Xcoor; }
+        float GetMouseYCoordinate() const { return m_Ycoor; }
 
         std::string ToString() const override
         {
@@ -77,11 +77,11 @@ namespace JSEngine
     class JSENGINE_API MouseScrollEvent : public Event
     {
     public:
-        MouseScrollEvent(double xOffset, double yOffet) :
+        MouseScrollEvent(float xOffset, float yOffet) :
             m_Xoffet(xOffset), m_Yoffet(yOffet)
         {}
-        int GetMouseXOffSet() const { return m_Xoffet; }
-        int GetMouseYOffSet() const { return m_Yoffet; }
+        float GetMouseXOffSet() const { return m_Xoffet; }
+        float GetMouseYOffSet() const { return m_Yoffet; }
 
         std::string ToString() const override
         {
@@ -94,7 +94,7 @@ namespace JSEngine
         EVENT_CLASS_TYPE(MOUSE_SCROLLED)
 
     private:
-        double m_Xoffet;
-        double m_Yoffet;
+        float m_Xoffet;
+        float m_Yoffet;
     };
 }

@@ -14,6 +14,8 @@
 
 #define JS_CORE_ASSERT(x, ...) if(!x) { JS_CORE_ERROR("Assert Failed : {0}", __VA_ARGS__); __debugbreak; }
 #define JS_ASSERT(x, ...)      if(!x) { JS_ERROR("Assert Failed : {0}", __VA_ARGS__); __debugbreak; }
+#define JS_BIND_EVENT(x) std::bind(&imguiLayer::x, this, std::placeholders::_1)
 
 #define BIT(x) (1 << x)
+
 

@@ -1,8 +1,8 @@
 #pragma once
-#include "Core.h"
-#include "Event/Event.h"
 #include <functional>
 #include <string>
+#include "Core.h"
+#include "Event/Event.h"
 #include "SingletonBaseClass.h"
 namespace JSEngine
 {

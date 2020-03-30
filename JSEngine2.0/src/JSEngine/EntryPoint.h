@@ -1,4 +1,10 @@
 #pragma once
+
+#pragma warning(push)
+#pragma warning(disable:4251)
+//your declarations that cause 4251
+#pragma warning(pop)
+
 #include <stdio.h>
 #include "Log.h"
 #ifdef JSENGINE_PLATFORM_WINDOWS

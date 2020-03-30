@@ -56,4 +56,21 @@ namespace JSEngine
 
     };
 
+    class JSENGINE_API KeyCharEvent : public KeyEvent
+    {
+    public:
+        KeyCharEvent(int keycode) :
+            KeyEvent(keycode) {}
+
+        std::string ToString() const override
+        {
+            std::stringstream ss;
+            ss << "KeyCharEvent: " << m_KeyCode;
+            return ss.str();
+        }
+
+        EVENT_CLASS_TYPE(KEY_CHAR)
+        
+    };
+
 }

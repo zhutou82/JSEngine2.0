@@ -3,7 +3,7 @@
 #include "JSEngine/Event/ApplicationEvent.h"
 #include "JSEngine/Event/MouseEvent.h"
 #include "JSEngine/Event/KeyEvent.h"
-#include "glad/glad.h"
+
 
 namespace JSEngine
 {
@@ -20,6 +20,7 @@ namespace JSEngine
     }
     void WindowsWindow::OnUpdate()
     {
+        
         glfwPollEvents();
         glfwSwapBuffers(m_Window);
     }
@@ -130,7 +131,23 @@ namespace JSEngine
         glfwSetScrollCallback(m_Window, [](GLFWwindow* window, double xoffet, double yoffset)
             {
                 WindowData data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
-                MouseScrollEvent e(xoffet, yoffset);
+                MouseScrollEvent e((float)xoffet, (float)yoffset);
+                data.EventCallBackFunction(e);
+            });
+
+        
+        glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double xcoord, double ycoord)
+            {
+                WindowData data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+                MouseMoveEvent e((float)xcoord, (float)ycoord);
+                data.EventCallBackFunction(e);
+            });
+
+
+        glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int keycode)
+            {
+                WindowData data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+                KeyCharEvent e((int)keycode);
                 data.EventCallBackFunction(e);
             });
     }

@@ -1,5 +1,6 @@
 #pragma once
 #include "JSEngine/Window.h"
+#include "glad/glad.h"
 #include "GLFW/glfw3.h"
 
 namespace JSEngine
@@ -27,7 +28,7 @@ namespace JSEngine
         bool IsVSync() const override { return m_Data.VSync; }
         void SetVSync(bool b) override;
         
-        
+        GLFWwindow* m_Window;
     private:
         void Init(const WindowsProp& wp);
         void ShutDown();
@@ -42,7 +43,7 @@ namespace JSEngine
             std::string Title;
             EventCallBackFn EventCallBackFunction;
         };
-        GLFWwindow* m_Window;
+        
         WindowData m_Data;
        
     };

@@ -13,7 +13,7 @@ namespace JSEngine
     Application::Application()
     {
         g_Logger.Init();
-        JS_CORE_ASSERT(s_Instance, "Application has been created!");
+        JS_CORE_ASSERT(!s_Instance, "Application has been created!");
         m_Window = std::unique_ptr<Window>(Window::Create());
         m_Window->AddCallBackFn(BIND_EVENT(OnEvent));
         s_Instance = this;
@@ -74,11 +74,11 @@ namespace JSEngine
     { 
         while (m_Running)
         {
-            m_Window->OnUpdate();
             for (auto& elem : m_LayerStack)
             {
                 elem->OnUpdate();
             }
+            m_Window->OnUpdate();
         }
     }
 }

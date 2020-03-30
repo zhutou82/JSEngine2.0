@@ -26,6 +26,7 @@ namespace JSEngine
         //key board
         KEY_PRESSED,
         KEY_RELEASE,
+        KEY_CHAR,
         //mouse
         MOUSE_BUTTON_PRESSED,
         MOUSE_BUTTON_RELEASED,
