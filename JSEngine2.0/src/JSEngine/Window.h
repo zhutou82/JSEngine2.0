@@ -37,7 +37,9 @@ namespace JSEngine
         virtual bool IsVSync() const = 0;
         virtual void SetVSync(bool b) = 0;
 
-        virtual double GetSystemCurrentTime() const = 0;
+        virtual float GetSystemCurrentTime() const = 0;
+
+        virtual void* GetNativeWindow() const = 0;
 
         static Window* Create(const WindowsProp& wp = WindowsProp());
 

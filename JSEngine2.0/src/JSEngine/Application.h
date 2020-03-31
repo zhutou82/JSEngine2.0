@@ -12,9 +12,14 @@
 
 namespace JSEngine
 {
-#define g_Application Application::s_Instance
+#define g_Application     Application::GetInstance()
+#define g_AppWindow       ((WindowsWindow*)g_Application->GetWindow())
+#define g_AppWindowHandle ((GLFWwindow*)g_AppWindow->GetNativeWindow())
+
     class JSENGINE_API Application 
     {
+        static constexpr float FRAME_RATE = 60.f;
+        static constexpr float FRAME_RATE_PER_SEC = 1.0f / FRAME_RATE;
     public:
         Application();
         virtual ~Application();
@@ -31,12 +36,16 @@ namespace JSEngine
 
         void PushLayer(Layer* layer);
         void PushOverLay(Layer* overlay);
-        static Application* s_Instance;
- 
+
+        static Application* GetInstance() { return s_Instance;  }
+
     private:
+        static Application* s_Instance;
         LayerStack m_LayerStack;
         std::unique_ptr<Window> m_Window;
         bool m_Running = true;
+        float m_AppDeltaTime;
+        float m_Time;
 
     };
 

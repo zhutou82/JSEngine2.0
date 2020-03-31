@@ -13,6 +13,8 @@ namespace JSEngine
 {
     class JSENGINE_API imguiLayer : public Layer
     {
+        static constexpr const char* JS_GL_VERSION = "#version 410";
+
     public:
 
         imguiLayer(const std::string& name = "imguiLayer")

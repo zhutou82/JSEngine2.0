@@ -1,9 +1,7 @@
 #include "Application.h"
 #include "Log.h"
 #include "Window.h"
-#include <vector>
-
-
+#include "Platform/WindowsInput.h"
 
 namespace JSEngine
 {
@@ -11,6 +9,7 @@ namespace JSEngine
 
 #define BIND_EVENT(x) std::bind(&Application::x, this, std::placeholders::_1)
     Application::Application()
+        : m_AppDeltaTime(0.f), m_Time(FRAME_RATE_PER_SEC)
     {
         g_Logger.Init();
         JS_CORE_ASSERT(!s_Instance, "Application has been created!");
@@ -22,11 +21,7 @@ namespace JSEngine
    
     void Application::OnEvent(Event& e)
     {
-        EventDispatcher dispatcher(e);
-        //dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT(CloseWindowEvent));
-        dispatcher.Dispatch<KeyPressEvent>(BIND_EVENT(PressKeyEvent));
-        JS_CORE_INFO("{0}", e);
-
+        //JS_CORE_INFO("{0}", e);
         for (std::vector<Layer*>::iterator it = m_LayerStack.end(); it != m_LayerStack.begin();)
         {
             (*--it)->OnEvent(e);
@@ -74,11 +69,39 @@ namespace JSEngine
     { 
         while (m_Running)
         {
+            float currentTime = (float)glfwGetTime();
             for (auto& elem : m_LayerStack)
             {
                 elem->OnUpdate();
             }
             m_Window->OnUpdate();
+            //if(g_Input.IsKeyReleased(GLFW_KEY_Y))
+            //{
+            //    JS_CORE_TRACE("Released {0}", GLFW_KEY_Y);
+            //}
+            if (g_Input.IsKeyPressed(JS_KEY_ESCAPE))
+            {
+                m_Running = false;
+            } 
+            if (g_Input.IsLeftMouseButtonPressed())
+            {
+                JS_CORE_TRACE("Mouse left button Pressed");
+            }
+            if (g_Input.IsRightMouseButtonPressed())
+            {
+                JS_CORE_TRACE("Mouse right button Pressed");
+            } 
+
+            m_AppDeltaTime = currentTime - m_Time;
+            m_Time = currentTime;
+            
+            JS_CORE_TRACE("engine_frame_rate : {0}",  1.0f / m_AppDeltaTime);
+            //maintain frame rate to 60 per second
+            if (m_AppDeltaTime < FRAME_RATE_PER_SEC)
+            {
+
+                //while()
+            }
         }
     }
 }

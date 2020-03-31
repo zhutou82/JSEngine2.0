@@ -18,4 +18,5 @@
 
 #define BIT(x) (1 << x)
 
-
+constexpr float FRAME_RATE = 60.f;
+constexpr float FRAME_RATE_PER_SEC = 1.0f / FRAME_RATE;

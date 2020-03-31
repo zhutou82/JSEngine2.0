@@ -17,7 +17,7 @@ namespace JSEngine
        
         ImGui::CreateContext();
         // Setup Platform/Renderer bindings
-        ImGui_ImplOpenGL3_Init("#version 410");
+        ImGui_ImplOpenGL3_Init(JS_GL_VERSION);
 
         // Setup back-end capabilities flags
         ImGuiIO& io = ImGui::GetIO();
@@ -50,6 +50,12 @@ namespace JSEngine
         io.KeyMap[ImGuiKey_X] = GLFW_KEY_X;
         io.KeyMap[ImGuiKey_Y] = GLFW_KEY_Y;
         io.KeyMap[ImGuiKey_Z] = GLFW_KEY_Z;
+
+
+
+        //io.DisplayFramebufferScale = ImVec2((float)(g_AppWindow->GetFrameBufferWidth())  / g_AppWindow->GetWidth(),
+        //                                    (float)(g_AppWindow->GetFrameBufferHeight()) / g_AppWindow->GetHeight());
+
     }
 
     void imguiLayer::OnDetach()
@@ -83,7 +89,6 @@ namespace JSEngine
     {
         ImGuiIO& io = ImGui::GetIO();
         io.MouseDown[e.GetMouseButton()] = false;
-
         return false;
     }
 
@@ -100,7 +105,6 @@ namespace JSEngine
     {
         ImGuiIO& io = ImGui::GetIO();
         io.MousePos = ImVec2(e.GetMouseXCoordinate(), e.GetMouseYCoordinate());
-        JS_CORE_TRACE("{0}, {1}", e.GetMouseXCoordinate(), e.GetMouseYCoordinate());
         return false;
     }
 
@@ -113,7 +117,6 @@ namespace JSEngine
         io.KeyCtrl = io.KeysDown[GLFW_KEY_LEFT_CONTROL] || io.KeysDown[GLFW_KEY_RIGHT_CONTROL];
         io.KeyShift = io.KeysDown[GLFW_KEY_LEFT_SHIFT] || io.KeysDown[GLFW_KEY_RIGHT_SHIFT];
         io.KeyAlt = io.KeysDown[GLFW_KEY_LEFT_ALT] || io.KeysDown[GLFW_KEY_RIGHT_ALT];
-
         return false;
     }
 
@@ -135,7 +138,7 @@ namespace JSEngine
     bool imguiLayer::WindowReziedEvent(WindowReSizeEvent & e)
     {
         ImGuiIO& io = ImGui::GetIO();
-        io.DisplaySize = ImVec2((float)e.GetWidth(),(float)e.GetHeight());
+        io.DisplaySize = ImVec2((float)e.GetWidth(),(float)e.GetHeight()); 
         io.DisplayFramebufferScale = ImVec2(1.0f, 1.0f);
         glViewport(0, 0, 1, 1);
 
@@ -146,13 +149,12 @@ namespace JSEngine
     {
         glClear(GL_COLOR_BUFFER_BIT);
         ImGuiIO& io = ImGui::GetIO();
-        io.DisplaySize = ImVec2(static_cast<float>(g_Application->GetWindow()->GetWidth()),
-                                static_cast<float>(g_Application->GetWindow()->GetHeight()));
-        //io.DisplayFramebufferScale = ImVec2(static_cast<float>(g_Window.GetFrameBufferWidth()) / g_Window.GetWidth(),
-        //                                    static_cast<float>(g_Window.GetFrameBufferHeight()) / g_Window.GetHeight());
 
+        //set up window size
+        io.DisplaySize = ImVec2((float)(g_AppWindow->GetWidth()),
+                                (float)(g_AppWindow->GetHeight()));
 
-        float currentTime = static_cast<float>(g_Application->GetWindow()->GetSystemCurrentTime());
+        float currentTime = (g_Application->GetWindow()->GetSystemCurrentTime());
         io.DeltaTime = m_imguiLayerTime > 0.0 ? (currentTime - m_imguiLayerTime) : (1.0f / 60.0f);
         m_imguiLayerTime = currentTime;
 
@@ -164,7 +166,7 @@ namespace JSEngine
         static bool show_another_window = false;
         ImGui::ShowDemoWindow(&showWindow);
 
-        ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+        //ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 
         //// 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
