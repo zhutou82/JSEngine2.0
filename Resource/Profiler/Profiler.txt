@@ -1,0 +1,2 @@
+JSEngine::Application::Init
+End profile, duration: 911
