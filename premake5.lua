@@ -16,15 +16,19 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 IncludeDir = {}
 IncludeDir["GLFW"]  = "JSEngine2.0/vendor/GLFW/include"
 IncludeDir["Glad"]  = "JSEngine2.0/vendor/Glad/include"
-IncludeDir["imgui"] = "JSEngine2.0/vendor/imgui"
+IncludeDir["imgui"] = "JSEngine2.0/vendor/imgui" 
+IncludeDir["glm"]   = "JSEngine2.0/vendor/glm" 
+IncludeDir["tinyXML"]   = "JSEngine2.0/vendor/tinyXML" 
+
 
 include "JSEngine2.0/vendor/GLFW"
 include "JSEngine2.0/vendor/Glad"
 include "JSEngine2.0/vendor/imgui"
+include "JSEngine2.0/vendor/tinyXML"
 
 project "JSEngine2.0"
     location "JSEngine2.0"
-    kind "SharedLib"
+    kind "StaticLib"
     language "C++"
     cppdialect "C++17"
     staticruntime "on"
@@ -32,13 +36,15 @@ project "JSEngine2.0"
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
-    -- pchheader "JSpch.h"
-    -- pchsource "JSEngine2.0/src/JSpch.cpp"
+    pchheader "PCH.h"
+    pchsource "JSEngine2.0/src/JSEngine/PCH.cpp"
 
     files
     {
         "%{prj.name}/src/**.h",
-        "%{prj.name}/src/**.cpp"
+        "%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/glm/glm/**.hpp",
+		"%{prj.name}/vendor/glm/glm/**.inl"
     }
 
     defines
@@ -52,7 +58,9 @@ project "JSEngine2.0"
         "%{prj.name}/vendor/spdlog/include",
         "%{IncludeDir.GLFW}",
         "%{IncludeDir.Glad}",
-        "%{IncludeDir.imgui}"
+        "%{IncludeDir.imgui}",
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.tinyXML}"
     }
 
     links 
@@ -60,11 +68,12 @@ project "JSEngine2.0"
         "GLFW",
         "Glad",
         "imgui",
-        "opengl32.lib"
+        "opengl32.lib",
+		'tinyxml2'
     }
 
     filter "system:windows"
-        systemversion "latest"
+        systemversion "10.0.14393.0"
 
         defines
         {
@@ -73,10 +82,6 @@ project "JSEngine2.0"
             "GLFW_INCLUDE_NONE"
         }
 
-        postbuildcommands
-        {
-           ("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox")
-		}
 
 
     filter "configurations:Debug"
@@ -117,7 +122,9 @@ project "Sandbox"
         "JSEngine2.0/vendor",
         "%{IncludeDir.GLFW}",
         "%{IncludeDir.Glad}",
-        "%{IncludeDir.imgui}"
+        "%{IncludeDir.imgui}",
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.tinyXML}"
     }
 
     links
@@ -126,7 +133,7 @@ project "Sandbox"
     }
 
     filter "system:windows"
-        systemversion "latest"
+        systemversion "10.0.14393.0"
         defines
         {
             "JSENGINE_PLATFORM_WINDOWS"
