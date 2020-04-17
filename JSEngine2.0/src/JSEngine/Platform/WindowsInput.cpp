@@ -1,9 +1,12 @@
+#include "PCH.h"
 #include "JSEngine/Application.h"
 #include "WindowsInput.h"
-#include "JSEngine/PCH.h"
 
-namespace JSEngine
+
+namespace JSEngine 
 {
+    InputManager* InputManager::s_Instance = new WindowsInput();
+
     WindowsInput::WindowsInput()
     {
         memset(m_Keys, false, NUM_OF_KEYS);
@@ -12,12 +15,12 @@ namespace JSEngine
 
     bool WindowsInput::IsKeyReleasedImp(int keycode)
     {
-        bool state = glfwGetKey((GLFWwindow*)g_Application->GetWindow()->GetNativeWindow(), keycode) == GLFW_RELEASE;
+        bool state = glfwGetKey(g_AppWindowHandle, keycode) == GLFW_RELEASE;
         if (m_Keys[keycode] && state)
         {
             m_Keys[keycode] = false;
             return true;
-        }
+        } 
         else if (!m_Keys[keycode] && !state)
         {
             m_Keys[keycode] = true;
@@ -25,42 +28,41 @@ namespace JSEngine
         return false;
     }
 
-    //mouse and keyboard down functions
-    bool WindowsInput::IsKeyDownImp(int keycode)
+    //mouse and keyboard press functions
+    bool WindowsInput::IsKeyPressedImp(int keycode)
     {
         return IsButtonDown(keycode, glfwGetKey);
     }
-    bool WindowsInput::IsMouseLeftButtonDownImp()
+    bool WindowsInput::IsMouseLeftButtonPressedImp()
     {
         return IsButtonDown(JS_MOUSE_BUTTON_LEFT, glfwGetMouseButton);
     }
-    bool WindowsInput::IsMouseRightButtonDownImp()
+    bool WindowsInput::IsMouseRightButtonPressedImp()
     {
         return IsButtonDown(JS_MOUSE_BUTTON_RIGHT, glfwGetMouseButton);
     }
 
-    bool WindowsInput::IsButtonDown(int code, std::function<int(GLFWwindow*, int)> fn)
+    bool WindowsInput::IsButtonDown(int code, const std::function<int(GLFWwindow*, int)>& fn)
     {
-        return fn((GLFWwindow*)g_Application->GetWindow()->GetNativeWindow(), code);
+        return fn(g_AppWindowHandle, code);
     }
 
-    //mouse and keyboard press functions
-    bool WindowsInput::IsKeyPressedImp(int keycode)
+    //mouse and keyboard toggled functions
+    bool WindowsInput::IsKeyToggledImp(int keycode)
     {
-        return IsButtonPressed(m_Keys, keycode, glfwGetKey);
+        return IsButtonToggled(m_Keys, keycode, glfwGetKey);
     }
-    bool WindowsInput::IsMouseLeftButtonPressedImp()
+    bool WindowsInput::IsMouseLeftButtonToggledImp()
     {
-        return IsButtonPressed(m_MouseKey, JS_MOUSE_BUTTON_LEFT, glfwGetMouseButton);
+        return IsButtonToggled(m_MouseKey, JS_MOUSE_BUTTON_LEFT, glfwGetMouseButton);
     }
-    bool WindowsInput::IsMouseRightButtonPressedImp()
+    bool WindowsInput::IsMouseRightButtonToggledImp()
     {
-        return IsButtonPressed(m_MouseKey, JS_MOUSE_BUTTON_RIGHT, glfwGetMouseButton);
+        return IsButtonToggled(m_MouseKey, JS_MOUSE_BUTTON_RIGHT, glfwGetMouseButton);
     }
-
-    bool WindowsInput::IsButtonPressed(bool* array, int code, std::function<int(GLFWwindow*, int)> fn)
+    bool WindowsInput::IsButtonToggled(bool* array, int code,const std::function<int    (GLFWwindow*, int)>& fn)
     {
-        bool state = fn((GLFWwindow*)g_Application->GetWindow()->GetNativeWindow(), code) == GLFW_PRESS;
+        bool state = fn(g_AppWindowHandle, code) == GLFW_PRESS;
         if (state && !array[code])
         {
             array[code] = true;
@@ -71,5 +73,21 @@ namespace JSEngine
             array[code] = false;
         }
         return false;
+    }
+    float WindowsInput::GetMouseXposImp()
+    {
+        auto[x, y] = GetMousePosImp();
+        return x;
+    }
+    float WindowsInput::GetMouseYposImp()
+    {
+        auto[x, y] = GetMousePosImp();
+        return y;
+    }
+    std::pair<float, float> WindowsInput::GetMousePosImp()
+    {
+        double x, y;
+        glfwGetCursorPos(g_AppWindowHandle, &x, &y);
+        return std::make_pair((float)x, (float)y);
     }
 }

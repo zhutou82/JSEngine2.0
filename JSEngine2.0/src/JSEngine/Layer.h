@@ -1,7 +1,7 @@
 #pragma once
 #include "Core.h"
 #include "JSEngine/Event/Event.h"
-#include <string>
+#include <string> 
 
 namespace JSEngine
 {
@@ -17,6 +17,7 @@ namespace JSEngine
         virtual void OnDetach() = 0;
 
         virtual void OnUpdate() = 0;
+        virtual void OnRenderUpdate() = 0;
         virtual void OnEvent(Event& e) = 0;
 
     private:

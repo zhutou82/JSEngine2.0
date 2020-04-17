@@ -1,11 +1,11 @@
+#include "PCH.h"
 #include "LayerStack.h"
-#include <algorithm>
 
 namespace JSEngine
 {
     LayerStack::LayerStack()
+        : m_StackLayerInsertIndex(0)
     {
-        m_StackLayerInsert = m_StackLayer.begin();
     }
 
     LayerStack::~LayerStack()
@@ -16,7 +16,8 @@ namespace JSEngine
 
     void LayerStack::PushLayer(Layer* layer)
     {
-        m_StackLayerInsert = m_StackLayer.emplace(m_StackLayerInsert, layer);
+       m_StackLayer.emplace(m_StackLayer.begin() + m_StackLayerInsertIndex, layer);
+       ++m_StackLayerInsertIndex;
     }
 
     void LayerStack::PopLayer(Layer* layer)
@@ -25,7 +26,7 @@ namespace JSEngine
         if (it != m_StackLayer.end())
         {
             m_StackLayer.erase(it);
-            --m_StackLayerInsert;
+            --m_StackLayerInsertIndex;
         }
     }
 

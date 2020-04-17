@@ -1,9 +1,9 @@
+#include "PCH.h"
 #include "JSEngine/Platform/WindowsWindow.h"
-#include "JSEngine/Log.h"
 #include "JSEngine/Event/ApplicationEvent.h"
 #include "JSEngine/Event/MouseEvent.h"
 #include "JSEngine/Event/KeyEvent.h"
-
+#include "JSEngine/Platform/Opengl/OpenGLContext.h"
 
 namespace JSEngine
 {
@@ -20,9 +20,8 @@ namespace JSEngine
     }
     void WindowsWindow::OnUpdate()
     {
-        
+        g_GraphicsConext.Render();
         glfwPollEvents();
-        glfwSwapBuffers(m_Window);
     }
 
     void WindowsWindow::SetVSync(bool b)
@@ -44,17 +43,22 @@ namespace JSEngine
 
             s_WindowHasInitialized = true;
         }
-        JS_CORE_INFO("Window created {0} {1} {2}", m_Data.Title, m_Data.Width, m_Data.Height);
+        //init window
         m_Window = glfwCreateWindow((int)m_Data.Width, (int)m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
-        glfwMakeContextCurrent(m_Window);
-        int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-        JS_CORE_ASSERT(status, "Failed to initialized Glad");
-
-        glfwSetWindowUserPointer(m_Window, &m_Data);
+        JS_CORE_ASSERT(m_Window, "Windows Init failed");
         SetVSync(true);
+        JS_CORE_INFO("Window created {0} {1}", m_Data.Width, m_Data.Height);
 
-        
+        //init graphics context
+        g_GraphicsConext.Init(m_Window);
 
+        //init windows call back event
+        SetWindowsEventCallBack();
+    }
+
+    void WindowsWindow::SetWindowsEventCallBack()
+    {
+        glfwSetWindowUserPointer(m_Window, &m_Data);
         //Set glfw call back functions
         glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
             {
@@ -87,46 +91,46 @@ namespace JSEngine
 
                 switch (action)
                 {
-                    case GLFW_PRESS:
-                    {     
-                        KeyPressEvent e(key, 0);
-                        data.EventCallBackFunction(e);
-                        break;
-                    }
-                    case GLFW_RELEASE:
-                    {
-                        KeyReleseEvent e(key);
-                        data.EventCallBackFunction(e);
-                        break;
-                    }
-                    case GLFW_REPEAT:
-                    {
-                        KeyPressEvent e(key, 1);
-                        data.EventCallBackFunction(e);
-                        break;
-                    }
+                case GLFW_PRESS:
+                {
+                    KeyPressEvent e(key, 0);
+                    data.EventCallBackFunction(e);
+                    break;
+                }
+                case GLFW_RELEASE:
+                {
+                    KeyReleseEvent e(key);
+                    data.EventCallBackFunction(e);
+                    break;
+                }
+                case GLFW_REPEAT:
+                {
+                    KeyPressEvent e(key, 1);
+                    data.EventCallBackFunction(e);
+                    break;
+                }
                 }
             });
 
         glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mod)
-        {
+            {
                 WindowData data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
                 switch (action)
                 {
-                    case GLFW_PRESS:
-                    {
-                        MouseButtonPressEvent e(button);
-                        data.EventCallBackFunction(e);
-                        break;
-                    }
-                    case GLFW_RELEASE:
-                    {
-                        MouseButtonReleaseEvent e(button);
-                        data.EventCallBackFunction(e);
-                        break;
-                    }
+                case GLFW_PRESS:
+                {
+                    MouseButtonPressEvent e(button);
+                    data.EventCallBackFunction(e);
+                    break;
                 }
-        });
+                case GLFW_RELEASE:
+                {
+                    MouseButtonReleaseEvent e(button);
+                    data.EventCallBackFunction(e);
+                    break;
+                }
+                }
+            });
 
         glfwSetScrollCallback(m_Window, [](GLFWwindow* window, double xoffet, double yoffset)
             {
@@ -135,7 +139,7 @@ namespace JSEngine
                 data.EventCallBackFunction(e);
             });
 
-        
+
         glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double xcoord, double ycoord)
             {
                 WindowData data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
@@ -150,11 +154,12 @@ namespace JSEngine
                 KeyCharEvent e((int)keycode);
                 data.EventCallBackFunction(e);
             });
+
     }
 
     void WindowsWindow::ShutDown()
     {
         glfwDestroyWindow(m_Window);
+        glfwTerminate();
     }
-
 }

@@ -6,6 +6,9 @@
 
 namespace JSEngine
 {
+    //template class JSENGINE_API std::allocator<Layer*>;
+    //template class JSENGINE_API std::vector<Layer*, std::allocator<Layer*> >;
+
     class JSENGINE_API LayerStack : public Singleton<LayerStack>
     {
     public:
@@ -13,7 +16,7 @@ namespace JSEngine
 
         LayerStack();
         ~LayerStack();
-
+         
         void PushLayer(Layer* layer);
         void PopLayer(Layer* layer);
 
@@ -23,10 +26,10 @@ namespace JSEngine
         std::vector<Layer*>::iterator begin() { return m_StackLayer.begin(); }
         std::vector<Layer*>::iterator end() { return m_StackLayer.end(); }
 
+       
     private:
-
         std::vector<Layer*> m_StackLayer;
-        std::vector<Layer*>::iterator m_StackLayerInsert;
+        unsigned m_StackLayerInsertIndex;
 
     };
 

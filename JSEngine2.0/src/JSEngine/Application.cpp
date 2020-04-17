@@ -1,21 +1,36 @@
+#include "PCH.h"
 #include "Application.h"
-#include "Log.h"
 #include "Window.h"
 #include "Platform/WindowsInput.h"
+#include "Managers/InputManager.h"
+#include "JSEngine/Serializer/Xml.h"
+#include "JSEngine/Platform/Profiler/SimpleProfiler.h"
 
 namespace JSEngine
 {
-    Application* Application::s_Instance = NULL;
+    Application* Application::     s_Instance             = NULL;
+    const std::string Application::s_RECOUSE_FOLDER_PATH  = "../Resource/";
+    const std::string Application::s_XML_FOLDER_PATH      = "../Resource/XML/";
+    const std::string Application::s_PROFILER_FOLDER_PATH = "../Resource/Profiler/";
 
 #define BIND_EVENT(x) std::bind(&Application::x, this, std::placeholders::_1)
     Application::Application()
-        : m_AppDeltaTime(0.f), m_Time(FRAME_RATE_PER_SEC)
+        : m_AppDeltaTime(0.f), 
+          m_Time(FRAME_RATE_PER_SEC), 
+          m_Serializer(XML_ENGINE_SETTING_FILE_NAME)
     {
-        g_Logger.Init();
         JS_CORE_ASSERT(!s_Instance, "Application has been created!");
-        m_Window = std::unique_ptr<Window>(Window::Create());
-        m_Window->AddCallBackFn(BIND_EVENT(OnEvent));
-        s_Instance = this;
+
+        m_EngineSettingVec.reserve(EngineSetting::NUM_OF_ENGINE_SETTING);
+        m_WindowSettingVec.reserve(WindowSetting::NUM_OF_WINDOW_SETTING);
+
+        //init all systems
+        g_Logger.Init();
+
+        //init simple profiler
+        g_Profiler.Init(s_PROFILER_FOLDER_PATH);
+
+        Init();
     }
 
    
@@ -23,7 +38,7 @@ namespace JSEngine
     {
         //JS_CORE_INFO("{0}", e);
         for (std::vector<Layer*>::iterator it = m_LayerStack.end(); it != m_LayerStack.begin();)
-        {
+        { 
             (*--it)->OnEvent(e);
             if (e.IsHanlded()) break;
         }
@@ -62,7 +77,21 @@ namespace JSEngine
 
     void Application::Init()
     {
+        ProfileStart(__FUNCTION__);
+        //init engine serializer
+        m_Serializer.Init(s_XML_FOLDER_PATH);
+        m_Serializer.DeSerialize(m_EngineSettingVec, "RecourseFolderPath");
+        m_Serializer.DeSerialize(m_WindowSettingVec, "WindowSetting");
 
+        //init winodw handle
+        m_Window = std::unique_ptr<Window>(Window::Create());
+        m_Window->AddCallBackFn(BIND_EVENT(OnEvent));
+        s_Instance = this;
+
+        //init imgui
+        m_ImguiLayer = new imguiLayer;
+        PushLayer(m_ImguiLayer);
+        ProfilerEnd
     }
     
     void Application::Run()
@@ -70,53 +99,52 @@ namespace JSEngine
         while (m_Running)
         {
             float currentTime = (float)glfwGetTime();
-            for (auto& elem : m_LayerStack)
-            {
-                elem->OnUpdate();
-            }
-            m_Window->OnUpdate();
-            //if(g_Input.IsKeyReleased(GLFW_KEY_Y))
-            //{
-            //    JS_CORE_TRACE("Released {0}", GLFW_KEY_Y);
-            //}
-            if (g_Input.IsKeyPressed(JS_KEY_ESCAPE))
+            //exit window
+            if (g_Input.IsKeyPressed(GLFW_KEY_ESCAPE))
             {
                 m_Running = false;
-            } 
-            if (g_Input.IsLeftMouseButtonPressed())
-            {
-                JS_CORE_TRACE("Mouse left button Pressed");
             }
-            if (g_Input.IsRightMouseButtonPressed())
+            
+            m_Window->OnUpdate();
+            for (auto& layer : m_LayerStack)
             {
-                JS_CORE_TRACE("Mouse right button Pressed");
-            } 
-
+                layer->OnUpdate();
+            }
+           
+            //will be put into render thread
+            m_ImguiLayer->Begin();
+            for (auto& imguiLayer : m_LayerStack)
+            {
+                imguiLayer->OnRenderUpdate();
+            }
+            m_ImguiLayer->End();
+            
             m_AppDeltaTime = currentTime - m_Time;
             m_Time = currentTime;
             
-            JS_CORE_TRACE("engine_frame_rate : {0}",  1.0f / m_AppDeltaTime);
+            //JS_CORE_TRACE("engine_frame_rate : {0}",  1.0f / m_AppDeltaTime);
             //maintain frame rate to 60 per second
             if (m_AppDeltaTime < FRAME_RATE_PER_SEC)
             {
-
                 //while()
             }
+
+            glfwSwapBuffers(g_AppWindowHandle);
         }
     }
 }
 
-#if DEBUG_ENGINE  1
-int main()
-{
-    printf("Welcome to JSEngine2.0\n");
-    JSEngine::Application* app = JSEngine::CreateApplication();
-    app->Init();
-    JS_CORE_INFO("Log initialized");
-    CLIENT_INFO("Welcome to JSEngine2.0");
-    int a = 10;
-    CLIENT_INFO("Varialbe = {0}", a);
-    app->Run();
-    delete app;
-}
-#endif
+//#if DEBUG_ENGINE  1
+//int main()
+//{
+//    printf("Welcome to JSEngine2.0\n");
+//    JSEngine::Application* app = JSEngine::CreateApplication();
+//    app->Init();
+//    JS_CORE_INFO("Log initialized");
+//    CLIENT_INFO("Welcome to JSEngine2.0");
+//    int a = 10;
+//    CLIENT_INFO("Varialbe = {0}", a);
+//    app->Run();
+//    delete app;
+//}
+//#endif

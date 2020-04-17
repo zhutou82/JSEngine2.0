@@ -16,7 +16,7 @@ int main(int argc, char** argv)
 {
     printf("Welcome to JSEngine2.0\n");
     JSEngine::Application* app = JSEngine::CreateApplication();
-    app->Init();
+    //app->Init();
     JS_CORE_INFO("Log initialized");
     CLIENT_INFO("Welcome to JSEngine2.0");
     int a = 10;
