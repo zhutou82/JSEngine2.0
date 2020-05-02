@@ -1,5 +1,5 @@
 #pragma once
-#include "JSEngine/SingletonBaseClass.h"
+#include "JSEngine/Core/SingletonBaseClass.h"
 #include "JSEngine/Managers/InputManager.h"
 
 

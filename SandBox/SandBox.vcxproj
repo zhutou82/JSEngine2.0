@@ -78,8 +78,8 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>JSENGINE_PLATFORM_WINDOWS;JS_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\JSEngine2.0\vendor\spdlog\include;..\JSEngine2.0\src;..\JSEngine2.0\vendor;..\JSEngine2.0\vendor\GLFW\include;..\JSEngine2.0\vendor\Glad\include;..\JSEngine2.0\vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>JSENGINE_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;JS_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\JSEngine2.0\vendor\spdlog\include;..\JSEngine2.0\src;..\JSEngine2.0\vendor;..\JSEngine2.0\vendor\GLFW\include;..\JSEngine2.0\vendor\Glad\include;..\JSEngine2.0\vendor\imgui;..\JSEngine2.0\vendor\glm;..\JSEngine2.0\vendor\tinyXML;..\JSEngine2.0\vendor\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -94,14 +94,14 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>JSENGINE_PLATFORM_WINDOWS;JS_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\JSEngine2.0\vendor\spdlog\include;..\JSEngine2.0\src;..\JSEngine2.0\vendor;..\JSEngine2.0\vendor\GLFW\include;..\JSEngine2.0\vendor\Glad\include;..\JSEngine2.0\vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>JSENGINE_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;JS_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\JSEngine2.0\vendor\spdlog\include;..\JSEngine2.0\src;..\JSEngine2.0\vendor;..\JSEngine2.0\vendor\GLFW\include;..\JSEngine2.0\vendor\Glad\include;..\JSEngine2.0\vendor\imgui;..\JSEngine2.0\vendor\glm;..\JSEngine2.0\vendor\tinyXML;..\JSEngine2.0\vendor\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -114,14 +114,14 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>JSENGINE_PLATFORM_WINDOWS;JS_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\JSEngine2.0\vendor\spdlog\include;..\JSEngine2.0\src;..\JSEngine2.0\vendor;..\JSEngine2.0\vendor\GLFW\include;..\JSEngine2.0\vendor\Glad\include;..\JSEngine2.0\vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>JSENGINE_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;JS_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\JSEngine2.0\vendor\spdlog\include;..\JSEngine2.0\src;..\JSEngine2.0\vendor;..\JSEngine2.0\vendor\GLFW\include;..\JSEngine2.0\vendor\Glad\include;..\JSEngine2.0\vendor\imgui;..\JSEngine2.0\vendor\glm;..\JSEngine2.0\vendor\tinyXML;..\JSEngine2.0\vendor\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>

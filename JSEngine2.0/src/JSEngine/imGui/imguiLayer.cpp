@@ -35,7 +35,7 @@ namespace JSEngine
         }
 
         // Setup Platform/Renderer bindings
-        ImGui_ImplGlfw_InitForOpenGL(g_AppWindowHandle, true);
+        ImGui_ImplGlfw_InitForOpenGL(g_AppWindowHandle, false);
         ImGui_ImplOpenGL3_Init(JS_GL_VERSION);
     }
 
@@ -81,8 +81,6 @@ namespace JSEngine
         ImGui::Render();
         
         //glClear(GL_COLOR_BUFFER_BIT);
-
-       
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         ImGuiIO& io = ImGui::GetIO();
@@ -164,7 +162,7 @@ namespace JSEngine
         return false;
     }
 
-    void imguiLayer::OnUpdate()
+    void imguiLayer::OnUpdate(TimeStep delta)
     {
         
     }

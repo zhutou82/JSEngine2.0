@@ -1,10 +1,11 @@
 #include "PCH.h"
 #include "Application.h"
-#include "Window.h"
+#include "Core/Window.h"
 #include "Platform/WindowsInput.h"
 #include "Managers/InputManager.h"
 #include "JSEngine/Serializer/Xml.h"
 #include "JSEngine/Platform/Profiler/SimpleProfiler.h"
+
 
 namespace JSEngine
 {
@@ -13,11 +14,10 @@ namespace JSEngine
     const std::string Application::s_XML_FOLDER_PATH      = "../Resource/XML/";
     const std::string Application::s_PROFILER_FOLDER_PATH = "../Resource/Profiler/";
 
-#define BIND_EVENT(x) std::bind(&Application::x, this, std::placeholders::_1)
     Application::Application()
-        : m_AppDeltaTime(0.f), 
-          m_Time(FRAME_RATE_PER_SEC), 
-          m_Serializer(XML_ENGINE_SETTING_FILE_NAME)
+        : m_AppDeltaTime(0.f),
+          m_LastTime(0.f),
+        m_Serializer(XML_ENGINE_SETTING_FILE_NAME)
     {
         JS_CORE_ASSERT(!s_Instance, "Application has been created!");
 
@@ -42,7 +42,7 @@ namespace JSEngine
             (*--it)->OnEvent(e);
             if (e.IsHanlded()) break;
         }
-            
+        
     }
     bool Application::CloseWindowEvent(WindowCloseEvent& e)
     {
@@ -55,6 +55,18 @@ namespace JSEngine
             m_Running = false;
 
         return true;
+    }
+
+    bool Application::CursorEvent(MouseMoveEvent& e)
+    {
+        //g_Camera.CursorPosCallBack(e.GetMouseXCoordinate(), e.GetMouseYCoordinate());
+        return true;
+    }
+
+    bool Application::CursorScrollEvent(MouseScrollEvent& e)
+    {
+        //g_Camera.CursorScrollCallBack(e.GetMouseXOffSet(), e.GetMouseYOffSet());
+        return false;
     }
 
     void Application::PushLayer(Layer* layer)
@@ -77,7 +89,7 @@ namespace JSEngine
 
     void Application::Init()
     {
-        ProfileStart(__FUNCTION__);
+        //ProfileStart(__FUNCTION__);
         //init engine serializer
         m_Serializer.Init(s_XML_FOLDER_PATH);
         m_Serializer.DeSerialize(m_EngineSettingVec, "RecourseFolderPath");
@@ -85,30 +97,36 @@ namespace JSEngine
 
         //init winodw handle
         m_Window = std::unique_ptr<Window>(Window::Create());
-        m_Window->AddCallBackFn(BIND_EVENT(OnEvent));
+        m_Window->AddCallBackFn(JS_BIND_EVENT(Application::OnEvent));
         s_Instance = this;
 
         //init imgui
         m_ImguiLayer = new imguiLayer;
         PushLayer(m_ImguiLayer);
-        ProfilerEnd
+        //ProfilerEnd
     }
     
     void Application::Run()
     { 
         while (m_Running)
         {
+            
             float currentTime = (float)glfwGetTime();
+            TimeStep delta(currentTime - m_LastTime);
+            m_AppDeltaTime = delta;
+            m_LastTime = currentTime;
+
+            
+
             //exit window
             if (g_Input.IsKeyPressed(GLFW_KEY_ESCAPE))
             {
                 m_Running = false;
             }
-            
-            m_Window->OnUpdate();
+
             for (auto& layer : m_LayerStack)
             {
-                layer->OnUpdate();
+                layer->OnUpdate(delta);
             }
            
             //will be put into render thread
@@ -117,18 +135,11 @@ namespace JSEngine
             {
                 imguiLayer->OnRenderUpdate();
             }
+            m_Window->OnUpdate();
             m_ImguiLayer->End();
-            
-            m_AppDeltaTime = currentTime - m_Time;
-            m_Time = currentTime;
-            
-            //JS_CORE_TRACE("engine_frame_rate : {0}",  1.0f / m_AppDeltaTime);
-            //maintain frame rate to 60 per second
-            if (m_AppDeltaTime < FRAME_RATE_PER_SEC)
-            {
-                //while()
-            }
 
+
+            
             glfwSwapBuffers(g_AppWindowHandle);
         }
     }

@@ -1,49 +1,58 @@
 #pragma once
 #include "JSEngine/Graphics/GraphicsContext.h"
 #include "JSEngine/Platform/WindowsWindow.h"
-#include "JSEngine/SingletonBaseClass.h"
-#include "JSEngine/FileSystem/FileSystem.h"
-
-
+#include "JSEngine/Core/SingletonBaseClass.h"
+//#include "glm/"
 
 namespace JSEngine
 {
+    class Mesh;
+
 #define g_GraphicsConext Singleton<OpenGLContext>::GetInstance()
 
     class OpenGLContext : public GraphicsConext, public Singleton<OpenGLContext>
     {
-        const std::string VERTEX_SHADER_FILE_NAME   = "VertexShader";
-        const std::string FRAGMENT_SHADER_FILE_NAME = "FragmentShader";
-
 
     public:
-        friend class Singleton<OpenGLContext>;
-        ~OpenGLContext() {};
 
+        friend class Singleton<OpenGLContext>;
+        ~OpenGLContext();
 
     public:
         
         void Init(GLFWwindow* m_WindowHandle) override;
         void SwapBuffer()                     override;
         void Render()                         override;
-        
+        void Clear();
+       
+        void EnableDepthTest(bool enable);
 
     private:
         OpenGLContext();
-        void InitShader();
-        void ReadShaderSource();
-        unsigned int CreateAndCompileShader(unsigned int type, const JSFile& shaderFile);
 
     private:
         GLFWwindow* m_WindowHandle;
-        unsigned int m_VertexArrayID;
-        unsigned int m_VertexBufferID;
-        unsigned int m_IndicesBufferID;
-        unsigned int m_ShaderID;
-        unsigned int m_UniformColorID;
+        //std::vector<Mesh*> m_MeshVec;
 
-        JSFile m_VertexShader;
-        JSFile m_FragmentShader;
+        //std::vector<Light*> m_LightVec;
+        //PointLight* m_PointLight;
+
+        //SceneData* m_SceneData;
+
+        //glm::mat4 m_ProjMat;
+        //glm::mat4 m_ViewMat;
+
+        //std::shared_ptr<OpenGLShader> m_Shader;
+        //std::shared_ptr<OpenGLShader> m_AnotherShader;
+        //
+        //float m_NearPlane;
+        //float m_FarPlane;
+
+        //glm::vec3 m_CameraPos;
+        //glm::vec3 m_CameraFront;
+        //glm::vec3 m_CameraUp;
+
+        
 
     };
 

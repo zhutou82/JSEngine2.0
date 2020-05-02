@@ -2,11 +2,28 @@
 
 //for use by JSEngin applications 
 #include "JSEngine/Application.h"
-#include "JSEngine/LayerStack.h"
-#include "JSEngine/Layer.h"
+#include "JSEngine/Core/LayerStack.h"
+#include "JSEngine/Core/Layer.h"
+
+
+//----------------Graphics---------------------
+#include "JSEngine/Graphics/Renderer.h"
+#include "JSEngine/Graphics/RenderCommand.h"
+#include "JSEngine/Graphics/RendererAPI.h"
+#include "JSEngine/Graphics/Shader.h"
+#include "JSEngine/Platform/CameraController.h"
+#include "JSEngine/Graphics/Camera.h"
+#include "JSEngine/Graphics/Meterial.h"
+#include "JSEngine/Platform/Opengl/Mesh.h"
+#include "JSEngine/Platform/Opengl/Light.h"
+
+
+
 
 //-------------- --UI---------------------
 #include "JSEngine/imGui/imguiLayer.h"
+#include "imgui.h"
+#include "imconfig.h"
 //----------------------------------------------
 
 //--------------Event---------------------
@@ -17,15 +34,21 @@
 //----------------------------------------------
 
 //--------------Logging---------------------
-#include "JSEngine/Log.h"
+#include "JSEngine/Core/Log.h"
 //----------------------------------------------
+
+//--------------Profiling---------------------
+#include "JSEngine/Platform/Profiler/SimpleProfiler.h"
+
+//--------------------------------------------
+
 
 //--------------Input---------------------
 #include "JSEngine/Managers/InputManager.h"
 //----------------------------------------------
 
 //--------------Entry point---------------------
-#include "JSEngine/EntryPoint.h"
+#include "JSEngine/Core/EntryPoint.h"
 //---------------------------------------------- 
 
 

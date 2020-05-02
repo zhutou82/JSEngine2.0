@@ -35,6 +35,7 @@ namespace JSEngine
         m_Data.Width = wp.Width;
         m_Data.Height = wp.Height;
         m_Data.Title = wp.Titile;
+        m_Data.AspectRatio = (float)wp.Width / wp.Height;
 
         if (s_WindowHasInitialized == false)
         {
@@ -49,11 +50,13 @@ namespace JSEngine
         SetVSync(true);
         JS_CORE_INFO("Window created {0} {1}", m_Data.Width, m_Data.Height);
 
+        //glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        //init windows call back event
+        SetWindowsEventCallBack();
+
         //init graphics context
         g_GraphicsConext.Init(m_Window);
 
-        //init windows call back event
-        SetWindowsEventCallBack();
     }
 
     void WindowsWindow::SetWindowsEventCallBack()

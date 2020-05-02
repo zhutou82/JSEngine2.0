@@ -1,5 +1,5 @@
 #pragma once
-#include "JSEngine/Window.h"
+#include "JSEngine/Core/Window.h"
 #include "GLFW/glfw3.h"
 
 namespace JSEngine
@@ -13,8 +13,9 @@ namespace JSEngine
     public:
 
         void OnUpdate             ()                                           override;
-        unsigned int GetWidth     () const                                     override { return m_Data.Width; }
-        unsigned int GetHeight    () const                                     override { return m_Data.Height; }
+        uint32_t GetWidth() const                                              override { return m_Data.Width; }
+        uint32_t GetHeight() const                                             override { return m_Data.Height; }
+        float GetAspectRatio() const                                           override { return m_Data.AspectRatio; }
         float GetSystemCurrentTime() const                                     override { return (float)glfwGetTime(); }
         bool IsVSync              () const                                     override { return m_Data.VSync; }
         void* GetNativeWindow     () const                                     override { return m_Window; }
@@ -38,6 +39,7 @@ namespace JSEngine
             bool VSync;
             std::string Title;
             EventCallBackFn EventCallBackFunction;
+            float AspectRatio;
         };
         GLFWwindow* m_Window;
         WindowData  m_Data;

@@ -1,6 +1,6 @@
 #pragma once
 #include "JSEngine/PCH.h"
-#include "JSEngine/Layer.h"
+#include "JSEngine/Core/Layer.h"
 #include "JSEngine/Event/MouseEvent.h"
 #include "JSEngine/Event/Event.h"
 #include "JSEngine/Event/ApplicationEvent.h"
@@ -19,11 +19,11 @@ namespace JSEngine
             : Layer(name), m_imguiLayerTime(0)
         {}
 
-        void OnUpdate()        override;
-        void OnAttach()        override;
-        void OnDetach()        override;
-        void OnRenderUpdate()  override;
-        void OnEvent(Event& e) override;
+        void OnUpdate(TimeStep delta)        override;
+        void OnAttach()                      override;
+        void OnDetach()                      override;
+        void OnRenderUpdate()                override;
+        void OnEvent(Event& e)               override;
         
 
         void Begin();

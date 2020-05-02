@@ -1,11 +1,12 @@
 #pragma once
-#include "JSEngine/Core.h"
-#include "JSEngine/Keycode.h"
-#include "JSEngine/MouseCode.h"
+#include "JSEngine/Core/Core.h"
+#include "JSEngine/Core/Keycode.h"
+#include "JSEngine/Core/MouseCode.h"
+
+#define g_Input JSEngine::InputManager::GetInstance()
 
 namespace JSEngine
 {
-#define g_Input InputManager::GetInstance()
     //base class
     class JSENGINE_API InputManager
     {

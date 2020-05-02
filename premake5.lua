@@ -14,12 +14,12 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 -- Include directories relative to root folder (solution directory)
 IncludeDir = {}
-IncludeDir["GLFW"]  = "JSEngine2.0/vendor/GLFW/include"
-IncludeDir["Glad"]  = "JSEngine2.0/vendor/Glad/include"
-IncludeDir["imgui"] = "JSEngine2.0/vendor/imgui" 
-IncludeDir["glm"]   = "JSEngine2.0/vendor/glm" 
+IncludeDir["GLFW"]      = "JSEngine2.0/vendor/GLFW/include"
+IncludeDir["Glad"]      = "JSEngine2.0/vendor/Glad/include"
+IncludeDir["imgui"]     = "JSEngine2.0/vendor/imgui" 
+IncludeDir["glm"]       = "JSEngine2.0/vendor/glm" 
 IncludeDir["tinyXML"]   = "JSEngine2.0/vendor/tinyXML" 
-
+IncludeDir["stb_image"]   = "JSEngine2.0/vendor/stb_image" 
 
 include "JSEngine2.0/vendor/GLFW"
 include "JSEngine2.0/vendor/Glad"
@@ -61,6 +61,7 @@ project "JSEngine2.0"
         "%{IncludeDir.imgui}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.tinyXML}"
+        "%{IncludeDir.stb_image}"
     }
 
     links 

@@ -1,9 +1,11 @@
 #pragma once
 #include "glad/glad.h"
+#include "JSEngine/Core/Core.h"
 struct GLFWwindow;
 
 namespace JSEngine
 {
+
     class GraphicsConext
     {
 
@@ -12,5 +14,6 @@ namespace JSEngine
         virtual void Render()          = 0;
 
     };
+
 }
 

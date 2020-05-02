@@ -1,25 +1,28 @@
 #pragma once
-#include "Core.h"
-#include "SingletonBaseClass.h"
+#include "Core/Core.h"
+#include "Core/SingletonBaseClass.h"
 #include "Platform/WindowsWindow.h"
 #include "JSEngine/Event/Event.h"
 #include "JSEngine/Event/ApplicationEvent.h"
 #include "JSEngine/Event/KeyEvent.h"
-#include "JSEngine/LayerStack.h"    
-#include "JSEngine/Layer.h"
+#include "JSEngine/Core/LayerStack.h"    
+#include "JSEngine/Core/Layer.h"
 #include "glm/glm.hpp"
 #include "JSEngine/imGui/imguiLayer.h"
 #include "Serializer/Serializer.h"
+#include "Core/TimeStep.h"
 //#include 
 
 
 #define DEBUG_ENGINE 0
 
+#define g_Application     JSEngine::Application::GetInstance()
+#define g_AppWindow       ((JSEngine::WindowsWindow*)g_Application.GetWindow())
+#define g_AppWindowHandle ((GLFWwindow*)g_AppWindow->GetNativeWindow())
+
 namespace JSEngine
 {
-#define g_Application     Application::GetInstance()
-#define g_AppWindow       ((WindowsWindow*)g_Application.GetWindow())
-#define g_AppWindowHandle ((GLFWwindow*)g_AppWindow->GetNativeWindow())
+#define g_dt              g_Application.GetDeltaTime()
 
     //template class JSENGINE_API std::default_delete<Window>;
     //template class JSENGINE_API std::unique_ptr<Window>;
@@ -44,15 +47,12 @@ namespace JSEngine
 
     class JSENGINE_API Application 
     {
-        static constexpr const float FRAME_RATE = 60.f;
-        static constexpr const float FRAME_RATE_PER_SEC = 1.0f / FRAME_RATE; 
         static constexpr const char* const XML_ENGINE_SETTING_FILE_NAME = "EngineSetting";
 
         static const std::string s_RECOUSE_FOLDER_PATH;
         static const std::string s_XML_FOLDER_PATH;
         static const std::string s_PROFILER_FOLDER_PATH;
         
-
         struct EngineSettingStruct
         {
             std::string ResourceFolderPath;
@@ -76,15 +76,20 @@ namespace JSEngine
         void PushOverLay(Layer* overlay);
 
         /********************** Event ****************/
-        void OnEvent         (Event& e);
-        bool CloseWindowEvent(WindowCloseEvent& e);
-        bool PressKeyEvent   (KeyPressEvent& e);
+        void OnEvent          (Event& e);
+        bool CloseWindowEvent (WindowCloseEvent& e);
+        bool PressKeyEvent    (KeyPressEvent& e);
+        bool CursorEvent      (MouseMoveEvent& e);
+        bool CursorScrollEvent(MouseScrollEvent& e);
 
         /******************** Gettor ****************/
         static Application& GetInstance()                   { return *s_Instance;     }
         Window* GetWindow()  const                          { return m_Window.get();  }
         const EngineSettingStruct& GetEngineSetting() const { return m_EngineSetting; }
-        
+        const float GetDeltaTime() const                    { return m_AppDeltaTime;  }
+
+
+
     private:
 
         static Application*      s_Instance;
@@ -92,12 +97,15 @@ namespace JSEngine
         std::unique_ptr<Window>  m_Window;
         bool                     m_Running = true;
         float                    m_AppDeltaTime;
-        float                    m_Time;
+        float                    m_LastTime;
         imguiLayer*              m_ImguiLayer;
         Serializer               m_Serializer;
         EngineSettingStruct      m_EngineSetting;
         std::vector<std::string> m_EngineSettingVec;
         std::vector<std::string> m_WindowSettingVec;
+        
+
+
     };
 
     Application* CreateApplication();

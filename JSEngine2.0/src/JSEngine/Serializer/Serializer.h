@@ -3,7 +3,7 @@
 #include <vector>
 #include "Binary.h"
 #include "Xml.h"
-#include "JSEngine/Core.h"
+#include "JSEngine/Core/Core.h"
 #include "JSEngine/FileSystem/FileSystem.h"
 namespace JSEngine
 {

@@ -1,6 +1,6 @@
 #pragma once
-#include "JSEngine/Core.h"
-#include "JSEngine/SingletonBaseClass.h"
+#include "JSEngine/Core/Core.h"
+#include "JSEngine/Core/SingletonBaseClass.h"
 namespace JSEngine
 {
 
