@@ -50,11 +50,13 @@ namespace JSEngine
     {
     public:
         OpenGLVertexBuffer(const void* data, uint32_t size);
+        OpenGLVertexBuffer(uint32_t size);
         ~OpenGLVertexBuffer();
 
         virtual void Bind()   const override;
         virtual void UnBind() const override;
 
+        virtual void SetData(const void* data, uint32_t size) override;
         const Layout& GetLayout() const override { return m_Layout; }
         virtual void SetLayout(const Layout& layout) override { m_Layout = layout;}
 

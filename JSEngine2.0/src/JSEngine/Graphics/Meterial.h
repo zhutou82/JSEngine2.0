@@ -11,9 +11,9 @@ namespace JSEngine
 
     public:
 
-        Meterial(const glm::vec3& color = { 1, 1, 1 }, 
-                 const glm::vec3& ambient = { 0.1f, 0.1f, 0.1f },
-                 const glm::vec3& diffuse = { 0.1f, 0.1f, 0.1f },
+        Meterial(const glm::vec3& color    = { 1, 1, 1 }, 
+                 const glm::vec3& ambient  = { 0.1f, 0.1f, 0.1f },
+                 const glm::vec3& diffuse  = { 0.1f, 0.1f, 0.1f },
                  const glm::vec3& specular = { 0.1f, 0.1f, 0.1f },
                  float shinese = 32);
 
@@ -46,6 +46,8 @@ namespace JSEngine
         float m_Shinese;
 
         uint32_t m_ID;
+
+
     };
 
     

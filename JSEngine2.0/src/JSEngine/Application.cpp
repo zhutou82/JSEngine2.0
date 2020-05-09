@@ -4,32 +4,22 @@
 #include "Platform/WindowsInput.h"
 #include "Managers/InputManager.h"
 #include "JSEngine/Serializer/Xml.h"
-#include "JSEngine/Platform/Profiler/SimpleProfiler.h"
+#include "Graphics/Renderer.h"
+#include "JSEngine/Managers/ResourceManager.h"
 
 
 namespace JSEngine
 {
-    Application* Application::     s_Instance             = NULL;
-    const std::string Application::s_RECOUSE_FOLDER_PATH  = "../Resource/";
-    const std::string Application::s_XML_FOLDER_PATH      = "../Resource/XML/";
-    const std::string Application::s_PROFILER_FOLDER_PATH = "../Resource/Profiler/";
-
+    Application* Application::s_Instance = NULL;
     Application::Application()
         : m_AppDeltaTime(0.f),
           m_LastTime(0.f),
-        m_Serializer(XML_ENGINE_SETTING_FILE_NAME)
+        m_Serializer()
     {
         JS_CORE_ASSERT(!s_Instance, "Application has been created!");
 
-        m_EngineSettingVec.reserve(EngineSetting::NUM_OF_ENGINE_SETTING);
-        m_WindowSettingVec.reserve(WindowSetting::NUM_OF_WINDOW_SETTING);
-
         //init all systems
         g_Logger.Init();
-
-        //init simple profiler
-        g_Profiler.Init(s_PROFILER_FOLDER_PATH);
-
         Init();
     }
 
@@ -37,6 +27,10 @@ namespace JSEngine
     void Application::OnEvent(Event& e)
     {
         //JS_CORE_INFO("{0}", e);
+        EventDispatcher dispatcher(e);
+        dispatcher.Dispatch<WindowReSizeEvent>(JS_BIND_EVENT(Application::WindowsResizeEvent));
+
+
         for (std::vector<Layer*>::iterator it = m_LayerStack.end(); it != m_LayerStack.begin();)
         { 
             (*--it)->OnEvent(e);
@@ -49,24 +43,23 @@ namespace JSEngine
         m_Running = false;
         return true;
     }
+    bool Application::WindowsResizeEvent(WindowReSizeEvent& e)
+    {
+        if (e.GetWidth() == 0 || e.GetHeight() == 0)
+            m_IsWindowMinimized = true;
+
+        
+        Renderer::OnMainWindowMinimized(e.GetWidth(), e.GetHeight());
+        Renderer2D::OnMainWindowMinimized(e.GetWidth(), e.GetHeight());
+
+        return false;
+    }
     bool Application::PressKeyEvent(KeyPressEvent& e)
     {
         if (e.GetKeyCode() == GLFW_KEY_ESCAPE)
             m_Running = false;
 
         return true;
-    }
-
-    bool Application::CursorEvent(MouseMoveEvent& e)
-    {
-        //g_Camera.CursorPosCallBack(e.GetMouseXCoordinate(), e.GetMouseYCoordinate());
-        return true;
-    }
-
-    bool Application::CursorScrollEvent(MouseScrollEvent& e)
-    {
-        //g_Camera.CursorScrollCallBack(e.GetMouseXOffSet(), e.GetMouseYOffSet());
-        return false;
     }
 
     void Application::PushLayer(Layer* layer)
@@ -89,21 +82,25 @@ namespace JSEngine
 
     void Application::Init()
     {
-        //ProfileStart(__FUNCTION__);
-        //init engine serializer
-        m_Serializer.Init(s_XML_FOLDER_PATH);
-        m_Serializer.DeSerialize(m_EngineSettingVec, "RecourseFolderPath");
-        m_Serializer.DeSerialize(m_WindowSettingVec, "WindowSetting");
+        JS_PROFILE_FUNCTION();
+
+        g_ResourceMgr.Init();
+        //read engine setting
+        m_Serializer.Init(g_ResourceMgr.GetCoreFileNames(CoreFilerName::ENGINEXML), g_ResourceMgr.GetCoreFolderPaths(CoreFolderPath::XML));
+        m_WindowSettingVec.reserve(WindowSetting::NUM_OF_WINDOW_SETTING);
+        m_Serializer.DeSerialize(m_WindowSettingVec, XML_WINDOW_SETTING_CHILD_NAME);
 
         //init winodw handle
-        m_Window = std::unique_ptr<Window>(Window::Create());
+        m_Window = std::unique_ptr<Window>(Window::Create({uint32_t(stoi(m_WindowSettingVec[WindowSetting::WIDTH])), 
+                                                           uint32_t(stoi(m_WindowSettingVec[WindowSetting::HEIGHT])), 
+                                                                         m_WindowSettingVec[WindowSetting::TITLE]}));
+
         m_Window->AddCallBackFn(JS_BIND_EVENT(Application::OnEvent));
         s_Instance = this;
 
         //init imgui
         m_ImguiLayer = new imguiLayer;
         PushLayer(m_ImguiLayer);
-        //ProfilerEnd
     }
     
     void Application::Run()
@@ -115,8 +112,6 @@ namespace JSEngine
             TimeStep delta(currentTime - m_LastTime);
             m_AppDeltaTime = delta;
             m_LastTime = currentTime;
-
-            
 
             //exit window
             if (g_Input.IsKeyPressed(GLFW_KEY_ESCAPE))
@@ -133,13 +128,12 @@ namespace JSEngine
             m_ImguiLayer->Begin();
             for (auto& imguiLayer : m_LayerStack)
             {
-                imguiLayer->OnRenderUpdate();
+                imguiLayer->OnRenderUpdate(delta);
             }
             m_Window->OnUpdate();
             m_ImguiLayer->End();
 
 
-            
             glfwSwapBuffers(g_AppWindowHandle);
         }
     }

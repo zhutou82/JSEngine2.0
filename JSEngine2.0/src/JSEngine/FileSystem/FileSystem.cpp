@@ -26,4 +26,11 @@ namespace JSEngine
         fclose(m_File);
     }
 
+    void JSFile::SetFile(const std::string& fileName, FILE_TYPE fileType, FILE_MODE mode)
+    {
+        m_FileName = fileName;
+        m_FileType = FILETYPE_ARR[fileType];
+        m_FileMode = FILEMODE_ARR[mode];
+    }
+
 }

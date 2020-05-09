@@ -7,27 +7,29 @@
 
 #include <stdio.h>
 #include "Log.h"
-#ifdef JSENGINE_PLATFORM_WINDOWS
+#include "JSEngine/Debug/SimpleProfiler.h"
 
+#ifdef JSENGINE_PLATFORM_WINDOWS
 
 extern JSEngine::Application* JSEngine::CreateApplication();
 
 int main(int argc, char** argv)
 {
-    printf("Welcome to JSEngine2.0\n");
+    JS_PROFILE_BEGINE_SESSION("Engine Initialization");
     JSEngine::Application* app = JSEngine::CreateApplication();
-    //app->Init();
-    JS_CORE_INFO("Log initialized");
-    CLIENT_INFO("Welcome to JSEngine2.0");
-    int a = 10;
-    CLIENT_INFO("Varialbe = {0}", a);
+    JS_PROFILE_END_SESSION();
+
+    JS_PROFILE_BEGINE_SESSION("Engine Update");
     app->Run();
+    JS_PROFILE_END_SESSION();
+
+    JS_PROFILE_BEGINE_SESSION("Engine Shutdown");
     delete app;
+    JS_PROFILE_END_SESSION();
+
 }
 
 
-
-
 #else
-    #error JSEngine only supports Windows!
+#error JSEngine only supports Windows!
 #endif 

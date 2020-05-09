@@ -20,7 +20,6 @@ namespace JSEngine
     }
     void WindowsWindow::OnUpdate()
     {
-        g_GraphicsConext.Render();
         glfwPollEvents();
     }
 
@@ -69,7 +68,7 @@ namespace JSEngine
                 data.Height = height;
                 data.Width = width;
                 glfwGetFramebufferSize(window, &data.FrameBufferWidth, &data.FrameBufferHeight);
-                WindowReSizeEvent event(height, width);
+                WindowReSizeEvent event(width, height);
                 data.EventCallBackFunction(event);
             }
         );

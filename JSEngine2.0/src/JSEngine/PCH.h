@@ -3,6 +3,7 @@
 #include <iostream>
 #include <memory>
 #include <utility>
+#include <thread>
 
 //algorithm
 #include <algorithm>
@@ -15,8 +16,10 @@
 #include <list>
 #include <set>
 #include <map>
+#include <stack>
 #include <unordered_map>
 #include <unordered_set>
+
 
 #ifdef JSENGINE_PLATFORM_WINDOWS
     //#include <Windows.h>
@@ -24,3 +27,4 @@
 
 //JSEngine
 #include "Core/Log.h"
+#include "Debug/SimpleProfiler.h"

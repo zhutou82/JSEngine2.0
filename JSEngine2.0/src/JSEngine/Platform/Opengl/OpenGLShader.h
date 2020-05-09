@@ -19,7 +19,6 @@ namespace JSEngine
             std::vector<std::pair<std::string, glm::mat4>> Mat4Vec;
         };
 
-        static std::string s_FolderPath;
         static std::string s_VertexType;
         static std::string s_FragmentType;
 
@@ -27,10 +26,7 @@ namespace JSEngine
 
     public:
 
-        
-
-        static void SetShaderFolderPath(const std::string& folderPath);
-
+       
         OpenGLShader(const std::string& glslFileName);
         OpenGLShader(const std::string& vFile, const std::string& fFile);
         ~OpenGLShader();
@@ -51,7 +47,7 @@ namespace JSEngine
         void SetUnifrom3f(const std::string& name, const glm::vec3& vec3);
         void SetUnifrom1i(const std::string& name, int value);
         void SetUnifrom1f(const std::string& name, float value);
-
+        void SetIntArrary(const std::string& name, uint32_t count, int* val) override;
         
 
         void AddToUniformVec(const std::string& name, float f)

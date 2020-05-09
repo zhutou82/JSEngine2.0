@@ -14,7 +14,7 @@ namespace JSEngine
 
     Ref<Meterial> Meterial::Create()
     {
-        return std::make_shared<Meterial>();
+        return CreateRef<Meterial>();
     }
 
 }

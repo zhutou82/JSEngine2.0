@@ -76,7 +76,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>PCH.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;JSENGINE_PLATFORM_WINDOWS;JSENGINE_BUILD_DLL;GLFW_INCLUDE_NONE;JS_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLFW_INCLUDE_NONE;JSENGINE_PLATFORM_WINDOWS;JS_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\tinyXML;vendor\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -96,7 +96,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>PCH.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;JSENGINE_PLATFORM_WINDOWS;JSENGINE_BUILD_DLL;GLFW_INCLUDE_NONE;JS_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLFW_INCLUDE_NONE;JSENGINE_PLATFORM_WINDOWS;JS_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\tinyXML;vendor\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -120,7 +120,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>PCH.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;JSENGINE_PLATFORM_WINDOWS;JSENGINE_BUILD_DLL;GLFW_INCLUDE_NONE;JS_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLFW_INCLUDE_NONE;JSENGINE_PLATFORM_WINDOWS;JS_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\tinyXML;vendor\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -143,8 +143,16 @@
     <ClInclude Include="src\JSEngine.h" />
     <ClInclude Include="src\JSEngine\Application.h" />
     <ClInclude Include="src\JSEngine\Core\Core.h" />
-    <ClInclude Include="src\JSEngine\Core\TimeStep.h" />
     <ClInclude Include="src\JSEngine\Core\EntryPoint.h" />
+    <ClInclude Include="src\JSEngine\Core\Keycode.h" />
+    <ClInclude Include="src\JSEngine\Core\Layer.h" />
+    <ClInclude Include="src\JSEngine\Core\LayerStack.h" />
+    <ClInclude Include="src\JSEngine\Core\Log.h" />
+    <ClInclude Include="src\JSEngine\Core\MouseCode.h" />
+    <ClInclude Include="src\JSEngine\Core\SingletonBaseClass.h" />
+    <ClInclude Include="src\JSEngine\Core\TimeStep.h" />
+    <ClInclude Include="src\JSEngine\Core\Window.h" />
+    <ClInclude Include="src\JSEngine\Debug\SimpleProfiler.h" />
     <ClInclude Include="src\JSEngine\Event\ApplicationEvent.h" />
     <ClInclude Include="src\JSEngine\Event\Event.h" />
     <ClInclude Include="src\JSEngine\Event\KeyEvent.h" />
@@ -160,12 +168,10 @@
     <ClInclude Include="src\JSEngine\Graphics\Shader.h" />
     <ClInclude Include="src\JSEngine\Graphics\Texture.h" />
     <ClInclude Include="src\JSEngine\Graphics\VertexArray.h" />
-    <ClInclude Include="src\JSEngine\Core\Keycode.h" />
-    <ClInclude Include="src\JSEngine\Core\Layer.h" />
-    <ClInclude Include="src\JSEngine\Core\LayerStack.h" />
-    <ClInclude Include="src\JSEngine\Core\Log.h" />
     <ClInclude Include="src\JSEngine\Managers\AssetManager.h" />
+    <ClInclude Include="src\JSEngine\Managers\GameObjectManager.h" />
     <ClInclude Include="src\JSEngine\Managers\InputManager.h" />
+    <ClInclude Include="src\JSEngine\Managers\ResourceManager.h" />
     <ClInclude Include="src\JSEngine\Math\JSMath.h" />
     <ClInclude Include="src\JSEngine\Math\Mat2.h" />
     <ClInclude Include="src\JSEngine\Math\Mat3.h" />
@@ -173,13 +179,12 @@
     <ClInclude Include="src\JSEngine\Math\Vec2.h" />
     <ClInclude Include="src\JSEngine\Math\Vec3.h" />
     <ClInclude Include="src\JSEngine\Math\Vec4.h" />
-    <ClInclude Include="src\JSEngine\Core\MouseCode.h" />
     <ClInclude Include="src\JSEngine\PCH.h" />
     <ClInclude Include="src\JSEngine\Platform\CameraController.h" />
     <ClInclude Include="src\JSEngine\Platform\Opengl\Light.h" />
-    <ClInclude Include="src\JSEngine\Platform\Opengl\OpenGLBuffer.h" />
     <ClInclude Include="src\JSEngine\Platform\Opengl\Mesh.h" />
     <ClInclude Include="src\JSEngine\Platform\Opengl\Model.h" />
+    <ClInclude Include="src\JSEngine\Platform\Opengl\OpenGLBuffer.h" />
     <ClInclude Include="src\JSEngine\Platform\Opengl\OpenGLContext.h" />
     <ClInclude Include="src\JSEngine\Platform\Opengl\OpenGLRenderAPI.h" />
     <ClInclude Include="src\JSEngine\Platform\Opengl\OpenGLShader.h" />
@@ -191,8 +196,6 @@
     <ClInclude Include="src\JSEngine\Serializer\Binary.h" />
     <ClInclude Include="src\JSEngine\Serializer\Serializer.h" />
     <ClInclude Include="src\JSEngine\Serializer\Xml.h" />
-    <ClInclude Include="src\JSEngine\Core\SingletonBaseClass.h" />
-    <ClInclude Include="src\JSEngine\Core\Window.h" />
     <ClInclude Include="src\JSEngine\imGui\imguiLayer.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_features.hpp" />
@@ -605,6 +608,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\JSEngine\Application.cpp" />
+    <ClCompile Include="src\JSEngine\Core\LayerStack.cpp" />
+    <ClCompile Include="src\JSEngine\Core\Log.cpp" />
     <ClCompile Include="src\JSEngine\Core\TimeStep.cpp" />
     <ClCompile Include="src\JSEngine\FileSystem\FileSystem.cpp" />
     <ClCompile Include="src\JSEngine\Graphics\Buffer.cpp" />
@@ -616,9 +621,9 @@
     <ClCompile Include="src\JSEngine\Graphics\Shader.cpp" />
     <ClCompile Include="src\JSEngine\Graphics\Texture.cpp" />
     <ClCompile Include="src\JSEngine\Graphics\VertexArray.cpp" />
-    <ClCompile Include="src\JSEngine\Core\LayerStack.cpp" />
-    <ClCompile Include="src\JSEngine\Core\Log.cpp" />
     <ClCompile Include="src\JSEngine\Managers\AssetManager.cpp" />
+    <ClCompile Include="src\JSEngine\Managers\GameObjectManager.cpp" />
+    <ClCompile Include="src\JSEngine\Managers\ResourceManager.cpp" />
     <ClCompile Include="src\JSEngine\Math\JSMathcpp.cpp" />
     <ClCompile Include="src\JSEngine\Math\Mat2.cpp" />
     <ClCompile Include="src\JSEngine\Math\Mat3.cpp" />
@@ -631,15 +636,15 @@
     </ClCompile>
     <ClCompile Include="src\JSEngine\Platform\CameraController.cpp" />
     <ClCompile Include="src\JSEngine\Platform\Opengl\Light.cpp" />
-    <ClCompile Include="src\JSEngine\Platform\Opengl\OpenGLBuffer.cpp" />
     <ClCompile Include="src\JSEngine\Platform\Opengl\Mesh.cpp" />
     <ClCompile Include="src\JSEngine\Platform\Opengl\Model.cpp" />
+    <ClCompile Include="src\JSEngine\Platform\Opengl\OpenGLBuffer.cpp" />
     <ClCompile Include="src\JSEngine\Platform\Opengl\OpenGLContext.cpp" />
     <ClCompile Include="src\JSEngine\Platform\Opengl\OpenGLRenderAPI.cpp" />
     <ClCompile Include="src\JSEngine\Platform\Opengl\OpenGLShader.cpp" />
-    <ClCompile Include="src\JSEngine\Platform\Opengl\std_image.cpp" />
     <ClCompile Include="src\JSEngine\Platform\Opengl\OpenGLTexture.cpp" />
     <ClCompile Include="src\JSEngine\Platform\Opengl\OpenGLVertexArray.cpp" />
+    <ClCompile Include="src\JSEngine\Platform\Opengl\std_image.cpp" />
     <ClCompile Include="src\JSEngine\Platform\Profiler\SimpleProfiler.cpp" />
     <ClCompile Include="src\JSEngine\Platform\WindowsInput.cpp" />
     <ClCompile Include="src\JSEngine\Platform\WindowsWindow.cpp" />

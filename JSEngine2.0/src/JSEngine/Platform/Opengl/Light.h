@@ -1,6 +1,9 @@
 #pragma once
 #include "glm/glm.hpp"
 
+
+#define CAST_LIGHT_TO(type, x) std::static_pointer_cast<JSEngine::Ref<type>::element_type>(x)
+
 namespace JSEngine
 {
     
@@ -11,6 +14,8 @@ namespace JSEngine
         POINT_LIGHT,
         SPOT_LIGHT
     };
+
+     //CastLightTo<DirectionalLight>(light)
 
     class Light
     {
@@ -63,6 +68,10 @@ namespace JSEngine
     {
 
     public:
+        DirectionalLight();
+
+        const glm::vec3& GetLightDirection() const { return m_Direction; }
+        void SetLightDirection(const glm::vec3& val) { m_Direction = val; }
 
 
     private:
@@ -101,5 +110,10 @@ namespace JSEngine
 
     };
 
+    template <typename T>
+    Ref<T> CastLightTo(const Ref<Light>& light)
+    {
+        return std::static_pointer_cast<Ref<T>::element_type>(light);
+    }
 
 }

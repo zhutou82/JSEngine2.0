@@ -35,6 +35,7 @@ namespace JSEngine
 
         bool CursorScrollCallBack(MouseScrollEvent& event);
         bool CursorPosCallBack(MouseMoveEvent& event);
+        bool OnWindowResizeCallBack(WindowReSizeEvent& event);
 
     private:
         CameraController() {}
@@ -52,9 +53,39 @@ namespace JSEngine
         float m_PreXScroll;
         float m_PreYScroll;
 
+    };
 
 
+    class OrthographicCameraController 
+    {
 
+    public:
+        OrthographicCameraController()  {};
+        OrthographicCameraController(float aspectRatio, const glm::vec2& pos);
+
+        void OnUpdate(TimeStep delta);
+        void OnEvent(Event& e);
+
+        const OrthographicCamera& GetCamera() const { return m_Camera;  }
+        
+    private:
+
+        bool MouseScrollCallBack(MouseScrollEvent& e);
+        bool MouseMovementCallBack(MouseMoveEvent& e);
+        bool OnWindowResizeCallBack(WindowReSizeEvent& e);
+
+    private:
+        glm::vec3 m_Pos;
+
+        bool m_EnableRotation;
+        float m_AspecRatio;
+        float m_ZoonLevel;
+
+        float m_CameraMoveSpeed;
+        float m_CameraRotationSpeed;
+
+        OrthographicCamera m_Camera;
+       
     };
 
 

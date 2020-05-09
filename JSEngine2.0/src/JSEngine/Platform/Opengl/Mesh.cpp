@@ -1,6 +1,6 @@
 #include "PCH.h"
 #include "Mesh.h"
-#include "JSEngine/Managers/AssetManager.h"
+#include "JSEngine/Managers/ResourceManager.h"
 
 namespace JSEngine
 {
@@ -8,7 +8,7 @@ namespace JSEngine
     Mesh::Mesh(MeshType meshType) :
         m_MeshType(meshType), m_ModelMat(1.f), m_RotationDegree(0), m_Scale({ 1, 1, 1 }), m_Position({0,0,0})
     {
-        m_Texture = g_AssertMgr.Acquire2DTexture();
+        m_Texture = g_ResourceMgr.Acquire2DTexture();
         m_Meterial = Meterial::Create();
 
         switch (meshType)
@@ -188,8 +188,10 @@ namespace JSEngine
         {
             0, 1, 2,
             0, 2, 3,
+
             4, 5, 6,
             4, 6, 7,
+
             8, 9, 10,
             8, 10,11,
             12,13,14,

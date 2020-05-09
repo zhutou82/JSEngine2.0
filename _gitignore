@@ -9,3 +9,4 @@ bin-int/
 *.vcxproj
 *.xml
 *.sln
+*.json

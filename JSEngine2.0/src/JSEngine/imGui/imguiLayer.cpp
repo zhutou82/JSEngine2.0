@@ -69,7 +69,7 @@ namespace JSEngine
         ImGui::NewFrame();
     }
 
-    void imguiLayer::OnRenderUpdate()
+    void imguiLayer::OnRenderUpdate(TimeStep delta)
     {
         static bool showWindow = true;
         ImGui::ShowDemoWindow(&showWindow);

@@ -54,10 +54,9 @@ namespace JSEngine
 
     class OpenGLTexture2D : public Texture2D
     {
-        static std::string s_FolderPath;
-
+        static uint32_t s_UniqueTextureID;
+        
     public:
-        static void SetFolderPath(const std::string& folderPath);
 
         OpenGLTexture2D() {};
         OpenGLTexture2D(const std::string& fileName, bool filp = true);
@@ -69,8 +68,11 @@ namespace JSEngine
         virtual uint32_t GetHeight() const override { return m_TextureData.Height; }
 
 
-        virtual void Bind() const override;
+        virtual void Bind(uint32_t slot) const override;
         virtual void UnBind() const override;    
+
+        virtual uint32_t GetTextureID() const override { return m_TexutureID; }
+        virtual bool Equals(const Texture& rhs) override { return m_TexutureID == rhs.GetTextureID(); }
 
         uint32_t GetSlot() const { return m_Slot; }
         void SetSlot(uint32_t val) { m_Slot = val; }
@@ -80,6 +82,7 @@ namespace JSEngine
         TextureData m_TextureData;
         unsigned m_RendererID;
         uint32_t m_Slot;
+        uint32_t m_TexutureID;
 
     };
 

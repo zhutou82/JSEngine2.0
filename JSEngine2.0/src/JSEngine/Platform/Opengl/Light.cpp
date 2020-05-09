@@ -59,4 +59,10 @@ namespace JSEngine
 
     
 
+    DirectionalLight::DirectionalLight()
+        : Light()
+    {
+        m_LightType = LightType::DIRECTIONAL_LIGHT;
+    }
+
 }

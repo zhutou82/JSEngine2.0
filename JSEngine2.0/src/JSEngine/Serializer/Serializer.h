@@ -11,10 +11,12 @@ namespace JSEngine
     {
 
     public:
+        Serializer();
         Serializer(const std::string& fileName);
         ~Serializer() {};
 
         void Init(const std::string& xmlFolderPath);
+        void Init(const std::string& fileName, const std::string& xmlFolderPath);
         void DeSerialize(std::vector<std::string>& vec, const std::string& childName); 
         void Serialize(const std::vector<std::string>& vec);
 

@@ -10,7 +10,7 @@ namespace JSEngine
         switch (Renderer::GetGraphicsAPI())
         {
             case RendererAPI::API::NONE:     return nullptr;
-            case RendererAPI::API::OPENGL:   return std::make_shared<OpenGLVertexArray>();
+            case RendererAPI::API::OPENGL:   return CreateRef<OpenGLVertexArray>();
             case RendererAPI::API::DIRECT3D: return nullptr;
         }
 

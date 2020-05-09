@@ -1,7 +1,6 @@
 #pragma once
 #include "Core.h"
 #include "Layer.h"
-#include "SingletonBaseClass.h"
 #include <vector>
 
 namespace JSEngine
@@ -9,10 +8,9 @@ namespace JSEngine
     //template class JSENGINE_API std::allocator<Layer*>;
     //template class JSENGINE_API std::vector<Layer*, std::allocator<Layer*> >;
 
-    class JSENGINE_API LayerStack : public Singleton<LayerStack>
+    class JSENGINE_API LayerStack 
     {
     public:
-        friend class Singleton <LayerStack>;
 
         LayerStack();
         ~LayerStack();
@@ -29,7 +27,7 @@ namespace JSEngine
        
     private:
         std::vector<Layer*> m_StackLayer;
-        unsigned m_StackLayerInsertIndex;
+        uint32_t m_StackLayerInsertIndex;
 
     };
 

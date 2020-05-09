@@ -16,9 +16,11 @@
 #include "JSEngine/Graphics/Meterial.h"
 #include "JSEngine/Platform/Opengl/Mesh.h"
 #include "JSEngine/Platform/Opengl/Light.h"
+//--------------------------------------------
 
-
-
+//----------------Resources---------------------
+#include "JSEngine/Managers/ResourceManager.h"
+//--------------------------------------------
 
 //-------------- --UI---------------------
 #include "JSEngine/imGui/imguiLayer.h"
@@ -37,9 +39,8 @@
 #include "JSEngine/Core/Log.h"
 //----------------------------------------------
 
-//--------------Profiling---------------------
-#include "JSEngine/Platform/Profiler/SimpleProfiler.h"
-
+//--------------Debug---------------------------
+#include "JSEngine/Debug/SimpleProfiler.h"
 //--------------------------------------------
 
 
@@ -47,9 +48,6 @@
 #include "JSEngine/Managers/InputManager.h"
 //----------------------------------------------
 
-//--------------Entry point---------------------
-#include "JSEngine/Core/EntryPoint.h"
-//---------------------------------------------- 
 
 
 

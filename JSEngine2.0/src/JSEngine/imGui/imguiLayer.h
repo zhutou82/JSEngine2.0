@@ -1,10 +1,10 @@
 #pragma once
-#include "JSEngine/PCH.h"
 #include "JSEngine/Core/Layer.h"
 #include "JSEngine/Event/MouseEvent.h"
 #include "JSEngine/Event/Event.h"
 #include "JSEngine/Event/ApplicationEvent.h"
 #include "JSEngine/Event/KeyEvent.h"
+
 
 
 namespace JSEngine
@@ -22,7 +22,7 @@ namespace JSEngine
         void OnUpdate(TimeStep delta)        override;
         void OnAttach()                      override;
         void OnDetach()                      override;
-        void OnRenderUpdate()                override;
+        void OnRenderUpdate(TimeStep delta)  override;
         void OnEvent(Event& e)               override;
         
 

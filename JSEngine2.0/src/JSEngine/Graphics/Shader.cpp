@@ -22,9 +22,9 @@ namespace JSEngine
     {
         switch (Renderer::GetGraphicsAPI())
         {
-        case RendererAPI::API::NONE: return nullptr;
-        case RendererAPI::API::OPENGL: return std::make_shared<OpenGLShader>(glslShaderFileName);
-        case RendererAPI::API::DIRECT3D: return nullptr;
+            case RendererAPI::API::NONE: return nullptr;
+            case RendererAPI::API::OPENGL: return CreateRef<OpenGLShader>(glslShaderFileName);
+            case RendererAPI::API::DIRECT3D: return nullptr;
 
         }
         JS_CORE_ASSERT(false, "Unknow type");

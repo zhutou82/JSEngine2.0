@@ -5,6 +5,7 @@
 namespace JSEngine
 {
 
+///////////////////////////////////////////////3DCameraController/////////////////////////////////////////////////////////
     void CameraController::Init(const glm::vec3& camStartPos, float aspecRatio, float fov, float nearPlane, float farPlane)
     {
         m_Pos = camStartPos;
@@ -108,7 +109,81 @@ namespace JSEngine
         direction.z = sin(glm::radians(m_Yaw)) * cos(glm::radians(m_Pictch));
 
         m_Front = glm::normalize(direction);
+        return true;
+    }
 
+    bool CameraController::OnWindowResizeCallBack(WindowReSizeEvent& event)
+    {
+        m_AspecRatio = (float)event.GetWidth() / (float)event.GetHeight();
+        return true;
+    }
+
+///////////////////////////////////////////////2DCameraController/////////////////////////////////////////////////////////
+
+    OrthographicCameraController::OrthographicCameraController(float aspectRatio, const glm::vec2& pos) :
+        m_Pos(pos.x, pos.y, 1.f),
+        m_EnableRotation(false),
+        m_AspecRatio(aspectRatio),
+        m_ZoonLevel(1.f),
+        m_Camera(-m_AspecRatio * m_ZoonLevel, m_AspecRatio * m_ZoonLevel, -m_ZoonLevel, m_ZoonLevel),
+        m_CameraMoveSpeed(1.f),
+        m_CameraRotationSpeed(glm::radians(120.f))
+    {
+        JS_PROFILE_FUNCTION();
+        m_Camera.SetPosition(m_Pos);
+    }
+
+    void OrthographicCameraController::OnUpdate(TimeStep delta)
+    {
+        JS_PROFILE_FUNCTION();
+        if (g_Input.IsKeyPressed(JS_KEY_W))
+        {
+            m_Pos.y += m_CameraMoveSpeed * delta;
+        }
+        else if (g_Input.IsKeyPressed(JS_KEY_S))
+        {
+            m_Pos.y -= m_CameraMoveSpeed * delta;
+        }
+
+        if (g_Input.IsKeyPressed(JS_KEY_A))
+        {
+            m_Pos.x -= m_CameraMoveSpeed * delta;
+
+        }
+        else if (g_Input.IsKeyPressed(JS_KEY_D))
+        {
+            m_Pos.x += m_CameraMoveSpeed * delta;
+        }
+
+        m_Camera.SetPosition(m_Pos);
+    }
+
+    void OrthographicCameraController::OnEvent(Event& e)
+    {
+        JS_PROFILE_FUNCTION();
+        EventDispatcher dispatcher(e);
+        dispatcher.Dispatch<MouseScrollEvent>(JS_BIND_EVENT(OrthographicCameraController::MouseScrollCallBack));
+        dispatcher.Dispatch<WindowReSizeEvent>(JS_BIND_EVENT(OrthographicCameraController::OnWindowResizeCallBack));
+    }
+
+    bool OrthographicCameraController::MouseScrollCallBack(MouseScrollEvent& e)
+    {
+        JS_PROFILE_FUNCTION();
+        m_ZoonLevel -= e.GetMouseYOffSet() * 0.1f;
+        m_Camera.SetProjMatrx(-m_AspecRatio * m_ZoonLevel, m_AspecRatio * m_ZoonLevel, -m_ZoonLevel, m_ZoonLevel);
+        return true;
+    }
+
+    bool OrthographicCameraController::MouseMovementCallBack(MouseMoveEvent& e)
+    {
+        return true;
+    }
+
+    bool OrthographicCameraController::OnWindowResizeCallBack(WindowReSizeEvent& e)
+    {
+        JS_PROFILE_FUNCTION();
+        m_AspecRatio = (float)e.GetWidth() / (float)e.GetHeight();
+        m_Camera.SetProjMatrx(-m_AspecRatio * m_ZoonLevel, m_AspecRatio * m_ZoonLevel, -m_ZoonLevel, m_ZoonLevel);
         return true;
     }
 

@@ -8,8 +8,8 @@ namespace JSEngine
 {
     struct WindowsProp
     {
-        unsigned int Width;
-        unsigned int Height;
+        uint32_t Width;
+        uint32_t Height;
         std::string Titile;
 
         WindowsProp(uint32_t width = 1280, 

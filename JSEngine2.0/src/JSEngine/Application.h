@@ -47,18 +47,13 @@ namespace JSEngine
 
     class JSENGINE_API Application 
     {
-        static constexpr const char* const XML_ENGINE_SETTING_FILE_NAME = "EngineSetting";
+        static constexpr const char* const XML_WINDOW_SETTING_CHILD_NAME = "WindowSetting";
 
-        static const std::string s_RECOUSE_FOLDER_PATH;
-        static const std::string s_XML_FOLDER_PATH;
-        static const std::string s_PROFILER_FOLDER_PATH;
-        
         struct EngineSettingStruct
         {
             std::string ResourceFolderPath;
             std::string TextureFile;
             glm::vec2 WindowResolution;
-            
         };
     public:
         Application();
@@ -78,9 +73,9 @@ namespace JSEngine
         /********************** Event ****************/
         void OnEvent          (Event& e);
         bool CloseWindowEvent (WindowCloseEvent& e);
+        bool WindowsResizeEvent(WindowReSizeEvent& e);
+
         bool PressKeyEvent    (KeyPressEvent& e);
-        bool CursorEvent      (MouseMoveEvent& e);
-        bool CursorScrollEvent(MouseScrollEvent& e);
 
         /******************** Gettor ****************/
         static Application& GetInstance()                   { return *s_Instance;     }
@@ -96,12 +91,13 @@ namespace JSEngine
         LayerStack               m_LayerStack;
         std::unique_ptr<Window>  m_Window;
         bool                     m_Running = true;
+        bool                     m_IsWindowMinimized = false;
+        bool                     m_IsFullScreen = false;
         float                    m_AppDeltaTime;
         float                    m_LastTime;
         imguiLayer*              m_ImguiLayer;
         Serializer               m_Serializer;
         EngineSettingStruct      m_EngineSetting;
-        std::vector<std::string> m_EngineSettingVec;
         std::vector<std::string> m_WindowSettingVec;
         
 

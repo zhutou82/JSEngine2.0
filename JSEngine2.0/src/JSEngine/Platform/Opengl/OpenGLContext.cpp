@@ -51,7 +51,7 @@ namespace JSEngine
         case GL_DEBUG_SEVERITY_MEDIUM:
             JS_CORE_INFO("MEDIUM");
             break;
-        case GL_DEBUG_SEVERITY_HIGH:
+        case GL_DEBUG_SEVERITY_HIGH:  
             JS_CORE_INFO("HIGH");
             break;
         }
@@ -87,70 +87,10 @@ namespace JSEngine
 
         glEnable(GL_DEBUG_OUTPUT);
         glDebugMessageCallback(openglCallbackFunction, nullptr);
-
-        //GLuint unusedIds = 0;
-        //glDebugMessageControl(GL_DONT_CARE,
-        //                      GL_DONT_CARE,
-        //                      GL_DONT_CARE,
-        //                      0,
-        //                      &unusedIds,
-        //                      true);
-
-        //g_Camera.Init(windowHandle, { 0, 0, 3 });
-
-        //glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
-        //m_Shader.reset(new OpenGLShader());
-        //m_Shader->Init();
-        ////m_AnotherShader.reset(new OpenGLShader("AnotherVertexShader", "AnotherFragmentShader"));
-
-
-        //Mesh * m = new Mesh();
-        //m->SetPosition(0, 0, 0);
-        //m->SetScale(1);
-        //m->AttachShader(m_Shader->GetShaderID());
-        //
-
-        //Mesh* lightObj = new Mesh();
-        //lightObj->SetPosition(lightPos);
-        //lightObj->SetScale(0.5);
-        //lightObj->AttachShader(m_Shader->GetShaderID());
-        ////m->SetRotation();
-        ////m->AttachShader(m_Shader);
-        //m_MeshVec.push_back(m);
-        //m_MeshVec.push_back(lightObj);
-
-        //m_PointLight = new PointLight();
-        //m_PointLight->SetPosition(lightPos);
-        //m_PointLight->SetAttachedShaderID(m_Shader->GetShaderID());
-
-        //RenderCommand::AttachShader(m_Shader);
-        //m_LightVec.push_back(m_PointLight);
-
-        //m_SceneData = new SceneData;
-        //m_SceneData->Lights = m_LightVec;
     }
 
     void OpenGLContext::Render()
     {
-        //RenderCommand::Clear({ 0.0f, 0.0f, 0.0f, 1 });
-
-        //g_Camera.Update();
-
-        //m_Shader->Bind();
-        //m_Shader->SetUnifrom1i("u_TextureID", 0);
-        ////ImGui::Begin("Testing");
-        ////ImGui::End();
-        //m_Shader->SetUnifrom3f("u_ObjectColor", { 1.0f, 0.5f, 0.31f });
-
-        //Renderer::BeginScene(m_SceneData);
-
-        //for (auto mesh : m_MeshVec)
-        //{
-        //    //mesh->SetRotation(mesh->GetRotation() + 10.f * g_dt);
-        //    Renderer::Submit(mesh);
-        //}
-
-        //Renderer::EndScene();
 
     }
 

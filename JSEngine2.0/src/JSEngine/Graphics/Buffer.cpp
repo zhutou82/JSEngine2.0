@@ -12,12 +12,17 @@ namespace JSEngine
         switch (Renderer::GetGraphicsAPI())
         {
         case RendererAPI::API::NONE:     return nullptr;
-        case RendererAPI::API::OPENGL:   return std::make_shared<OpenGLVertexBuffer>(data, size);
+        case RendererAPI::API::OPENGL:   return CreateRef<OpenGLVertexBuffer>(data, size);
         case RendererAPI::API::DIRECT3D: return nullptr;
         }
 
         JS_CORE_ASSERT(false, "Graphics API not found");
         return nullptr;
+    }
+
+    Ref<VertexBuffer> VertexBuffer::Create(uint32_t size)
+    {
+        return CreateRef<OpenGLVertexBuffer>(size);
     }
 
 
@@ -26,7 +31,7 @@ namespace JSEngine
         switch (Renderer::GetGraphicsAPI())
         {
         case RendererAPI::API::NONE:     return nullptr;
-        case RendererAPI::API::OPENGL:   return std::make_shared<OpenGLIndexBuffer>(data, count);
+        case RendererAPI::API::OPENGL:   return CreateRef<OpenGLIndexBuffer>(data, count);
         case RendererAPI::API::DIRECT3D: return nullptr;
         }
 

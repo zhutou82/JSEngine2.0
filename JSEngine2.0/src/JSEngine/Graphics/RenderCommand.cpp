@@ -6,6 +6,11 @@ namespace JSEngine
 {
     RendererAPI * RenderCommand::s_RenderAPI = new OpenGLRendererAPI;
 
+    void RenderCommand::SetMainViewPort(uint32_t width, uint32_t height)
+    {
+        s_RenderAPI->SetMainViewPort(width, height);
+    }
+
     void RenderCommand::Clear(const glm::vec4& color)
     {
         s_RenderAPI->Clear(color);
@@ -14,11 +19,6 @@ namespace JSEngine
     void RenderCommand::DrawIndex(const Ref<Mesh>& mesh)
     {
         s_RenderAPI->DrawIndexd(mesh);
-    }
-
-    void RenderCommand::DrawIndex(const Ref<VertexArray>& VAO)
-    {
-        s_RenderAPI->DrawIndexd(VAO);
     }
 
     void RenderCommand::AttachShader(const Ref<Shader>& shader)
@@ -46,6 +46,16 @@ namespace JSEngine
         s_RenderAPI->Submit(mesh);
     }
 
+    //Renderer 2D
+
+    void RenderCommand::DrawIndex(const Ref<VertexArray>& VAO, uint32_t count)
+    {
+        s_RenderAPI->DrawIndexd(VAO, count);
+    }
+    //void RenderCommand::SetUpEnviroment(const Ref<SceneData2D>& sceneData)
+    //{
+    //    s_RenderAPI->SetUpEnviroment(sceneData);
+    //}
 
 
     

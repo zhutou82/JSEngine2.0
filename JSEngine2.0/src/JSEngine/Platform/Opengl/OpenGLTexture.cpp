@@ -1,19 +1,19 @@
 #include "PCH.h"
 #include "OpenGLTexture.h"
+#include "JSEngine/Managers/ResourceManager.h"
 
 
 namespace JSEngine
 {
-    std::string OpenGLTexture2D::s_FolderPath = "../Resource/Texture/";
 
-    void OpenGLTexture2D::SetFolderPath(const std::string& folderPath)
-    {
-        s_FolderPath = folderPath;
-    }
+    uint32_t OpenGLTexture2D::s_UniqueTextureID = 0;
+
     OpenGLTexture2D::OpenGLTexture2D(const std::string& fileName, bool flipped) :
-        m_TextureData(s_FolderPath, fileName, flipped), m_Slot(0)
+        m_TextureData(g_ResourceMgr.GetCoreFolderPaths(CoreFolderPath::ASSETS), fileName, flipped), m_Slot(0), m_TexutureID(0)
     {
         Init();
+        m_TexutureID = s_UniqueTextureID;
+        ++s_UniqueTextureID;
     }
 
     void OpenGLTexture2D::Init()
@@ -40,9 +40,9 @@ namespace JSEngine
         glDeleteTextures(1, &m_RendererID);
     }
 
-    void OpenGLTexture2D::Bind() const
+    void OpenGLTexture2D::Bind(uint32_t slot) const
     {
-        glBindTextureUnit(m_Slot, m_RendererID);
+        glBindTextureUnit(slot, m_RendererID);
     }
 
     void OpenGLTexture2D::UnBind() const

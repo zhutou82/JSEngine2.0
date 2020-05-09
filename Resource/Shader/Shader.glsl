@@ -43,31 +43,52 @@ struct Material
     float shinese;
 };
 
-struct PointLight
+struct Light
 {
     vec3 pos;
     vec3 color;
     vec3 direction;
 
-    vec3 ambient;
+    vec3 ambient; 
     vec3 diffuse;
     vec3 specular;
 
 };
 
-uniform PointLight ptLight;
+uniform Light directionalLight;
+uniform Light ptLight;
 uniform Material material;
 
 uniform vec3 u_ObjectColor;
 uniform vec3 u_CameraPos;
 
 
-void main()
+vec3 ComputeDirectionalLight(vec3 norm, Light light)
 {
-    vec3 ambient = ptLight.color * ptLight.ambient;
+    vec3 ambient = light.color * light.ambient;
 
-    vec3 norm = normalize(v_Normal);
-    vec3 lightVec = ptLight.pos - v_FragPos;
+
+    vec3 lightDir   = normalize(-light.direction);
+
+    float diff = max(dot(norm, lightDir), 0);
+    vec3 diffuse = diff * light.color;
+
+    vec3 viewDir = normalize(u_CameraPos - v_FragPos);
+    vec3 reflectDir = reflect(-lightDir, norm);
+
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shinese);
+    vec3 specular = spec * light.specular * light.color;
+
+    return (ambient + diffuse + specular) * material.color;
+}
+
+
+vec3 ComputePointLight(vec3 norm, Light light)
+{
+    vec3 ambient = light.color * light.ambient;
+
+    
+    vec3 lightVec = light.pos - v_FragPos;
     vec3 lightDir = normalize(lightVec);
     //vec3 distance = length(lightVec);
 
@@ -79,13 +100,31 @@ void main()
     vec3 reflectDir = reflect(-lightDir, norm);
 
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shinese);
-    vec3 specular = spec * ptLight.specular * ptLight.color;
+    vec3 specular = spec * light.specular * light.color;
 
 
-    vec3 result = (ambient + diffuse + specular) * material.color;
+    return (ambient + diffuse + specular) * material.color;
+}
 
+//
+//vec3 CompuateSpotLight()
+//{
+//    
+//
+//}
+
+
+void main()
+{   
+    vec3 norm = normalize(v_Normal);
+    
+    vec3 result = ComputeDirectionalLight(norm, directionalLight);
+    result += ComputePointLight(norm, ptLight);
+
+   
 	fragcolor = vec4(result, 1.0);
 	//fragcolor = texture(u_TextureID, v_TextCoor);
+    //fragcolor = vec4(1,1,1,1);
 }
 
 //type

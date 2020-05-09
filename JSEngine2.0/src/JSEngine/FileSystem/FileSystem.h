@@ -1,9 +1,8 @@
 #pragma once
-//#include "JSEngine/Core.h"
-#include "JSEngine/Core/SingletonBaseClass.h"
-#include "JSEngine/Core/Core.h"
 #include <string>
-#include <array>
+
+#include "JSEngine/Core/Core.h"
+
 
 namespace JSEngine
 {
@@ -17,6 +16,7 @@ namespace JSEngine
         VS,
         FS,
         GLSL,
+        JSON,
         NUM_OF_FILE_TYPE
     };
     static constexpr const char* FILETYPE_ARR[NUM_OF_FILE_TYPE] =
@@ -28,7 +28,9 @@ namespace JSEngine
         ".jpeg",
         ".vs",
         ".fs",
-        ".glsl"
+        ".glsl",
+        ".json"
+
     };
 
     enum FILE_MODE
@@ -57,6 +59,8 @@ namespace JSEngine
         ~JSFile();
 
     public:
+
+        void SetFile(const std::string& fileName, FILE_TYPE fileType, FILE_MODE mode = WRITE);
         FILE* GetFile() const                       { return m_File;         }
         const std::string& GetFileName()            { return m_FileName;     }
         const std::string& GetFileExtension() const { return m_FileType;     }

@@ -7,6 +7,12 @@
     <Filter Include="src\JSEngine">
       <UniqueIdentifier>{AF4B4B95-9BAE-DA39-4434-13F03076A6BC}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\JSEngine\Core">
+      <UniqueIdentifier>{6715C22A-D32B-C0C0-1CA3-4BE288F89048}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\JSEngine\Debug">
+      <UniqueIdentifier>{651D1183-5101-D2D8-BA61-CC2BA664BC5A}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\JSEngine\Event">
       <UniqueIdentifier>{40942C83-2C78-EDD8-95D8-E72B81DBD75A}</UniqueIdentifier>
     </Filter>
@@ -66,6 +72,39 @@
     <ClInclude Include="src\JSEngine\Application.h">
       <Filter>src\JSEngine</Filter>
     </ClInclude>
+    <ClInclude Include="src\JSEngine\Core\Core.h">
+      <Filter>src\JSEngine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JSEngine\Core\EntryPoint.h">
+      <Filter>src\JSEngine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JSEngine\Core\Keycode.h">
+      <Filter>src\JSEngine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JSEngine\Core\Layer.h">
+      <Filter>src\JSEngine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JSEngine\Core\LayerStack.h">
+      <Filter>src\JSEngine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JSEngine\Core\Log.h">
+      <Filter>src\JSEngine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JSEngine\Core\MouseCode.h">
+      <Filter>src\JSEngine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JSEngine\Core\SingletonBaseClass.h">
+      <Filter>src\JSEngine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JSEngine\Core\TimeStep.h">
+      <Filter>src\JSEngine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JSEngine\Core\Window.h">
+      <Filter>src\JSEngine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JSEngine\Debug\SimpleProfiler.h">
+      <Filter>src\JSEngine\Debug</Filter>
+    </ClInclude>
     <ClInclude Include="src\JSEngine\Event\ApplicationEvent.h">
       <Filter>src\JSEngine\Event</Filter>
     </ClInclude>
@@ -81,10 +120,46 @@
     <ClInclude Include="src\JSEngine\FileSystem\FileSystem.h">
       <Filter>src\JSEngine\FileSystem</Filter>
     </ClInclude>
+    <ClInclude Include="src\JSEngine\Graphics\Buffer.h">
+      <Filter>src\JSEngine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JSEngine\Graphics\Camera.h">
+      <Filter>src\JSEngine\Graphics</Filter>
+    </ClInclude>
     <ClInclude Include="src\JSEngine\Graphics\GraphicsContext.h">
       <Filter>src\JSEngine\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="src\JSEngine\Graphics\Meterial.h">
+      <Filter>src\JSEngine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JSEngine\Graphics\RenderCommand.h">
+      <Filter>src\JSEngine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JSEngine\Graphics\Renderer.h">
+      <Filter>src\JSEngine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JSEngine\Graphics\RendererAPI.h">
+      <Filter>src\JSEngine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JSEngine\Graphics\Shader.h">
+      <Filter>src\JSEngine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JSEngine\Graphics\Texture.h">
+      <Filter>src\JSEngine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JSEngine\Graphics\VertexArray.h">
+      <Filter>src\JSEngine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JSEngine\Managers\AssetManager.h">
+      <Filter>src\JSEngine\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JSEngine\Managers\GameObjectManager.h">
+      <Filter>src\JSEngine\Managers</Filter>
+    </ClInclude>
     <ClInclude Include="src\JSEngine\Managers\InputManager.h">
+      <Filter>src\JSEngine\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JSEngine\Managers\ResourceManager.h">
       <Filter>src\JSEngine\Managers</Filter>
     </ClInclude>
     <ClInclude Include="src\JSEngine\Math\JSMath.h">
@@ -111,10 +186,34 @@
     <ClInclude Include="src\JSEngine\PCH.h">
       <Filter>src\JSEngine</Filter>
     </ClInclude>
+    <ClInclude Include="src\JSEngine\Platform\CameraController.h">
+      <Filter>src\JSEngine\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JSEngine\Platform\Opengl\Light.h">
+      <Filter>src\JSEngine\Platform\Opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JSEngine\Platform\Opengl\Mesh.h">
+      <Filter>src\JSEngine\Platform\Opengl</Filter>
+    </ClInclude>
     <ClInclude Include="src\JSEngine\Platform\Opengl\Model.h">
       <Filter>src\JSEngine\Platform\Opengl</Filter>
     </ClInclude>
+    <ClInclude Include="src\JSEngine\Platform\Opengl\OpenGLBuffer.h">
+      <Filter>src\JSEngine\Platform\Opengl</Filter>
+    </ClInclude>
     <ClInclude Include="src\JSEngine\Platform\Opengl\OpenGLContext.h">
+      <Filter>src\JSEngine\Platform\Opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JSEngine\Platform\Opengl\OpenGLRenderAPI.h">
+      <Filter>src\JSEngine\Platform\Opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JSEngine\Platform\Opengl\OpenGLShader.h">
+      <Filter>src\JSEngine\Platform\Opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JSEngine\Platform\Opengl\OpenGLTexture.h">
+      <Filter>src\JSEngine\Platform\Opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JSEngine\Platform\Opengl\OpenGLVertexArray.h">
       <Filter>src\JSEngine\Platform\Opengl</Filter>
     </ClInclude>
     <ClInclude Include="src\JSEngine\Platform\Profiler\SimpleProfiler.h">
@@ -1362,63 +1461,58 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="src\JSEngine\Platform\Opengl\Mesh.h" />
-    <ClInclude Include="src\JSEngine\Graphics\Buffer.h" />
-    <ClInclude Include="src\JSEngine\Graphics\VertexArray.h" />
-    <ClInclude Include="src\JSEngine\Platform\Opengl\OpenGLVertexArray.h">
-      <Filter>src\JSEngine\Platform\Opengl</Filter>
-    </ClInclude>
-    <ClInclude Include="src\JSEngine\Platform\Opengl\OpenGLBuffer.h" />
-    <ClInclude Include="src\JSEngine\Graphics\Renderer.h" />
-    <ClInclude Include="src\JSEngine\Graphics\Shader.h" />
-    <ClInclude Include="src\JSEngine\Platform\Opengl\OpenGLShader.h">
-      <Filter>src\JSEngine\Platform\Opengl</Filter>
-    </ClInclude>
-    <ClInclude Include="src\JSEngine\Graphics\RenderCommand.h" />
-    <ClInclude Include="src\JSEngine\Graphics\RendererAPI.h" />
-    <ClInclude Include="src\JSEngine\Platform\Opengl\OpenGLRenderAPI.h" />
-    <ClInclude Include="src\JSEngine\Platform\Opengl\Light.h" />
-    <ClInclude Include="src\JSEngine\Graphics\Camera.h" />
-    <ClInclude Include="src\JSEngine\Core\TimeStep.h" />
-    <ClInclude Include="src\JSEngine\Graphics\Meterial.h" />
-    <ClInclude Include="src\JSEngine\Graphics\Texture.h" />
-    <ClInclude Include="src\JSEngine\Platform\Opengl\OpenGLTexture.h" />
-    <ClInclude Include="src\JSEngine\Managers\AssetManager.h" />
-    <ClInclude Include="src\JSEngine\Platform\CameraController.h" />
-    <ClInclude Include="src\JSEngine\Core\Core.h">
-      <Filter>src\JSEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\JSEngine\Core\EntryPoint.h">
-      <Filter>src\JSEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\JSEngine\Core\Layer.h">
-      <Filter>src\JSEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\JSEngine\Core\LayerStack.h">
-      <Filter>src\JSEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\JSEngine\Core\Log.h">
-      <Filter>src\JSEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\JSEngine\Core\SingletonBaseClass.h">
-      <Filter>src\JSEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\JSEngine\Core\Keycode.h">
-      <Filter>src\JSEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\JSEngine\Core\MouseCode.h">
-      <Filter>src\JSEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\JSEngine\Core\Window.h">
-      <Filter>src\JSEngine</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\JSEngine\Application.cpp">
       <Filter>src\JSEngine</Filter>
     </ClCompile>
+    <ClCompile Include="src\JSEngine\Core\LayerStack.cpp">
+      <Filter>src\JSEngine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\JSEngine\Core\Log.cpp">
+      <Filter>src\JSEngine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\JSEngine\Core\TimeStep.cpp">
+      <Filter>src\JSEngine\Core</Filter>
+    </ClCompile>
     <ClCompile Include="src\JSEngine\FileSystem\FileSystem.cpp">
       <Filter>src\JSEngine\FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\JSEngine\Graphics\Buffer.cpp">
+      <Filter>src\JSEngine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\JSEngine\Graphics\Camera.cpp">
+      <Filter>src\JSEngine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\JSEngine\Graphics\Meterial.cpp">
+      <Filter>src\JSEngine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\JSEngine\Graphics\RenderCommand.cpp">
+      <Filter>src\JSEngine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\JSEngine\Graphics\Renderer.cpp">
+      <Filter>src\JSEngine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\JSEngine\Graphics\RendererAPI.cpp">
+      <Filter>src\JSEngine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\JSEngine\Graphics\Shader.cpp">
+      <Filter>src\JSEngine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\JSEngine\Graphics\Texture.cpp">
+      <Filter>src\JSEngine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\JSEngine\Graphics\VertexArray.cpp">
+      <Filter>src\JSEngine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\JSEngine\Managers\AssetManager.cpp">
+      <Filter>src\JSEngine\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\JSEngine\Managers\GameObjectManager.cpp">
+      <Filter>src\JSEngine\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\JSEngine\Managers\ResourceManager.cpp">
+      <Filter>src\JSEngine\Managers</Filter>
     </ClCompile>
     <ClCompile Include="src\JSEngine\Math\JSMathcpp.cpp">
       <Filter>src\JSEngine\Math</Filter>
@@ -1444,10 +1538,37 @@
     <ClCompile Include="src\JSEngine\PCH.cpp">
       <Filter>src\JSEngine</Filter>
     </ClCompile>
+    <ClCompile Include="src\JSEngine\Platform\CameraController.cpp">
+      <Filter>src\JSEngine\Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="src\JSEngine\Platform\Opengl\Light.cpp">
+      <Filter>src\JSEngine\Platform\Opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\JSEngine\Platform\Opengl\Mesh.cpp">
+      <Filter>src\JSEngine\Platform\Opengl</Filter>
+    </ClCompile>
     <ClCompile Include="src\JSEngine\Platform\Opengl\Model.cpp">
       <Filter>src\JSEngine\Platform\Opengl</Filter>
     </ClCompile>
+    <ClCompile Include="src\JSEngine\Platform\Opengl\OpenGLBuffer.cpp">
+      <Filter>src\JSEngine\Platform\Opengl</Filter>
+    </ClCompile>
     <ClCompile Include="src\JSEngine\Platform\Opengl\OpenGLContext.cpp">
+      <Filter>src\JSEngine\Platform\Opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\JSEngine\Platform\Opengl\OpenGLRenderAPI.cpp">
+      <Filter>src\JSEngine\Platform\Opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\JSEngine\Platform\Opengl\OpenGLShader.cpp">
+      <Filter>src\JSEngine\Platform\Opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\JSEngine\Platform\Opengl\OpenGLTexture.cpp">
+      <Filter>src\JSEngine\Platform\Opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\JSEngine\Platform\Opengl\OpenGLVertexArray.cpp">
+      <Filter>src\JSEngine\Platform\Opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\JSEngine\Platform\Opengl\std_image.cpp">
       <Filter>src\JSEngine\Platform\Opengl</Filter>
     </ClCompile>
     <ClCompile Include="src\JSEngine\Platform\Profiler\SimpleProfiler.cpp">
@@ -1474,35 +1595,5 @@
     <ClCompile Include="src\JSEngine\imGui\imguiLayer.cpp">
       <Filter>src\JSEngine\imGui</Filter>
     </ClCompile>
-    <ClCompile Include="src\JSEngine\Platform\Opengl\Mesh.cpp" />
-    <ClCompile Include="src\JSEngine\Platform\Opengl\std_image.cpp" />
-    <ClCompile Include="src\JSEngine\Graphics\Buffer.cpp" />
-    <ClCompile Include="src\JSEngine\Graphics\VertexArray.cpp" />
-    <ClCompile Include="src\JSEngine\Platform\Opengl\OpenGLVertexArray.cpp">
-      <Filter>src\JSEngine\Platform\Opengl</Filter>
-    </ClCompile>
-    <ClCompile Include="src\JSEngine\Platform\Opengl\OpenGLBuffer.cpp" />
-    <ClCompile Include="src\JSEngine\Graphics\Renderer.cpp" />
-    <ClCompile Include="src\JSEngine\Graphics\Shader.cpp" />
-    <ClCompile Include="src\JSEngine\Platform\Opengl\OpenGLShader.cpp">
-      <Filter>src\JSEngine\Platform\Opengl</Filter>
-    </ClCompile>
-    <ClCompile Include="src\JSEngine\Graphics\RenderCommand.cpp" />
-    <ClCompile Include="src\JSEngine\Graphics\RendererAPI.cpp" />
-    <ClCompile Include="src\JSEngine\Platform\Opengl\OpenGLRenderAPI.cpp" />
-    <ClCompile Include="src\JSEngine\Platform\Opengl\Light.cpp" />
-    <ClCompile Include="src\JSEngine\Graphics\Camera.cpp" />
-    <ClCompile Include="src\JSEngine\Core\TimeStep.cpp" />
-    <ClCompile Include="src\JSEngine\Graphics\Meterial.cpp" />
-    <ClCompile Include="src\JSEngine\Graphics\Texture.cpp" />
-    <ClCompile Include="src\JSEngine\Platform\Opengl\OpenGLTexture.cpp" />
-    <ClCompile Include="src\JSEngine\Platform\CameraController.cpp" />
-    <ClCompile Include="src\JSEngine\Core\LayerStack.cpp">
-      <Filter>src\JSEngine</Filter>
-    </ClCompile>
-    <ClCompile Include="src\JSEngine\Core\Log.cpp">
-      <Filter>src\JSEngine</Filter>
-    </ClCompile>
-    <ClCompile Include="src\JSEngine\Managers\AssetManager.cpp" />
   </ItemGroup>
 </Project>

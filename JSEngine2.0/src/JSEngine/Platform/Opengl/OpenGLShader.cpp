@@ -1,15 +1,11 @@
 #include "PCH.h"
 #include "OpenGLShader.h"
+#include "JSEngine/Managers/ResourceManager.h"
 #include "JSEngine/Platform/Opengl/OpenGLContext.h"
 #include "glm/gtc/type_ptr.hpp"
 
-#include <iostream> 
-#include <string> 
-#include <stdio.h>
-
 namespace JSEngine
 {
-    std::string OpenGLShader::s_FolderPath = "../Resource/Shader/";
     std::string OpenGLShader::s_VertexType = "vertex";
     std::string OpenGLShader::s_FragmentType = "fragment";
 
@@ -27,15 +23,10 @@ namespace JSEngine
         return 0;
     }
 
-    void OpenGLShader::SetShaderFolderPath(const std::string& folderPath)
-    {
-        s_FolderPath = folderPath;
-    }
-
     OpenGLShader::OpenGLShader(const std::string& glslFileName) 
         : m_GlslFile(glslFileName, GLSL, READ)
     {
-        m_GlslFile.Init(s_FolderPath);
+        m_GlslFile.Init(g_ResourceMgr.GetCoreFolderPaths(CoreFolderPath::SHADER));
         GetShaderSrc();
 
         //create and link shader file to shader program
@@ -88,7 +79,7 @@ namespace JSEngine
     {
         FILE* vs = m_GlslFile.GetFile();
         const char* type = "//type";
-        const size_t bufsize = 2048;
+        const size_t bufsize = 4096;
         char line[bufsize] = { 0 };
         char shaderName[bufsize] = { 0 };
         char shaderSrc[bufsize] = { 0 };
@@ -171,6 +162,11 @@ namespace JSEngine
     void OpenGLShader::SetUnifrom1f(const std::string& name, float value)
     {
         glUniform1f(GetUnifromLocation(name), value);
+    }
+
+    void OpenGLShader::SetIntArrary(const std::string& name, uint32_t count, int* val)
+    {
+        glUniform1iv(GetUnifromLocation(name), count, val);
     }
 
     int OpenGLShader::GetUnifromLocation(const std::string & name)

@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
-
+#include "JSEngine/Core/Log.h"
+#include "JSEngine/Core/Core.h"
 
 namespace JSEngine
 {
@@ -107,10 +108,12 @@ namespace JSEngine
         virtual void Bind() const = 0;
         virtual void UnBind() const = 0;
 
+        virtual void SetData(const void* data, uint32_t size) = 0;
         virtual const Layout& GetLayout() const = 0;
         virtual void SetLayout(const Layout& layout) = 0;
 
         static Ref<VertexBuffer> Create(const void* data, uint32_t size);
+        static Ref<VertexBuffer> Create(uint32_t size);
 
        
     };

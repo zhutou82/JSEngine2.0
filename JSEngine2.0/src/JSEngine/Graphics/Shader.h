@@ -32,6 +32,10 @@ namespace JSEngine
         virtual void AddToUniformVec(const std::string& name, const glm::vec4& val) = 0;
         virtual void AddToUniformVec(const std::string& name, const glm::mat4& val) = 0;
 
+        virtual void SetIntArrary(const std::string& name, uint32_t count, int* val) = 0;
+        
+        
+
     };
 
 

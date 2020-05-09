@@ -30,7 +30,7 @@ namespace JSEngine
             offset += GetSizeByElementType(elem.Type);
         }
         m_VertexBufferVec.push_back(vbo);
-
+        m_VertexBuffer = vbo;
     }
 
     void OpenGLVertexArray::AddIndexBuffer(const Ref<IndexBuffer>& ibo)

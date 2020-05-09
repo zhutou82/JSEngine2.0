@@ -26,8 +26,7 @@ namespace JSEngine
         uint32_t m_VertexBufferIndex = 0;
         std::vector<Ref<VertexBuffer>> m_VertexBufferVec;
         Ref<IndexBuffer> m_IndexBuffer;
-
-
+        Ref<VertexBuffer> m_VertexBuffer;
     };
 
 }
