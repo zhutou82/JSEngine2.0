@@ -49,7 +49,8 @@ project "JSEngine2.0"
 
     defines
     {
-        "_CRT_SECURE_NO_WARNINGS"
+        "_CRT_SECURE_NO_WARNINGS",
+        "GLFW_INCLUDE_NONE"
     }
 
     includedirs
@@ -60,7 +61,7 @@ project "JSEngine2.0"
         "%{IncludeDir.Glad}",
         "%{IncludeDir.imgui}",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.tinyXML}"
+		"%{IncludeDir.tinyXML}",
         "%{IncludeDir.stb_image}"
     }
 
@@ -74,15 +75,12 @@ project "JSEngine2.0"
     }
 
     filter "system:windows"
-        systemversion "10.0.14393.0"
+        systemversion "latest"
 
         defines
         {
             "JSENGINE_PLATFORM_WINDOWS",
-            "JSENGINE_BUILD_DLL",
-            "GLFW_INCLUDE_NONE"
         }
-
 
 
     filter "configurations:Debug"
@@ -125,7 +123,8 @@ project "Sandbox"
         "%{IncludeDir.Glad}",
         "%{IncludeDir.imgui}",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.tinyXML}"
+		"%{IncludeDir.tinyXML}",
+        "%{IncludeDir.stb_image}"
     }
 
     links
@@ -134,10 +133,11 @@ project "Sandbox"
     }
 
     filter "system:windows"
-        systemversion "10.0.14393.0"
+        systemversion "latest"
         defines
         {
-            "JSENGINE_PLATFORM_WINDOWS"
+            "JSENGINE_PLATFORM_WINDOWS",
+            "GLFW_INCLUDE_NONE"
         }
         
     filter "configurations:Debug"

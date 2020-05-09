@@ -4,9 +4,6 @@
 [submodule "JSEngine2.0/vendor/GLFW"]
 	path = JSEngine2.0/vendor/GLFW
 	url = https://github.com/TheCherno/GLFW
-[submodule "JSEngine2.0/vendor/imgui"]
-	path = JSEngine2.0/vendor/imgui
-	url = https://github.com/zhutou82/imgui.git
 [submodule "JSEngine2.0/vendor/glm"]
 	path = JSEngine2.0/vendor/glm
 	url = https://github.com/g-truc/glm.git
