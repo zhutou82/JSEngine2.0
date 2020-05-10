@@ -45,6 +45,9 @@ namespace JSEngine
         JS_CORE_INFO("id: {0}", id);
         JS_CORE_INFO("severity: ");
         switch (severity) {
+        case GL_DEBUG_SEVERITY_NOTIFICATION:
+            JS_CORE_INFO("NOTIFICATION");
+            break;
         case GL_DEBUG_SEVERITY_LOW:
             JS_CORE_INFO("LOW");
             break;
@@ -56,6 +59,11 @@ namespace JSEngine
             break;
         }
         JS_CORE_INFO("---------------------opengl-callback-end--------------");
+
+        // dont assert for notifications
+        if (severity == GL_DEBUG_SEVERITY_NOTIFICATION)
+            return;
+
         JS_CORE_ASSERT(false, "Error");
     }
 
