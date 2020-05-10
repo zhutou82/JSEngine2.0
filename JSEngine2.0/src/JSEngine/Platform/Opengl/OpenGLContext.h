@@ -26,6 +26,8 @@ namespace JSEngine
         void Clear();
        
         void EnableDepthTest(bool enable);
+        void EnableBlending(bool enable);
+        void SetBlendFunc(GLenum source, GLenum dest);
 
     private:
         OpenGLContext();

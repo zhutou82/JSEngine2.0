@@ -6,7 +6,6 @@
 #include "JSEngine/Platform/WindowsWindow.h"
 #include "imgui.h"
 
-
 namespace JSEngine
 {
     void APIENTRY openglCallbackFunction(GLenum source,
@@ -66,14 +65,23 @@ namespace JSEngine
 
         JS_CORE_ASSERT(false, "Error");
     }
-
-
     void OpenGLContext::EnableDepthTest(bool enable)
     {
         if(enable)
             glEnable(GL_DEPTH_TEST);
         else
             glDisable(GL_DEPTH_TEST);
+    }
+    void OpenGLContext::EnableBlending(bool enable)
+    {
+        if (enable)
+            glEnable(GL_BLEND);
+        else
+            glDisable(GL_BLEND);
+    }
+    void OpenGLContext::SetBlendFunc(GLenum source, GLenum dest)
+    {
+        glBlendFunc(source, dest);
     }
     OpenGLContext::OpenGLContext()
     {
@@ -91,7 +99,11 @@ namespace JSEngine
         glfwMakeContextCurrent(m_WindowHandle);
         int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
         JS_CORE_ASSERT(status, "Failed to initialized Glad");
+
+        // TODO: control below based on specific render passes' needs
         EnableDepthTest(true);
+        EnableBlending(true);
+        SetBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         glEnable(GL_DEBUG_OUTPUT);
         glDebugMessageCallback(openglCallbackFunction, nullptr);
