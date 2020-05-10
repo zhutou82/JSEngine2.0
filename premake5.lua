@@ -32,6 +32,9 @@ project "JSEngine2.0"
     language "C++"
     cppdialect "C++17"
     staticruntime "on"
+    
+    -- Enable Visual Studio to use multiple compiler processes when building
+    flags { "MultiProcessorCompile" }
 
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -104,6 +107,9 @@ project "Sandbox"
     language "C++"
     cppdialect "C++17"
     staticruntime "on"
+    
+    -- Enable Visual Studio to use multiple compiler processes when building
+    flags { "MultiProcessorCompile" }
 
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
