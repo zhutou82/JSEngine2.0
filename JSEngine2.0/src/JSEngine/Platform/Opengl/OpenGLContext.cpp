@@ -95,6 +95,9 @@ namespace JSEngine
 
         glEnable(GL_DEBUG_OUTPUT);
         glDebugMessageCallback(openglCallbackFunction, nullptr);
+
+        // Comment below to retrieve ALL OpenGL debug messages, including trivial notifications. Warning: it's fucking spammy.
+        glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, nullptr, false);
     }
 
     void OpenGLContext::Render()
