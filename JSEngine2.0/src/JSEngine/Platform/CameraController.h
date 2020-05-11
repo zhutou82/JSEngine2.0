@@ -56,6 +56,18 @@ namespace JSEngine
     };
 
 
+    struct Bound
+    {
+        float Left;
+        float Right;
+        float Bottom;
+        float Top;
+
+        float GetWidth() const { return Right - Left; }
+        float GetHeigh() const { return Top - Bottom; }
+
+    };
+
     class OrthographicCameraController 
     {
 
@@ -68,6 +80,8 @@ namespace JSEngine
 
         const OrthographicCamera& GetCamera() const { return m_Camera;  }
         
+        const Bound& GetBound() const { return m_Bound; }
+
     private:
 
         bool MouseScrollCallBack(MouseScrollEvent& e);
@@ -85,6 +99,8 @@ namespace JSEngine
         float m_CameraRotationSpeed;
 
         OrthographicCamera m_Camera;
+
+        Bound m_Bound;
        
     };
 

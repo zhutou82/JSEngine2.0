@@ -48,6 +48,11 @@
 #include "JSEngine/Managers/InputManager.h"
 //----------------------------------------------
 
+//--------------Math--------------------------
+#include "JSEngine/Math/Random.h"
+#include <math.h>
+//----------------------------------------------
+
 
 
 

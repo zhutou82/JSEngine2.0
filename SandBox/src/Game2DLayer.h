@@ -1,6 +1,7 @@
 #pragma once
 #include <JSEngine.h>
 #include <vector>
+#include "ParticleSystem.h"
 
 class Game2DLayer : public JSEngine::Layer
 {
@@ -25,6 +26,9 @@ private:
     JSEngine::Ref<JSEngine::SceneData2D>     m_SceneData;
 
     JSEngine::Ref<JSEngine::VertexArray> m_VAO;
+
+    ParticleSystem m_ParticalSystem;
+    ParticleProperty m_ParticleProp;
 
 
 };

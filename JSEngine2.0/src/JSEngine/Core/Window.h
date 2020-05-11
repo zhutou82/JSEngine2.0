@@ -32,6 +32,9 @@ namespace JSEngine
         virtual void OnUpdate() = 0;
         virtual uint32_t GetWidth() const = 0;
         virtual uint32_t GetHeight() const = 0;
+        virtual void SetWidth(uint32_t width) = 0;
+        virtual void SetHeight(uint32_t height) = 0;
+
         virtual float GetAspectRatio() const = 0;
 
         virtual void AddCallBackFn(const EventCallBackFn&) = 0;

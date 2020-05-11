@@ -9,8 +9,10 @@
 #include "nmmintrin.h" // for SSE4.2
 #include "immintrin.h" // for AVX 
 
-namespace JSMath
+
+namespace JSEngine
 {
+
     //Vec2f StringToVec2f(const std::string& rhs);
     //Vec2i StringToVec2i(const std::string& rhs);
 }

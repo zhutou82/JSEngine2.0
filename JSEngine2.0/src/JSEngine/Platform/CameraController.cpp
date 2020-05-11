@@ -125,9 +125,10 @@ namespace JSEngine
         m_EnableRotation(false),
         m_AspecRatio(aspectRatio),
         m_ZoonLevel(1.f),
-        m_Camera(-m_AspecRatio * m_ZoonLevel, m_AspecRatio * m_ZoonLevel, -m_ZoonLevel, m_ZoonLevel),
+        m_Camera(-m_AspecRatio * m_ZoonLevel, m_AspecRatio* m_ZoonLevel, -m_ZoonLevel, m_ZoonLevel),
         m_CameraMoveSpeed(1.f),
-        m_CameraRotationSpeed(glm::radians(120.f))
+        m_CameraRotationSpeed(glm::radians(120.f)),
+        m_Bound{ -m_AspecRatio * m_ZoonLevel, m_AspecRatio * m_ZoonLevel, -m_ZoonLevel, m_ZoonLevel }
     {
         JS_PROFILE_FUNCTION();
         m_Camera.SetPosition(m_Pos);
@@ -170,7 +171,8 @@ namespace JSEngine
     {
         JS_PROFILE_FUNCTION();
         m_ZoonLevel -= e.GetMouseYOffSet() * 0.1f;
-        m_Camera.SetProjMatrx(-m_AspecRatio * m_ZoonLevel, m_AspecRatio * m_ZoonLevel, -m_ZoonLevel, m_ZoonLevel);
+        m_Bound = { -m_AspecRatio * m_ZoonLevel, m_AspecRatio * m_ZoonLevel, -m_ZoonLevel, m_ZoonLevel };
+        m_Camera.SetProjMatrx(m_Bound.Left, m_Bound.Right, m_Bound.Bottom, m_Bound.Top);
         return true;
     }
 
@@ -183,7 +185,8 @@ namespace JSEngine
     {
         JS_PROFILE_FUNCTION();
         m_AspecRatio = (float)e.GetWidth() / (float)e.GetHeight();
-        m_Camera.SetProjMatrx(-m_AspecRatio * m_ZoonLevel, m_AspecRatio * m_ZoonLevel, -m_ZoonLevel, m_ZoonLevel);
+        m_Bound = { -m_AspecRatio * m_ZoonLevel, m_AspecRatio * m_ZoonLevel, -m_ZoonLevel, m_ZoonLevel };
+        m_Camera.SetProjMatrx(m_Bound.Left, m_Bound.Right, m_Bound.Bottom, m_Bound.Top);
         return true;
     }
 

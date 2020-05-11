@@ -18,7 +18,7 @@ namespace JSEngine
     {
         RenderCommand::DrawIndex(Ref<Mesh>());
     }
-
+    
     void Renderer::Submit(const Ref<Mesh>& mesh)
     {
         RenderCommand::Submit(mesh); 
@@ -91,7 +91,10 @@ namespace JSEngine
         s_Data.QuadOrigin[2] = {  0.5f,  0.5f, 0.f, 1.f };
         s_Data.QuadOrigin[3] = { -0.5f,  0.5f, 0.f, 1.f };
 
-
+        s_Data.QuadTextCoord[0] = { 0.f, 0.f };
+        s_Data.QuadTextCoord[1] = { 1.f, 0.f };
+        s_Data.QuadTextCoord[2] = { 1.f, 1.f };
+        s_Data.QuadTextCoord[3] = { 0.f, 1.f };
 
         s_Data.NumberOfQuadsPerDrawCall = s_Data.MaxNumberOfQuad;
     }
@@ -147,11 +150,10 @@ namespace JSEngine
     void Renderer2D::DrawAnimatedQuad(const glm::vec3& pos, const glm::vec2& size, float rotationAngle, const glm::vec4& color, int textureID, int index)
     {
         glm::mat4 Transform = glm::translate(glm::mat4(1.f), glm::vec3(pos.x, pos.y, pos.z)) *
-            glm::rotate(glm::mat4(1.f), rotationAngle, glm::vec3(0, 0, 1.f)) *
-            glm::scale(glm::mat4(1.f), glm::vec3(size.x, size.y, 1.f));
+                              glm::rotate(glm::mat4(1.f), rotationAngle, glm::vec3(0, 0, 1.f)) *
+                              glm::scale(glm::mat4(1.f), glm::vec3(size.x, size.y, 1.f));
 
         //glm::ivec2 dim{ 10, 2 };
-        //index = 12;
         //glm::vec4 uvs;
         //int xTile = index % dim.x;
         //int yTile = index / dim.x;
@@ -166,10 +168,10 @@ namespace JSEngine
         //s_Data.QuadTextCoord[2] = { uvs.x + uvs.z, uvs.y + uvs.w };
         //s_Data.QuadTextCoord[3] = { uvs.x        , uvs.y + uvs.w };
 
-        s_Data.QuadTextCoord[0] = { 0.2f, 0.5f };
-        s_Data.QuadTextCoord[1] = { 0.3f, 0.5f };
-        s_Data.QuadTextCoord[2] = { 0.3f, 1.0f };
-        s_Data.QuadTextCoord[3] = { 0.2f, 1.0f };
+        //s_Data.QuadTextCoord[0] = { 0.2f, 0.5f };
+        //s_Data.QuadTextCoord[1] = { 0.3f, 0.5f };
+        //s_Data.QuadTextCoord[2] = { 0.3f, 1.0f };
+        //s_Data.QuadTextCoord[3] = { 0.2f, 1.0f };
 
         for (uint32_t i = 0; i < s_Data.QuadVertexCount; ++i)
         {
@@ -198,7 +200,7 @@ namespace JSEngine
         {
             s_Data.TextureArray[i]->Bind(i);
         }
-        RenderCommand::DrawIndex(s_Data.VAO, s_Data.MaxNumberIndices);
+        RenderCommand::DrawIndex(s_Data.VAO, s_Data.NumberOfIndicesDrawn);
     }
 
     void Renderer2D::Shutdown()

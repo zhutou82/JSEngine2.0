@@ -1,9 +1,29 @@
 #include "Game2DLayer.h"
+#include "glm/gtc/type_ptr.hpp"
+
 
 Game2DLayer::Game2DLayer() 
     : Layer("Game2DLayer"),
-      m_Camera(JSEngine::CreateRef<JSEngine::OrthographicCameraController>(g_AppWindow->GetAspectRatio(), glm::vec2(0, 0)))
+      m_Camera(JSEngine::CreateRef<JSEngine::OrthographicCameraController>(g_AppWindow->GetAspectRatio(), glm::vec2(0, 0))), m_ParticalSystem(10000)
 {
+    m_ParticleProp.Position = { 0.f, 0.f };
+
+    m_ParticleProp.SizeStart = { 0.5f, 0.5f };
+    m_ParticleProp.SizeEnd = { 0.f, 0.f };
+    m_ParticleProp.SizeVairation = 0.3f;
+
+    m_ParticleProp.ColorBegin = { 1.f, .4f, 0.1f, 1.f };
+    m_ParticleProp.ColorEnd =   { 0.f, 0.1f, 1.f, 0.f };
+
+    m_ParticleProp.Velocity = { 0.3f, 0.005f };
+    m_ParticleProp.VelocityVariation = 2.f;
+
+    m_ParticleProp.Rotation = 0.f;
+    m_ParticleProp.LifeTime = 3.f;
+
+    m_ParticleProp.Acceleration = { 0, -0.005 };
+
+
 
 }
 
@@ -14,6 +34,7 @@ Game2DLayer::~Game2DLayer()
 
 void Game2DLayer::OnAttach()
 {
+    JSEngine::Random::Init();
     JSEngine::Renderer2D::Init();
 }
 
@@ -22,43 +43,62 @@ void Game2DLayer::OnDetach()
 
 }
 
-int index = 2;
+float index = 0;
 
 void Game2DLayer::OnUpdate(JSEngine::TimeStep delta)
 {
+    
     m_Camera->OnUpdate(delta);
+    
+
     static glm::vec2 startPos = { 0, 0 };
     static float step = 0.3f;
     static glm::vec2 size{ step * 0.9f };
 
+    if (g_Input.IsLeftMouseButtonPressed())
+    {
+        //auto& mousePos = m_Camera->GetCamera().GetViewProjectMatrix() * glm::vec4(g_Input.GetMousePos().first, g_Input.GetMousePos().second, 0, 0);
+        auto& mousePos = glm::vec4(g_Input.GetMousePos().first, g_Input.GetMousePos().second, 0, 0);
+
+        glm::vec2 pos(1.f); //{ mousePos.x, mousePos.y };
+        pos.x =   (float)mousePos.x / (float)g_AppWindow->GetWidth() * m_Camera->GetBound().GetWidth() - 0.5f * m_Camera->GetBound().GetWidth();
+        pos.y = -((float)mousePos.y / (float)g_AppWindow->GetHeight() * m_Camera->GetBound().GetHeigh() - 0.5f * m_Camera->GetBound().GetHeigh());
+
+        auto& cameraPos = m_Camera->GetCamera().GetPosition();
+
+        m_ParticleProp.Position = { cameraPos.x + pos.x, cameraPos.y + pos.y };
+        m_ParticalSystem.Emit(m_ParticleProp);
+    }
+
+
+
     JSEngine::RenderCommand::Clear({ 0.1, 0.1, 0.0, 1 });
-    JSEngine::Renderer2D::BeginScene(m_Camera);
+    m_ParticalSystem.Update(delta);
+    m_ParticalSystem.OnRender(m_Camera);
+    //JSEngine::Renderer2D::BeginScene(m_Camera);
 
-    //JSEngine::Renderer2D::DrawQuad(startPos, { 0.2f, 0.2f }, glm::vec4(1.f), 2);
-    
+    ////JSEngine::Renderer2D::DrawQuad(startPos, { 0.2f, 0.2f }, glm::vec4(1.f), 2);
+    //
     //index += delta;
-    //CLIENT_INFO("{0}", index);
-    JSEngine::Renderer2D::DrawAnimatedQuad(glm::vec3(0.f), { 0.2f, 0.2f }, 0, glm::vec4(1.f), 2, (int)index);
-    //JSEngine::Renderer2D::DrawQuad({ 1.f, 1.f }, 1, color, 1);
+    ////CLIENT_INFO("{0}", index);
+    ////JSEngine::Renderer2D::DrawAnimatedQuad(glm::vec3(0.f), { 0.2f, 0.2f }, 0, glm::vec4(1.f), 2, (int)index);
+    ////JSEngine::Renderer2D::DrawQuad({ 1.f, 1.f }, 1, color, 1);
 
-    //for (float i = -5.f; i < 5.f; i += step)
-    //{
-    //    for (float j = -5.f; j < 5.f; j += step)
-    //    {
-    //        glm::vec4 color = { (i + 5.f) / 10.f, 0.3f, (j + 5.f) / 10.f, 1.f };
-    //        JSEngine::Renderer2D::DrawQuad({ startPos.x + j, startPos.y + i }, size, color, 1);
-    //    }
-    //}
+    ////for (float i = -5.f; i < 5.f; i += step)
+    ////{
+    ////    for (float j = -5.f; j < 5.f; j += step)
+    ////    {
+    ////        glm::vec4 color = { (i + 5.f) / 10.f, 0.3f, (j + 5.f) / 10.f, 1.f };
+    ////        JSEngine::Renderer2D::DrawQuad({ startPos.x + j, startPos.y + i }, size, color, 1);
+    ////    }
+    ////}
 
-    JSEngine::Renderer2D::EndScene();
-    JSEngine::Renderer2D::Flush();
-
+    //JSEngine::Renderer2D::EndScene();
+    //JSEngine::Renderer2D::Flush();
 }
 
 void Game2DLayer::OnRenderUpdate(JSEngine::TimeStep delta)
 {
-
-
 
     ImGui::Begin("Renderer2D info");
     const auto& stats =  JSEngine::Renderer2D::GetSceneStats();
@@ -66,7 +106,7 @@ void Game2DLayer::OnRenderUpdate(JSEngine::TimeStep delta)
     ImGui::Text("Frame rate: %f", 1.f/delta);
     ImGui::Separator();
     ImGui::DragInt("Number of Quads per draw call: ", (int*)&data.NumberOfQuadsPerDrawCall);
-    ImGui::DragInt("Index: ", &index, 1, 0, 19);
+    //ImGui::DragInt("Index: ", (int*)&index, 1, 0, 19);
     ImGui::Columns(2, "Renderer stats"); // 2-ways, with border
     ImGui::Text("Drawn "); ImGui::NextColumn();
     ImGui::Text("Number "); ImGui::NextColumn();
@@ -84,10 +124,24 @@ void Game2DLayer::OnRenderUpdate(JSEngine::TimeStep delta)
     ImGui::Text("Indices "); ImGui::NextColumn();
     ImGui::Text("%i", stats.NumberOfIndicesDrawn); ImGui::NextColumn();
 
+    ImGui::Separator();
+    ImGui::End();
 
+    ImGui::Begin("Particle properties");
+    ImGui::Separator();
+
+    ImGui::ColorEdit4("Color Begin: ", value_ptr(m_ParticleProp.ColorBegin));
+    ImGui::ColorEdit4("Color End: ", value_ptr(m_ParticleProp.ColorEnd));
+
+    ImGui::DragFloat2("Size Begin: ", value_ptr(m_ParticleProp.SizeStart), 0.1f, 0.f, 2.f);
+    ImGui::DragFloat2("Size End: ", value_ptr(m_ParticleProp.SizeEnd), 0.1f, 0.f, 2.f);
+
+    ImGui::DragFloat("Life time: ", &m_ParticleProp.LifeTime, 1.f, 0.f, 10.f);
+    
 
     ImGui::Separator();
     ImGui::End();
+
 }
 
 void Game2DLayer::OnEvent(JSEngine::Event& e)

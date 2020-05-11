@@ -5,14 +5,13 @@
 namespace JSEngine
 {
     RecourcesManager::RecourcesManager()
-        : m_Serializer(RESOURCE_XML_FILE_NAME)
     {
-        DeseralizeCoreFolderPath();
+        
     }
 
     void RecourcesManager::DeseralizeCoreFolderPath()
     {
-        m_Serializer.Init(RESOURCE_XML_FOLDER_PATH);
+        m_Serializer.Init(RESOURCE_XML_FILE_NAME, RESOURCE_XML_FOLDER_PATH);
 
         m_CoreFolderPaths.reserve((int)CoreFolderPath::MAX_NUM_OF_FOLDER_PATH);
         m_CoreFileNames.reserve((int)CoreFilerName::MAX_NUM_OF_FILE_NAME);
@@ -23,7 +22,8 @@ namespace JSEngine
 
     void RecourcesManager::Init()
     {
-       
+        
+        DeseralizeCoreFolderPath();
     }
 
     Ref<Texture> RecourcesManager::AcquireTexture(const std::string& fileName)

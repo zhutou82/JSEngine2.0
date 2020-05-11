@@ -8,6 +8,8 @@
 #include "JSEngine/Managers/ResourceManager.h"
 
 
+
+
 namespace JSEngine
 {
     Application* Application::s_Instance = NULL;
@@ -16,10 +18,14 @@ namespace JSEngine
           m_LastTime(0.f),
         m_Serializer()
     {
+        JS_PROFILE_FUNCTION();
+
         JS_CORE_ASSERT(!s_Instance, "Application has been created!");
 
         //init all systems
         g_Logger.Init();
+        //init math library
+
         Init();
     }
 
@@ -48,9 +54,11 @@ namespace JSEngine
         if (e.GetWidth() == 0 || e.GetHeight() == 0)
             m_IsWindowMinimized = true;
 
-        
         Renderer::OnMainWindowMinimized(e.GetWidth(), e.GetHeight());
         Renderer2D::OnMainWindowMinimized(e.GetWidth(), e.GetHeight());
+
+        g_AppWindow->SetWidth(e.GetWidth());
+        g_AppWindow->SetHeight(e.GetHeight());
 
         return false;
     }
@@ -110,6 +118,7 @@ namespace JSEngine
             
             float currentTime = (float)glfwGetTime();
             TimeStep delta(currentTime - m_LastTime);
+
             m_AppDeltaTime = delta;
             m_LastTime = currentTime;
 

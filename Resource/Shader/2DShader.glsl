@@ -34,9 +34,9 @@ in float v_TextureID;
 
 void main()
 {
-    //fragColor = v_Color;
 	//fragColor = vec4(1.0, 1.0, 1.0, 1.0);
     fragColor = texture(u_Textures[int(v_TextureID)], v_TextCoor);
+    fragColor = v_Color;
 }
 
 //type

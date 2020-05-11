@@ -137,10 +137,12 @@
   <ItemGroup>
     <ClInclude Include="src\Game2DLayer.h" />
     <ClInclude Include="src\Game3DLayer.h" />
+    <ClInclude Include="src\ParticleSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game2DLayer.cpp" />
     <ClCompile Include="src\Game3DLayer.cpp" />
+    <ClCompile Include="src\ParticleSystem.cpp" />
     <ClCompile Include="src\SandBox.cpp" />
   </ItemGroup>
   <ItemGroup>

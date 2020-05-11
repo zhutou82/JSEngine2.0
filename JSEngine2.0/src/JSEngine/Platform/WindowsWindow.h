@@ -15,6 +15,8 @@ namespace JSEngine
         void OnUpdate             ()                                           override;
         uint32_t GetWidth() const                                              override { return m_Data.Width; }
         uint32_t GetHeight() const                                             override { return m_Data.Height; }
+        void SetWidth(uint32_t width)                                          override { m_Data.Width = width; }
+        void SetHeight(uint32_t height)                                        override { m_Data.Height = height; }
         float GetAspectRatio() const                                           override { return m_Data.AspectRatio; }
         float GetSystemCurrentTime() const                                     override { return (float)glfwGetTime(); }
         bool IsVSync              () const                                     override { return m_Data.VSync; }

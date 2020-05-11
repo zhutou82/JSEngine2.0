@@ -180,6 +180,7 @@
     <ClInclude Include="src\JSEngine\Math\Mat2.h" />
     <ClInclude Include="src\JSEngine\Math\Mat3.h" />
     <ClInclude Include="src\JSEngine\Math\Mat4.h" />
+    <ClInclude Include="src\JSEngine\Math\Random.h" />
     <ClInclude Include="src\JSEngine\Math\Vec2.h" />
     <ClInclude Include="src\JSEngine\Math\Vec3.h" />
     <ClInclude Include="src\JSEngine\Math\Vec4.h" />
@@ -632,6 +633,7 @@
     <ClCompile Include="src\JSEngine\Math\Mat2.cpp" />
     <ClCompile Include="src\JSEngine\Math\Mat3.cpp" />
     <ClCompile Include="src\JSEngine\Math\Mat4.cpp" />
+    <ClCompile Include="src\JSEngine\Math\Random.cpp" />
     <ClCompile Include="src\JSEngine\Math\Vec2.cpp" />
     <ClCompile Include="src\JSEngine\Math\Vec3.cpp" />
     <ClCompile Include="src\JSEngine\Math\Vec4.cpp" />

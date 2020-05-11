@@ -50,13 +50,17 @@ namespace JSEngine
     class Instrumentor : public Singleton<Instrumentor>
     {
 
+        const std::string ProfilerFolderPath = "../Resource/Profiler/";
+        const std::string ProfilerFileType = ".json";
+         
+
     public:
         friend class Singleton<Instrumentor>;
 
         void BeingSession(const std::string& sessionName)
         {
             //m_JSONFile.Init("../Resource/Profiler/");
-            m_OutputFile.open(g_ResourceMgr.GetCoreFolderPaths(CoreFolderPath::PROFILER) + sessionName + ".json", std::ofstream::out);
+            m_OutputFile.open(ProfilerFolderPath + sessionName + ProfilerFileType, std::ofstream::out);
             m_HasStartSession = true;
             WriteHeader();
         }
