@@ -19,12 +19,14 @@ IncludeDir["Glad"]      = "JSEngine2.0/vendor/Glad/include"
 IncludeDir["imgui"]     = "JSEngine2.0/vendor/imgui" 
 IncludeDir["glm"]       = "JSEngine2.0/vendor/glm" 
 IncludeDir["tinyXML"]   = "JSEngine2.0/vendor/tinyXML" 
-IncludeDir["stb_image"]   = "JSEngine2.0/vendor/stb_image" 
+IncludeDir["stb_image"] = "JSEngine2.0/vendor/stb_image" 
+IncludeDir["box2D"]     = "JSEngine2.0/vendor/box2D/include" 
 
 include "JSEngine2.0/vendor/GLFW"
 include "JSEngine2.0/vendor/Glad"
 include "JSEngine2.0/vendor/imgui"
 include "JSEngine2.0/vendor/tinyXML"
+include "JSEngine2.0/vendor/box2D"
 
 project "JSEngine2.0"
     location "JSEngine2.0"
@@ -65,7 +67,8 @@ project "JSEngine2.0"
         "%{IncludeDir.imgui}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.tinyXML}",
-        "%{IncludeDir.stb_image}"
+        "%{IncludeDir.stb_image}",
+        "%{IncludeDir.box2D}"
     }
 
     links 
@@ -74,7 +77,8 @@ project "JSEngine2.0"
         "Glad",
         "imgui",
         "opengl32.lib",
-		'tinyxml2'
+		'tinyxml2',
+        'box2D'
     }
 
     filter "system:windows"
@@ -130,7 +134,8 @@ project "Sandbox"
         "%{IncludeDir.imgui}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.tinyXML}",
-        "%{IncludeDir.stb_image}"
+        "%{IncludeDir.stb_image}",
+        "%{IncludeDir.box2D}"
     }
 
     links

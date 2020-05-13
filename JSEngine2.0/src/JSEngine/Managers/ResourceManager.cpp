@@ -39,7 +39,18 @@ namespace JSEngine
         }
         auto newTexture = Texture2D::Create(fileName);
         m_2DTexturePathPtrMap.insert({ fileName, newTexture });
+        m_2DTextureIDPtrMap.insert({ newTexture->GetTextureID(), newTexture });
         return newTexture;
+    }
+    Ref<Texture2D> RecourcesManager::Acquire2DTexture(uint32_t textureID)
+    {
+        auto it = m_2DTextureIDPtrMap.find(textureID);
+        if (it != m_2DTextureIDPtrMap.end())
+        {
+            return it->second;
+        }
+        JS_CORE_ASSERT(false, "Texture ID not found");
+        return Ref<Texture2D>();
     }
     Ref<Shader> RecourcesManager::AcquireShader(const std::string& fileName)
     {

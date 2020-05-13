@@ -59,13 +59,17 @@ namespace JSEngine
     public:
 
         OpenGLTexture2D() {};
-        OpenGLTexture2D(const std::string& fileName, bool filp = true);
+        OpenGLTexture2D(const std::string& fileName, const glm::ivec2& dim, bool filp = true);
         ~OpenGLTexture2D();
 
         void Init();
         
         virtual uint32_t GetWidth() const override { return m_TextureData.Width; }
         virtual uint32_t GetHeight() const override { return m_TextureData.Height; }
+
+        virtual const glm::ivec2& GetDimension() const override { return m_Dim; }
+        virtual void SetDimension(const glm::ivec2& dimension);
+        virtual const glm::vec2* GetSubTextureCoord(const glm::ivec2& index) const;
 
 
         virtual void Bind(uint32_t slot) const override;
@@ -83,6 +87,9 @@ namespace JSEngine
         unsigned m_RendererID;
         uint32_t m_Slot;
         uint32_t m_TexutureID;
+
+        std::unordered_map<uint32_t, glm::vec2*> m_SubTextureCoordVec;
+        glm::ivec2 m_Dim;
 
     };
 

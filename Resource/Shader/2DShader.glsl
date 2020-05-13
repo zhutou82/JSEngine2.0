@@ -25,7 +25,7 @@ void main()
 out vec4 fragColor; 
 
 //uniform
-uniform sampler2D u_Textures[8];
+uniform sampler2D u_Textures[32];
 
 //in from vertex shaders
 in vec4 v_Color;
@@ -36,7 +36,7 @@ void main()
 {
 	//fragColor = vec4(1.0, 1.0, 1.0, 1.0);
     fragColor = texture(u_Textures[int(v_TextureID)], v_TextCoor);
-    fragColor = v_Color;
+    //fragColor = v_Color;
 }
 
 //type

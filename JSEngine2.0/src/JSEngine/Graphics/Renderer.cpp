@@ -72,19 +72,7 @@ namespace JSEngine
         delete[] indexBufferData;
 
         s_Data.Shader2D = g_ResourceMgr.AcquireShader("2DShader");
-        s_Data.TextureArray[s_Data.CurrentTextureIndex++] = g_ResourceMgr.Acquire2DTexture("awesomeface");
-        s_Data.TextureArray[s_Data.CurrentTextureIndex++] = g_ResourceMgr.Acquire2DTexture("Bobo");
-        s_Data.TextureArray[s_Data.CurrentTextureIndex++] = g_ResourceMgr.Acquire2DTexture("blue_ninja");
-
-        int textureSlots[8] = { 0 };
-
-        for (uint32_t i = 0; i < s_Data.CurrentTextureIndex; ++i)
-        {
-            textureSlots[i] = s_Data.TextureArray[i]->GetTextureID();
-        }
-
-        s_Data.Shader2D->Bind();
-        s_Data.Shader2D->SetIntArrary("u_Textures", 8, textureSlots);
+         
 
         s_Data.QuadOrigin[0] = { -0.5f, -0.5f, 0.f, 1.f };
         s_Data.QuadOrigin[1] = {  0.5f, -0.5f, 0.f, 1.f };
@@ -130,7 +118,6 @@ namespace JSEngine
         {
             StartNewBatch();
         }
-
         glm::mat4 Transform = glm::translate(glm::mat4(1.f), glm::vec3(pos.x, pos.y, pos.z)) *
                               glm::rotate(glm::mat4(1.f), rotationAngle, glm::vec3(0, 0, 1.f)) *
                               glm::scale(glm::mat4(1.f), glm::vec3(size.x, size.y, 1.f));
@@ -145,44 +132,74 @@ namespace JSEngine
         }
         s_Data.RenderingStats.UpdateQaudDrawnStats();
         s_Data.NumberOfIndicesDrawn += s_Data.QuadIndexCount;
+
+        if (s_Data.TextureIDArray.find(textureID) == s_Data.TextureIDArray.end())
+        {
+            s_Data.TextureIDArray.insert(textureID);
+        }
+
     }
 
-    void Renderer2D::DrawAnimatedQuad(const glm::vec3& pos, const glm::vec2& size, float rotationAngle, const glm::vec4& color, int textureID, int index)
+    void Renderer2D::DrawSubTextureQuad(const glm::vec3& pos, const glm::vec2& size, float rotationAngle, const glm::vec4& color, const Ref<SubTexture2D>& subTexture)
     {
+        if (s_Data.NumberOfIndicesDrawn >= s_Data.NumberOfQuadsPerDrawCall * s_Data.QuadIndexCount)
+        {
+            StartNewBatch();
+        }
         glm::mat4 Transform = glm::translate(glm::mat4(1.f), glm::vec3(pos.x, pos.y, pos.z)) *
                               glm::rotate(glm::mat4(1.f), rotationAngle, glm::vec3(0, 0, 1.f)) *
                               glm::scale(glm::mat4(1.f), glm::vec3(size.x, size.y, 1.f));
 
-        //glm::ivec2 dim{ 10, 2 };
-        //glm::vec4 uvs;
-        //int xTile = index % dim.x;
-        //int yTile = index / dim.x;
-
-        //uvs.x = xTile / (float)dim.x;
-        //uvs.y = yTile / (float)dim.y;
-        //uvs.z = 1.f / dim.x;
-        //uvs.w = 1.f / dim.y;
-
-        //s_Data.QuadTextCoord[0] = { uvs.x        , uvs.y };
-        //s_Data.QuadTextCoord[1] = { uvs.x + uvs.z, uvs.y };
-        //s_Data.QuadTextCoord[2] = { uvs.x + uvs.z, uvs.y + uvs.w };
-        //s_Data.QuadTextCoord[3] = { uvs.x        , uvs.y + uvs.w };
-
-        //s_Data.QuadTextCoord[0] = { 0.2f, 0.5f };
-        //s_Data.QuadTextCoord[1] = { 0.3f, 0.5f };
-        //s_Data.QuadTextCoord[2] = { 0.3f, 1.0f };
-        //s_Data.QuadTextCoord[3] = { 0.2f, 1.0f };
-
+        int textureID = subTexture->GetTextureID();
         for (uint32_t i = 0; i < s_Data.QuadVertexCount; ++i)
         {
             s_Data.LastVertexPtr->Position = Transform * s_Data.QuadOrigin[i];
             s_Data.LastVertexPtr->Color = color;
-            s_Data.LastVertexPtr->TextCoord = s_Data.QuadTextCoord[i];
+            s_Data.LastVertexPtr->TextCoord = subTexture->GetTextureCoord()[i];
             s_Data.LastVertexPtr->TextID = (float)textureID;
             ++s_Data.LastVertexPtr;
         }
         s_Data.RenderingStats.UpdateQaudDrawnStats();
         s_Data.NumberOfIndicesDrawn += s_Data.QuadIndexCount;
+
+        if (s_Data.TextureIDArray.find(textureID) == s_Data.TextureIDArray.end())
+        {
+            s_Data.TextureIDArray.insert(textureID);
+        }
+
+    }
+
+    void Renderer2D::DrawAnimatedQuad(const glm::vec3& pos, const glm::vec2& size, const Ref<Texture>& texture, const Ref<Animation2D>& animation)
+    {
+
+        if (s_Data.NumberOfIndicesDrawn >= s_Data.NumberOfQuadsPerDrawCall * s_Data.QuadIndexCount)
+        {
+            StartNewBatch();
+        }
+        glm::mat4 Transform = glm::translate(glm::mat4(1.f), glm::vec3(pos.x, pos.y, pos.z)) *
+                              glm::rotate(glm::mat4(1.f), 0.f, glm::vec3(0, 0, 1.f)) *
+                              glm::scale(glm::mat4(1.f), glm::vec3(size.x, size.y, 1.f));
+
+
+        int textureID = texture->GetTextureID();
+        for (uint32_t i = 0; i < s_Data.QuadVertexCount; ++i)
+        {
+            s_Data.LastVertexPtr->Position = Transform * s_Data.QuadOrigin[i];
+            s_Data.LastVertexPtr->Color = {1,1,1,1};
+            s_Data.LastVertexPtr->TextCoord = animation->GetTextureCoord()[i];
+            s_Data.LastVertexPtr->TextID = (float)textureID;
+            ++s_Data.LastVertexPtr;
+        }
+        s_Data.RenderingStats.UpdateQaudDrawnStats();
+        s_Data.NumberOfIndicesDrawn += s_Data.QuadIndexCount;
+
+
+        if (s_Data.TextureIDArray.find(textureID) == s_Data.TextureIDArray.end())
+        {
+            s_Data.TextureIDArray.insert(textureID);
+        }
+
+
     }
 
     void Renderer2D::EndScene()
@@ -191,14 +208,22 @@ namespace JSEngine
         s_Data.VAO->GetVertexBuffer().back()->SetData(s_Data.BasePtr, (uint32_t)size);
 
         ++s_Data.RenderingStats.NumberOfDrawCall;
+
     }
 
     void Renderer2D::Flush()
     {
         s_Data.Shader2D->UploadUnfiromVec();
-        for (uint32_t i = 0; i < s_Data.CurrentTextureIndex; ++i)
+        int textureSlots[s_Data.MaxTextureSlots] = { 0 };
+        for (const auto& textureID : s_Data.TextureIDArray)
         {
-            s_Data.TextureArray[i]->Bind(i);
+            textureSlots[textureID] = textureID;
+        }
+        s_Data.Shader2D->SetIntArrary("u_Textures", s_Data.MaxTextureSlots, textureSlots);
+
+        for (const auto& textureID : s_Data.TextureIDArray)
+        {
+            g_ResourceMgr.Acquire2DTexture(textureID)->Bind(textureID);
         }
         RenderCommand::DrawIndex(s_Data.VAO, s_Data.NumberOfIndicesDrawn);
     }

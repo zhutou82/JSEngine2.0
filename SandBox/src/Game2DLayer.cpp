@@ -1,5 +1,6 @@
 #include "Game2DLayer.h"
 #include "glm/gtc/type_ptr.hpp"
+//#include "Box2D/Box2D/Collision/b2BroadPhase.h"
 
 
 Game2DLayer::Game2DLayer() 
@@ -36,6 +37,15 @@ void Game2DLayer::OnAttach()
 {
     JSEngine::Random::Init();
     JSEngine::Renderer2D::Init();
+
+    m_AwesomeFace = g_ResourceMgr.Acquire2DTexture("awesomeface");
+    m_Bobo        = g_ResourceMgr.Acquire2DTexture("Bobo");
+    m_Robot       = g_ResourceMgr.Acquire2DTexture("character_robot_sheetHD");
+
+    m_RobotSub = JSEngine::SubTexture2D::Create(m_Robot, { 9, 5 }, { 1 , 1 , 1, 1 });
+
+    m_Animation = JSEngine::CreateRef<JSEngine::Animation2D>(m_Robot, glm::ivec2(9, 5));
+
 }
 
 void Game2DLayer::OnDetach()
@@ -50,7 +60,6 @@ void Game2DLayer::OnUpdate(JSEngine::TimeStep delta)
     
     m_Camera->OnUpdate(delta);
     
-
     static glm::vec2 startPos = { 0, 0 };
     static float step = 0.3f;
     static glm::vec2 size{ step * 0.9f };
@@ -70,14 +79,21 @@ void Game2DLayer::OnUpdate(JSEngine::TimeStep delta)
         m_ParticalSystem.Emit(m_ParticleProp);
     }
 
-
-
     JSEngine::RenderCommand::Clear({ 0.1, 0.1, 0.0, 1 });
     m_ParticalSystem.Update(delta);
     m_ParticalSystem.OnRender(m_Camera);
-    //JSEngine::Renderer2D::BeginScene(m_Camera);
 
-    ////JSEngine::Renderer2D::DrawQuad(startPos, { 0.2f, 0.2f }, glm::vec4(1.f), 2);
+
+    JSEngine::Renderer2D::BeginScene(m_Camera);
+    
+    JSEngine::Renderer2D::DrawQuad(startPos, { 0.2f, 0.2f }, glm::vec4(1.f), m_Bobo->GetTextureID());
+    JSEngine::Renderer2D::DrawSubTextureQuad({ 0.2,0.2,0 }, { 0.2f, 0.2f }, 0.f, glm::vec4(1.f), m_RobotSub);
+
+
+    m_Animation->OnUpdate(delta);
+    m_Animation->Play(0, 7, 0.1f);
+    JSEngine::Renderer2D::DrawAnimatedQuad({ -0.2, -0.2, 0 }, { 0.2f, 0.2f }, m_Robot, m_Animation);   
+
     //
     //index += delta;
     ////CLIENT_INFO("{0}", index);
@@ -93,8 +109,8 @@ void Game2DLayer::OnUpdate(JSEngine::TimeStep delta)
     ////    }
     ////}
 
-    //JSEngine::Renderer2D::EndScene();
-    //JSEngine::Renderer2D::Flush();
+    JSEngine::Renderer2D::EndScene();
+    JSEngine::Renderer2D::Flush();
 }
 
 void Game2DLayer::OnRenderUpdate(JSEngine::TimeStep delta)

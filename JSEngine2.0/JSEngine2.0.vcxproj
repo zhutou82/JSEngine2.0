@@ -77,7 +77,7 @@
       <PrecompiledHeaderFile>PCH.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLFW_INCLUDE_NONE;JSENGINE_PLATFORM_WINDOWS;JS_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\tinyXML;vendor\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\tinyXML;vendor\stb_image;vendor\box2D\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -99,7 +99,7 @@
       <PrecompiledHeaderFile>PCH.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLFW_INCLUDE_NONE;JSENGINE_PLATFORM_WINDOWS;JS_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\tinyXML;vendor\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\tinyXML;vendor\stb_image;vendor\box2D\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -124,7 +124,7 @@
       <PrecompiledHeaderFile>PCH.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLFW_INCLUDE_NONE;JSENGINE_PLATFORM_WINDOWS;JS_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\tinyXML;vendor\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\tinyXML;vendor\stb_image;vendor\box2D\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -162,6 +162,7 @@
     <ClInclude Include="src\JSEngine\Event\KeyEvent.h" />
     <ClInclude Include="src\JSEngine\Event\MouseEvent.h" />
     <ClInclude Include="src\JSEngine\FileSystem\FileSystem.h" />
+    <ClInclude Include="src\JSEngine\Graphics\Animation.h" />
     <ClInclude Include="src\JSEngine\Graphics\Buffer.h" />
     <ClInclude Include="src\JSEngine\Graphics\Camera.h" />
     <ClInclude Include="src\JSEngine\Graphics\GraphicsContext.h" />
@@ -170,6 +171,7 @@
     <ClInclude Include="src\JSEngine\Graphics\Renderer.h" />
     <ClInclude Include="src\JSEngine\Graphics\RendererAPI.h" />
     <ClInclude Include="src\JSEngine\Graphics\Shader.h" />
+    <ClInclude Include="src\JSEngine\Graphics\SubTexture2D.h" />
     <ClInclude Include="src\JSEngine\Graphics\Texture.h" />
     <ClInclude Include="src\JSEngine\Graphics\VertexArray.h" />
     <ClInclude Include="src\JSEngine\Managers\AssetManager.h" />
@@ -617,6 +619,7 @@
     <ClCompile Include="src\JSEngine\Core\Log.cpp" />
     <ClCompile Include="src\JSEngine\Core\TimeStep.cpp" />
     <ClCompile Include="src\JSEngine\FileSystem\FileSystem.cpp" />
+    <ClCompile Include="src\JSEngine\Graphics\Animation.cpp" />
     <ClCompile Include="src\JSEngine\Graphics\Buffer.cpp" />
     <ClCompile Include="src\JSEngine\Graphics\Camera.cpp" />
     <ClCompile Include="src\JSEngine\Graphics\Meterial.cpp" />
@@ -624,6 +627,7 @@
     <ClCompile Include="src\JSEngine\Graphics\Renderer.cpp" />
     <ClCompile Include="src\JSEngine\Graphics\RendererAPI.cpp" />
     <ClCompile Include="src\JSEngine\Graphics\Shader.cpp" />
+    <ClCompile Include="src\JSEngine\Graphics\SubTexture2D.cpp" />
     <ClCompile Include="src\JSEngine\Graphics\Texture.cpp" />
     <ClCompile Include="src\JSEngine\Graphics\VertexArray.cpp" />
     <ClCompile Include="src\JSEngine\Managers\AssetManager.cpp" />
@@ -672,6 +676,9 @@
     </ProjectReference>
     <ProjectReference Include="vendor\tinyXML\tinyxml2.vcxproj">
       <Project>{8C609325-782D-EE30-A146-DCD88D7223BF}</Project>
+    </ProjectReference>
+    <ProjectReference Include="vendor\box2D\box2D.vcxproj">
+      <Project>{C4442B0F-3059-53C0-F9DA-F61F65AE4FF1}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

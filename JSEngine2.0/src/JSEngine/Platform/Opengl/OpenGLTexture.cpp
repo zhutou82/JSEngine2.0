@@ -8,8 +8,8 @@ namespace JSEngine
 
     uint32_t OpenGLTexture2D::s_UniqueTextureID = 0;
 
-    OpenGLTexture2D::OpenGLTexture2D(const std::string& fileName, bool flipped) :
-        m_TextureData(g_ResourceMgr.GetCoreFolderPaths(CoreFolderPath::ASSETS), fileName, flipped), m_Slot(0), m_TexutureID(0)
+    OpenGLTexture2D::OpenGLTexture2D(const std::string& fileName, const glm::ivec2& dim, bool flipped) :
+        m_TextureData(g_ResourceMgr.GetCoreFolderPaths(CoreFolderPath::ASSETS), fileName, flipped), m_Slot(0), m_TexutureID(0), m_Dim(dim)
     {
         Init();
         m_TexutureID = s_UniqueTextureID;
@@ -48,6 +48,43 @@ namespace JSEngine
     void OpenGLTexture2D::UnBind() const
     {
         glBindTexture(GL_TEXTURE_2D, 0);
+    }
+
+    void OpenGLTexture2D::SetDimension(const glm::ivec2& dimension)
+    {
+        m_Dim = dimension;  
+        //compute SubTexutre Coord
+        for (int i = 0; i < m_Dim.y; ++i)
+        {
+            for (int j = 0; i < m_Dim.x; ++j)
+            {
+                glm::vec4 uvs;
+                int xTile = j % m_Dim.x;
+                int yTile = i / m_Dim.x;
+
+                uvs.x = xTile / (float)m_Dim.x;
+                uvs.y = yTile / (float)m_Dim.y;
+                uvs.z = 1.f / m_Dim.x;
+                uvs.w = 1.f / m_Dim.y;
+
+                glm::vec2 coord[4];
+
+                coord[0] = { uvs.x        , uvs.y };
+                coord[1] = { uvs.x + uvs.z, uvs.y };
+                coord[2] = { uvs.x + uvs.z, uvs.y + uvs.w };
+                coord[3] = { uvs.x        , uvs.y + uvs.w };
+
+                m_SubTextureCoordVec.insert({ i * m_Dim.x + j, coord });
+
+            }
+
+        }
+    }
+
+    const glm::vec2* OpenGLTexture2D::GetSubTextureCoord(const glm::ivec2& index) const
+    {
+        JS_CORE_ASSERT( (index.x >= m_Dim.x && index.y <= m_Dim.y), "Index for SubTexutre out of bound");
+        return m_SubTextureCoordVec.find(index.y * m_Dim.x + index.x)->second;
     }
 
 }

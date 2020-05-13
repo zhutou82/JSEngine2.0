@@ -30,5 +30,11 @@ private:
     ParticleSystem m_ParticalSystem;
     ParticleProperty m_ParticleProp;
 
+    JSEngine::Ref<JSEngine::Texture> m_AwesomeFace;
+    JSEngine::Ref<JSEngine::Texture> m_Bobo;
+    JSEngine::Ref<JSEngine::Texture> m_Robot;
 
+    JSEngine::Ref<JSEngine::SubTexture2D> m_RobotSub;
+
+    JSEngine::Ref<JSEngine::Animation2D> m_Animation;
 };

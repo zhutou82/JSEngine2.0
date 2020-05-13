@@ -53,6 +53,9 @@ namespace JSEngine
         
         Ref<Texture>   AcquireTexture  (const std::string& fileName = "Bobo");
         Ref<Texture2D> Acquire2DTexture(const std::string& fileName = "Bobo");
+        Ref<Texture2D> Acquire2DTexture(uint32_t textureID);
+
+
         Ref<Shader>    AcquireShader(const std::string& filename);
 
         const std::unordered_map<std::string, Ref<Shader>>& GetShaders() const { return m_ShaderIDPtrMap; }
@@ -73,6 +76,8 @@ namespace JSEngine
     private:
         
         std::unordered_map<std::string, Ref<Texture2D>> m_2DTexturePathPtrMap;
+        std::unordered_map<int, Ref<Texture2D>> m_2DTextureIDPtrMap;
+
         std::unordered_map<int, Ref<Meterial>>          m_MeterialIDhPtrMap;
         std::unordered_map<std::string, Ref<Shader>>    m_ShaderIDPtrMap;
 

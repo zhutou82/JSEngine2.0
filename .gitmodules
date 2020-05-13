@@ -13,3 +13,6 @@
 [submodule "JSEngine2.0/vendor/imgui"]
 	path = JSEngine2.0/vendor/imgui
 	url = https://github.com/zhutou82/imgui.git
+[submodule "JSEngine2.0/vendor/box2D"]
+	path = JSEngine2.0/vendor/box2D
+	url = https://github.com/zhutou82/box2d.git

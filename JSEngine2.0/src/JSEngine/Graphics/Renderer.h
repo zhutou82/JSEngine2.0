@@ -1,7 +1,10 @@
 #pragma once
 #include <memory>
 #include <vector>
+#include <set>
 #include "RenderCommand.h"
+#include "JSEngine/Graphics/SubTexture2D.h"
+#include "JSEngine/Graphics/Animation.h"
 
 
 
@@ -81,6 +84,8 @@ namespace JSEngine
         {
            LastVertexPtr = BasePtr;
            NumberOfIndicesDrawn = 0;
+           CurrentTextureIndex = 0;
+           TextureIDArray.clear();
         }
 
         Ref<Shader> Shader2D;
@@ -100,7 +105,7 @@ namespace JSEngine
         Vertex2D* BasePtr = nullptr;
         Vertex2D* LastVertexPtr = nullptr;
 
-        //stats260716
+        //stats26071
         Stats RenderingStats;
 
         //texture
@@ -111,6 +116,7 @@ namespace JSEngine
         //model
         glm::vec4 QuadOrigin[4];
 
+        std::set<uint32_t> TextureIDArray;
 
 
     };
@@ -124,11 +130,12 @@ namespace JSEngine
         static void BeginScene(const Ref<OrthographicCameraController>& camera);
         static void EndScene();
         static void Submit(const Ref<Mesh>& mesh);
-        static void DrawQuad        (const glm::vec2& pos, const glm::vec2& size, const glm::vec4& color, int textureID);
-        static void DrawRotatedQuad (const glm::vec2& pos, const glm::vec2& size, float rotationAngle, const glm::vec4& color, int textureID);
-        static void DrawQuad        (const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color, int textureID);
-        static void DrawRotatedQuad (const glm::vec3& pos, const glm::vec2& size, float rotationAngle, const glm::vec4& color, int textureID);
-        static void DrawAnimatedQuad(const glm::vec3& pos, const glm::vec2& size, float rotationAngle, const glm::vec4& color, int textureID, int index);
+        static void DrawQuad          (const glm::vec2& pos, const glm::vec2& size, const glm::vec4& color, int textureID);
+        static void DrawRotatedQuad   (const glm::vec2& pos, const glm::vec2& size, float rotationAngle, const glm::vec4& color, int textureID);
+        static void DrawQuad          (const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color, int textureID);
+        static void DrawRotatedQuad   (const glm::vec3& pos, const glm::vec2& size, float rotationAngle, const glm::vec4& color, int textureID);
+        static void DrawSubTextureQuad(const glm::vec3& pos, const glm::vec2& size, float rotationAngle, const glm::vec4& color, const Ref<SubTexture2D>& subTexture);
+        static void DrawAnimatedQuad  (const glm::vec3& pos, const glm::vec2& size, const Ref<Texture>& subTexture, const Ref<Animation2D>& animation );
         static void Flush();
         static RendererAPI::API GetGraphicsAPI() { return RendererAPI::GetAPI(); }
 

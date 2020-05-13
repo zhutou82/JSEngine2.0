@@ -6,12 +6,12 @@
 namespace JSEngine
 {
 
-    Ref<Texture2D> Texture2D::Create(const std::string& fileName)
+    Ref<Texture2D> Texture2D::Create(const std::string& fileName, const glm::ivec2& dim)
     {
         switch (Renderer::GetGraphicsAPI())
         {
             case RendererAPI::API::NONE:     return nullptr;
-            case RendererAPI::API::OPENGL:   return CreateRef<OpenGLTexture2D>(fileName);
+            case RendererAPI::API::OPENGL:   return CreateRef<OpenGLTexture2D>(fileName, dim);
             case RendererAPI::API::DIRECT3D: return nullptr;
         }
 

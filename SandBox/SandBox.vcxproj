@@ -79,7 +79,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>JSENGINE_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;JS_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\JSEngine2.0\vendor\spdlog\include;..\JSEngine2.0\src;..\JSEngine2.0\vendor;..\JSEngine2.0\vendor\GLFW\include;..\JSEngine2.0\vendor\Glad\include;..\JSEngine2.0\vendor\imgui;..\JSEngine2.0\vendor\glm;..\JSEngine2.0\vendor\tinyXML;..\JSEngine2.0\vendor\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\JSEngine2.0\vendor\spdlog\include;..\JSEngine2.0\src;..\JSEngine2.0\vendor;..\JSEngine2.0\vendor\GLFW\include;..\JSEngine2.0\vendor\Glad\include;..\JSEngine2.0\vendor\imgui;..\JSEngine2.0\vendor\glm;..\JSEngine2.0\vendor\tinyXML;..\JSEngine2.0\vendor\stb_image;..\JSEngine2.0\vendor\box2D\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -97,7 +97,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>JSENGINE_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;JS_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\JSEngine2.0\vendor\spdlog\include;..\JSEngine2.0\src;..\JSEngine2.0\vendor;..\JSEngine2.0\vendor\GLFW\include;..\JSEngine2.0\vendor\Glad\include;..\JSEngine2.0\vendor\imgui;..\JSEngine2.0\vendor\glm;..\JSEngine2.0\vendor\tinyXML;..\JSEngine2.0\vendor\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\JSEngine2.0\vendor\spdlog\include;..\JSEngine2.0\src;..\JSEngine2.0\vendor;..\JSEngine2.0\vendor\GLFW\include;..\JSEngine2.0\vendor\Glad\include;..\JSEngine2.0\vendor\imgui;..\JSEngine2.0\vendor\glm;..\JSEngine2.0\vendor\tinyXML;..\JSEngine2.0\vendor\stb_image;..\JSEngine2.0\vendor\box2D\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -118,7 +118,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>JSENGINE_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;JS_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\JSEngine2.0\vendor\spdlog\include;..\JSEngine2.0\src;..\JSEngine2.0\vendor;..\JSEngine2.0\vendor\GLFW\include;..\JSEngine2.0\vendor\Glad\include;..\JSEngine2.0\vendor\imgui;..\JSEngine2.0\vendor\glm;..\JSEngine2.0\vendor\tinyXML;..\JSEngine2.0\vendor\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\JSEngine2.0\vendor\spdlog\include;..\JSEngine2.0\src;..\JSEngine2.0\vendor;..\JSEngine2.0\vendor\GLFW\include;..\JSEngine2.0\vendor\Glad\include;..\JSEngine2.0\vendor\imgui;..\JSEngine2.0\vendor\glm;..\JSEngine2.0\vendor\tinyXML;..\JSEngine2.0\vendor\stb_image;..\JSEngine2.0\vendor\box2D\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>

@@ -120,6 +120,9 @@
     <ClInclude Include="src\JSEngine\FileSystem\FileSystem.h">
       <Filter>src\JSEngine\FileSystem</Filter>
     </ClInclude>
+    <ClInclude Include="src\JSEngine\Graphics\Animation.h">
+      <Filter>src\JSEngine\Graphics</Filter>
+    </ClInclude>
     <ClInclude Include="src\JSEngine\Graphics\Buffer.h">
       <Filter>src\JSEngine\Graphics</Filter>
     </ClInclude>
@@ -142,6 +145,9 @@
       <Filter>src\JSEngine\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\JSEngine\Graphics\Shader.h">
+      <Filter>src\JSEngine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JSEngine\Graphics\SubTexture2D.h">
       <Filter>src\JSEngine\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\JSEngine\Graphics\Texture.h">
@@ -172,6 +178,9 @@
       <Filter>src\JSEngine\Math</Filter>
     </ClInclude>
     <ClInclude Include="src\JSEngine\Math\Mat4.h">
+      <Filter>src\JSEngine\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JSEngine\Math\Random.h">
       <Filter>src\JSEngine\Math</Filter>
     </ClInclude>
     <ClInclude Include="src\JSEngine\Math\Vec2.h">
@@ -1461,9 +1470,6 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="src\JSEngine\Math\Random.h">
-      <Filter>src\JSEngine\Math</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\JSEngine\Application.cpp">
@@ -1480,6 +1486,9 @@
     </ClCompile>
     <ClCompile Include="src\JSEngine\FileSystem\FileSystem.cpp">
       <Filter>src\JSEngine\FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\JSEngine\Graphics\Animation.cpp">
+      <Filter>src\JSEngine\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\JSEngine\Graphics\Buffer.cpp">
       <Filter>src\JSEngine\Graphics</Filter>
@@ -1500,6 +1509,9 @@
       <Filter>src\JSEngine\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\JSEngine\Graphics\Shader.cpp">
+      <Filter>src\JSEngine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\JSEngine\Graphics\SubTexture2D.cpp">
       <Filter>src\JSEngine\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\JSEngine\Graphics\Texture.cpp">
@@ -1527,6 +1539,9 @@
       <Filter>src\JSEngine\Math</Filter>
     </ClCompile>
     <ClCompile Include="src\JSEngine\Math\Mat4.cpp">
+      <Filter>src\JSEngine\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\JSEngine\Math\Random.cpp">
       <Filter>src\JSEngine\Math</Filter>
     </ClCompile>
     <ClCompile Include="src\JSEngine\Math\Vec2.cpp">
@@ -1598,6 +1613,5 @@
     <ClCompile Include="src\JSEngine\imGui\imguiLayer.cpp">
       <Filter>src\JSEngine\imGui</Filter>
     </ClCompile>
-    <ClCompile Include="src\JSEngine\Math\Random.cpp" />
   </ItemGroup>
 </Project>
