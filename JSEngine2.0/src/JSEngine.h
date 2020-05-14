@@ -20,6 +20,12 @@
 #include "JSEngine/Platform/Opengl/Light.h"
 //--------------------------------------------
 
+//----------------Physics---------------------
+#include "JSEngine/Physics/Physics2D.h"
+#include "JSEngine/Physics/Box2D.h"
+//--------------------------------------------
+
+
 //----------------Resources---------------------
 #include "JSEngine/Managers/ResourceManager.h"
 //--------------------------------------------

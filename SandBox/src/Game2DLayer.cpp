@@ -1,5 +1,6 @@
 #include "Game2DLayer.h"
 #include "glm/gtc/type_ptr.hpp"
+#include <Random>
 //#include "Box2D/Box2D/Collision/b2BroadPhase.h"
 
 
@@ -30,6 +31,11 @@ Game2DLayer::Game2DLayer()
 
 Game2DLayer::~Game2DLayer()
 {
+
+    // By deleting the world, we delete the bomb, mouse joint, etc.
+    //delete m_world;
+    //m_world = NULL;
+
     JSEngine::Renderer2D::Shutdown();
 }
 
@@ -46,6 +52,14 @@ void Game2DLayer::OnAttach()
 
     m_Animation = JSEngine::CreateRef<JSEngine::Animation2D>(m_Robot, glm::ivec2(9, 5));
 
+    g_Physics.Init({ 0, -0.98f });
+    g_Physics.CreateGround({0, -1}, {10.f, 0.01f});
+
+    for (int i = 0; i < 50; ++i)
+    {
+        float quadSize = JSEngine::Random::Float(0.1f, 0.25f);
+        g_Physics.AddToBox2DVec(JSEngine::Box2D::Create({ JSEngine::Random::Float(-1.5f, 1.5), JSEngine::Random::Float(1.5, 5.f) }, { quadSize, quadSize }));
+    }
 }
 
 void Game2DLayer::OnDetach()
@@ -70,7 +84,7 @@ void Game2DLayer::OnUpdate(JSEngine::TimeStep delta)
         auto& mousePos = glm::vec4(g_Input.GetMousePos().first, g_Input.GetMousePos().second, 0, 0);
 
         glm::vec2 pos(1.f); //{ mousePos.x, mousePos.y };
-        pos.x =   (float)mousePos.x / (float)g_AppWindow->GetWidth() * m_Camera->GetBound().GetWidth() - 0.5f * m_Camera->GetBound().GetWidth();
+        pos.x =   (float)mousePos.x / (float)g_AppWindow->GetWidth()  * m_Camera->GetBound().GetWidth() - 0.5f * m_Camera->GetBound().GetWidth();
         pos.y = -((float)mousePos.y / (float)g_AppWindow->GetHeight() * m_Camera->GetBound().GetHeigh() - 0.5f * m_Camera->GetBound().GetHeigh());
 
         auto& cameraPos = m_Camera->GetCamera().GetPosition();
@@ -83,16 +97,30 @@ void Game2DLayer::OnUpdate(JSEngine::TimeStep delta)
     m_ParticalSystem.Update(delta);
     m_ParticalSystem.OnRender(m_Camera);
 
-
+    g_Physics.OnUpdate(delta);
     JSEngine::Renderer2D::BeginScene(m_Camera);
+
+
+    for (const auto& elem : g_Physics.GetBox2DVec())
+    {
+        glm::vec2 pos = { elem->GetBody()->GetPosition().x , elem->GetBody()->GetPosition().y };
+        //glm::vec2 size = 
+        JSEngine::Renderer2D::DrawRotatedQuad(pos, elem->GetSize(), elem->GetBody()->GetAngle(), glm::vec4(1.f), m_Bobo->GetTextureID());
+    }
+
+
+    //m_groundBody->
+    //JSEngine::Renderer2D::DrawQuad({ 0, 0 }, { 0.2f, 0.2f }, glm::vec4(1.f), m_Bobo->GetTextureID());
+    //JSEngine::Renderer2D::DrawQuad({ 0.2, 0 }, { 0.2f, 0.2f }, glm::vec4(1.f), m_Bobo->GetTextureID());
     
-    JSEngine::Renderer2D::DrawQuad(startPos, { 0.2f, 0.2f }, glm::vec4(1.f), m_Bobo->GetTextureID());
-    JSEngine::Renderer2D::DrawSubTextureQuad({ 0.2,0.2,0 }, { 0.2f, 0.2f }, 0.f, glm::vec4(1.f), m_RobotSub);
+    //JSEngine::Renderer2D::DrawSubTextureQuad({ 0.2,0.2,0 }, { 0.2f, 0.2f }, 0.f, glm::vec4(1.f), m_RobotSub);
 
 
-    m_Animation->OnUpdate(delta);
-    m_Animation->Play(0, 7, 0.1f);
-    JSEngine::Renderer2D::DrawAnimatedQuad({ -0.2, -0.2, 0 }, { 0.2f, 0.2f }, m_Robot, m_Animation);   
+    //m_Animation->OnUpdate(delta);
+    //m_Animation->Play(0, 7, 0.1f);
+    //JSEngine::Renderer2D::DrawAnimatedQuad({ -0.2, -0.2, 0 }, { 0.2f, 0.2f }, m_Robot, m_Animation);   
+
+
 
     //
     //index += delta;

@@ -13,3 +13,6 @@
 [submodule "JSEngine2.0/vendor/box2D"]
 	path = JSEngine2.0/vendor/box2D
 	url = https://github.com/zhutou82/box2d.git
+[submodule "JSEngine2.0/vendor/tinyXML"]
+	path = JSEngine2.0/vendor/tinyXML
+	url = https://github.com/zhutou82/tinyxml2.git

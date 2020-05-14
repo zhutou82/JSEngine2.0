@@ -187,6 +187,8 @@
     <ClInclude Include="src\JSEngine\Math\Vec3.h" />
     <ClInclude Include="src\JSEngine\Math\Vec4.h" />
     <ClInclude Include="src\JSEngine\PCH.h" />
+    <ClInclude Include="src\JSEngine\Physics\Box2D.h" />
+    <ClInclude Include="src\JSEngine\Physics\Physics2D.h" />
     <ClInclude Include="src\JSEngine\Platform\CameraController.h" />
     <ClInclude Include="src\JSEngine\Platform\Opengl\Light.h" />
     <ClInclude Include="src\JSEngine\Platform\Opengl\Mesh.h" />
@@ -644,6 +646,8 @@
     <ClCompile Include="src\JSEngine\PCH.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\JSEngine\Physics\Box2D.cpp" />
+    <ClCompile Include="src\JSEngine\Physics\Physics2D.cpp" />
     <ClCompile Include="src\JSEngine\Platform\CameraController.cpp" />
     <ClCompile Include="src\JSEngine\Platform\Opengl\Light.cpp" />
     <ClCompile Include="src\JSEngine\Platform\Opengl\Mesh.cpp" />
@@ -684,4 +688,4 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
-</Project>
+</Project> 

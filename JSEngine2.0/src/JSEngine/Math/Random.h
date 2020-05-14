@@ -7,9 +7,9 @@ namespace JSEngine
     {
     public:
 
-        static float Float()
+        static float Float(float min = 0.f, float max = 1.f)
         {
-            return (float)s_Range(s_Engine)/ (float)std::numeric_limits<uint32_t>::max();
+            return std::uniform_real_distribution<float>(min, max)(s_Engine);
         }
 
         static void Init()
@@ -20,7 +20,6 @@ namespace JSEngine
     private:
 
         static std::mt19937 s_Engine;
-        static std::uniform_int_distribution<std::mt19937::result_type> s_Range;
     };
 
 

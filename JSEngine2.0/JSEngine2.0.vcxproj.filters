@@ -28,6 +28,9 @@
     <Filter Include="src\JSEngine\Math">
       <UniqueIdentifier>{E855C72A-546C-C5C0-9DE3-50E209399648}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\JSEngine\Physics">
+      <UniqueIdentifier>{218E2730-0D1D-B1F9-B63B-C5F4A2A9C19F}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\JSEngine\Platform">
       <UniqueIdentifier>{E31C1731-4F89-D22B-187D-6A8984A8F493}</UniqueIdentifier>
     </Filter>
@@ -194,6 +197,12 @@
     </ClInclude>
     <ClInclude Include="src\JSEngine\PCH.h">
       <Filter>src\JSEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JSEngine\Physics\Box2D.h">
+      <Filter>src\JSEngine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JSEngine\Physics\Physics2D.h">
+      <Filter>src\JSEngine\Physics</Filter>
     </ClInclude>
     <ClInclude Include="src\JSEngine\Platform\CameraController.h">
       <Filter>src\JSEngine\Platform</Filter>
@@ -1555,6 +1564,12 @@
     </ClCompile>
     <ClCompile Include="src\JSEngine\PCH.cpp">
       <Filter>src\JSEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\JSEngine\Physics\Box2D.cpp">
+      <Filter>src\JSEngine\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\JSEngine\Physics\Physics2D.cpp">
+      <Filter>src\JSEngine\Physics</Filter>
     </ClCompile>
     <ClCompile Include="src\JSEngine\Platform\CameraController.cpp">
       <Filter>src\JSEngine\Platform</Filter>
