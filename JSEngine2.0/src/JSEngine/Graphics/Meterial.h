@@ -1,17 +1,21 @@
 #pragma once
+#include <vector>
+
 #include "glm/glm.hpp"
 #include "JSEngine/Core/Core.h"
+#include "JSEngine/Graphics/Texture.h"
+#include "JSEngine/Graphics/Shader.h"
 
 
 namespace JSEngine
 {
-    class Meterial
+    class Material
     {
         static uint32_t s_UniqueID;
 
     public:
 
-        Meterial(const glm::vec3& color    = { 1, 1, 1 }, 
+        Material(const glm::vec3& color    = { 1, 1, 1 }, 
                  const glm::vec3& ambient  = { 0.1f, 0.1f, 0.1f },
                  const glm::vec3& diffuse  = { 0.1f, 0.1f, 0.1f },
                  const glm::vec3& specular = { 0.1f, 0.1f, 0.1f },
@@ -34,8 +38,9 @@ namespace JSEngine
 
         uint32_t GetID() const                 { return m_ID;       }
 
-        static Ref<Meterial> Create();
+        static Ref<Material> Create();
 
+        
     private:
 
         glm::vec3 m_Color;
@@ -44,9 +49,10 @@ namespace JSEngine
         glm::vec3 m_Specular;
 
         float m_Shinese;
-
         uint32_t m_ID;
 
+        std::vector<Ref<Texture>> m_TextureVec;
+        Ref<Shader> m_Shader;
 
     };
 

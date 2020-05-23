@@ -22,7 +22,7 @@ namespace JSEngine
         static void DrawIndex(const Ref<Mesh>& mesh);
 
         //2D renderer commond
-        static void DrawIndex(const Ref<VertexArray>& VAO, uint32_t count);
+        static void DrawIndex(const Ref<VertexArray>& VAO, uint32_t count = 0);
         //static void SetUpEnviroment(const Ref<SceneData2D>& sceneData2D);
 
     private:

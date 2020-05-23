@@ -2,6 +2,7 @@
 #include <memory>
 #include <vector>
 #include <set>
+#include <unordered_map>
 #include "RenderCommand.h"
 #include "JSEngine/Graphics/SubTexture2D.h"
 #include "JSEngine/Graphics/Animation.h"
@@ -14,11 +15,16 @@ namespace JSEngine
     class Camera;
     class VertexArray;
     class Mesh;
+    class Shader;
 
     struct SceneData
     {
-        std::vector<Ref<Light>> Lights;
-        std::vector <Ref<Mesh>> Meshes;
+
+        std::vector<Ref<Light>>  Lights;
+        std::vector <Ref<Mesh>>  Meshes;
+        std::unordered_map<uint32_t, Ref<Shader> > Shaders;
+        
+
     };
 
 
@@ -31,11 +37,14 @@ namespace JSEngine
         static void BeginScene(const Ref<SceneData>& sceneData);
         static void EndScene();
         static void Submit(const Ref<Mesh>& mesh);
-
+        static void SubmitMesh(const Ref<Mesh>& mesh, const glm::mat4& transform);//, const Ref<MaterialInstance>& overrideMateria)
+        static void DrawMesh();
         static void Flush();
         static RendererAPI::API GetGraphicsAPI() { return RendererAPI::GetAPI(); }
 
     private:
+
+        static Ref<SceneData> s_Data;
 
     };
 

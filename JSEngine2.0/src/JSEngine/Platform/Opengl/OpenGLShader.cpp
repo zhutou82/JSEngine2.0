@@ -79,7 +79,7 @@ namespace JSEngine
     {
         FILE* vs = m_GlslFile.GetFile();
         const char* type = "//type";
-        const size_t bufsize = 4096;
+        const size_t bufsize = 10000;
         char line[bufsize] = { 0 };
         char shaderName[bufsize] = { 0 };
         char shaderSrc[bufsize] = { 0 };
@@ -113,7 +113,7 @@ namespace JSEngine
 
     void OpenGLShader::UploadUnfiromVec()
     {
-        Bind();
+        for (const auto& val : m_Uniforms.IntVec)   SetUnifrom1i(val.first, val.second);
         for (const auto& val : m_Uniforms.FloatVec) SetUnifrom1f(val.first, val.second);
         for (const auto& val : m_Uniforms.Vec3Vec)  SetUnifrom3f(val.first, val.second);
         for (const auto& val : m_Uniforms.Vec4Vec)  SetUnifrom4f(val.first, val.second);
@@ -175,7 +175,7 @@ namespace JSEngine
         {
             m_UnfiromNameIDMap[name] = glGetUniformLocation(m_RendererID, name.c_str());
             if (m_UnfiromNameIDMap[name] == -1)
-                JS_CORE_INFO("Uniform name not exist {0}", name);
+                JS_CORE_INFO("Uniform name not exist {0}, {1}", name, m_GlslFile.GetFileName());
         }
 
         return m_UnfiromNameIDMap[name];

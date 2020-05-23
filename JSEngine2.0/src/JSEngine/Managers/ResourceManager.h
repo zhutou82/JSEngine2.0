@@ -23,6 +23,7 @@ namespace JSEngine
         ASSETS,
         SHADER,
         PROFILER,
+        MODEL,
         MAX_NUM_OF_FOLDER_PATH
     };
 
@@ -60,7 +61,7 @@ namespace JSEngine
 
         const std::unordered_map<std::string, Ref<Shader>>& GetShaders() const { return m_ShaderIDPtrMap; }
 
-        Ref<Meterial>  AcquireMeterial(int ID = 0);      
+        Ref<Material>  AcquireMeterial(int ID = 0);      
 
         const std::string& GetCoreFolderPaths(CoreFolderPath folderName) const { return m_CoreFolderPaths[(uint32_t)folderName]; }
         const std::string& GetCoreFileNames(CoreFilerName folderName) const    { return m_CoreFileNames[(uint32_t)folderName];   }
@@ -78,7 +79,7 @@ namespace JSEngine
         std::unordered_map<std::string, Ref<Texture2D>> m_2DTexturePathPtrMap;
         std::unordered_map<int, Ref<Texture2D>> m_2DTextureIDPtrMap;
 
-        std::unordered_map<int, Ref<Meterial>>          m_MeterialIDhPtrMap;
+        std::unordered_map<int, Ref<Material>>          m_MeterialIDhPtrMap;
         std::unordered_map<std::string, Ref<Shader>>    m_ShaderIDPtrMap;
 
         std::vector<std::string> m_CoreFolderPaths;

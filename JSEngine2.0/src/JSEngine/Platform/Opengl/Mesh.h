@@ -1,4 +1,9 @@
 #pragma once
+
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
 #include "OpenGLBuffer.h"
 #include "OpenGLVertexArray.h"
 #include "OpenGLShader.h"
@@ -16,6 +21,7 @@ namespace JSEngine
         QUAD,
         CUBE,
         SPHARE,
+        MODEL,
         MAX_NUM_OF_MESH_TYPE
     };
 
@@ -39,6 +45,7 @@ namespace JSEngine
     public:
         void SetPosition    (const glm::vec3& pos)   { m_Pos = pos; }
         void SetNormal      (const glm::vec3& norm)  { m_Normal= norm; }
+        void SetTextureCoor(const glm::vec2& textCoor) { m_TextCoor = textCoor; }
         const float* GetData() const                 { return &m_Pos[0]; }
 
 
@@ -55,27 +62,29 @@ namespace JSEngine
         
     };
 
-
-    class Indices
+    struct Index
     {
-    public:
-        Indices() {}
-        ~Indices() { if (m_Data) free(m_Data); }
-
-        void SetData(uint32_t* data, uint32_t count)
-        {
-            m_Count = count;
-            m_Data = (uint32_t*)calloc(count, sizeof(uint32_t));
-            memcpy(m_Data, data, count * sizeof(uint32_t));
-        }
-
-        uint32_t GetCount() const { return m_Count; }
-        uint32_t* GetData() const { return m_Data; }
-
-    private:
-        uint32_t m_Count;
-        uint32_t* m_Data;
+        uint32_t V1, V2, V3;
     };
+
+    struct SubMesh
+    {
+        uint32_t BaseVertex = 0;
+        uint32_t BaseIndex = 0;
+
+        uint32_t VertexCount = 0;
+        uint32_t IndexCount = 0;
+
+        uint32_t MaterialIndex = 0;
+
+        uint32_t AlbedoMapIndex = 0;
+        uint32_t SpecularMapIndex = 0;
+
+        std::string NodeName;
+
+        glm::mat4 Transform;
+    };
+
 
     class Mesh
     {
@@ -83,16 +92,18 @@ namespace JSEngine
     public:
 
         Mesh(MeshType = TRIANGLE);
-        ~Mesh();
+        Mesh(const std::string& fileName, FILE_TYPE f = FILE_TYPE::OBJ);
+        ~Mesh() = default;
+
+        void SetUpMesh();
+
         void AttachShader(uint32_t shaderID);
         void AttachMeterial(uint32_t meterialID);
         uint32_t GetShaderID() const;
         uint32_t GetMeterialID() const;
 
-        void AttachMeterial(const Ref < Meterial>& meterial) { m_Meterial = meterial;  }
-        const Ref<Meterial>& GetMeterial() const {  return m_Meterial; }
-
-        void AddTexture();
+        void AttachMeterial(const Ref < Material>& meterial) { m_Meterial = meterial;  }
+        const Ref<Material>& GetMeterial() const {  return m_Meterial; }
 
         void SetScale(const glm::vec3& scaleV);
         void SetScale(float x, float y, float z);
@@ -114,10 +125,21 @@ namespace JSEngine
 
         const Ref<VertexArray>& GetVAO() const { return m_VAO; }
         const Ref<Texture>& GetTexture() const { return m_Texture; }
-        
+
+        const std::vector<Ref<Texture>>& GetTextures() const {return m_Texture2DVec; }
+       
         void Bind() const;
-        
+
+        void AddVertex(const Vertex& vertex) { m_VertexVec.push_back(vertex); }
+        void AddTexture(const Ref<Texture>& texture) { m_Texture2DVec.push_back(texture); }
+        //void AddIndex(uint32_t index) { m_IndicesVec.push_back(index); }
+
+        const std::vector<SubMesh>& GetSubMeshes() const { return m_SubMeshesVec; }
+
+    public:
+
         static Ref<Mesh> Create(MeshType meshType = TRIANGLE);
+        static Ref<Mesh> Create(const std::string& fileName);
 
     private:
 
@@ -125,20 +147,27 @@ namespace JSEngine
         void InitQuad();
         void InitCube();
 
+
+        void ProcessModelNode(aiNode* rootNode, const glm::mat4& transform = glm::mat4(1.f), uint32_t level = 0);
+        SubMesh ProcessMesh(const aiScene* scene, aiMesh* mesh);
+
+        void LoadTextureFromMaterial(const Ref<Mesh>& m, aiMaterial* material, aiTextureType aiType);
+
+
     private:
 
         MeshType            m_MeshType;
+        std::vector<SubMesh> m_SubMeshesVec;
+        std::vector<Vertex>  m_VertexVec;
+        std::vector<Ref<Texture> > m_Texture2DVec;
+        std::vector<Index> m_IndicesVec;
 
         Ref<VertexArray>   m_VAO;
 
-        
-        std::vector<Vertex> m_VertexVec;
-        Indices m_Indices;
         Ref<Texture> m_Texture;
         Ref<Texture2D> m_2DTexture;
 
         glm::mat4 m_ModelMat;
-
         glm::vec3 m_Scale;
         glm::vec3 m_Position;
         glm::vec3 m_RotationAxis;
@@ -148,7 +177,10 @@ namespace JSEngine
         uint32_t m_AttachedShaderID;
         uint32_t m_AttachedMeterialID;
 
-        Ref<Meterial> m_Meterial;
+        Ref<Material> m_Meterial;
+        Ref<Shader> m_Shader;
+
+        JSFile m_ModelFile;
 
     };
 }

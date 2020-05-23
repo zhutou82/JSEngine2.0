@@ -33,7 +33,8 @@
 #define JS_PROFILE_SCOPE_END() }
 #define JS_PROFILE_FUNCTION() JSEngine::InstrumentTimer timer##__LINE__(__FUNCSIG__);
 
-#endif
+#define JS_FLUSH_PROFILE_FILE() g_Instrumentor.Flush()
+ #endif
 
 namespace JSEngine
 {
@@ -53,14 +54,14 @@ namespace JSEngine
         const std::string ProfilerFolderPath = "../Resource/Profiler/";
         const std::string ProfilerFileType = ".json";
          
-
     public:
         friend class Singleton<Instrumentor>;
 
         void BeingSession(const std::string& sessionName)
         {
             //m_JSONFile.Init("../Resource/Profiler/");
-            m_OutputFile.open(ProfilerFolderPath + sessionName + ProfilerFileType, std::ofstream::out);
+            m_File = ProfilerFolderPath + sessionName + ProfilerFileType;
+            m_OutputFile.open(m_File, std::ofstream::out);
             m_HasStartSession = true;
             WriteHeader();
         }
@@ -72,30 +73,17 @@ namespace JSEngine
             m_OutputFile.close();
         }
 
+        void Flush()
+        {
+            if (m_HasStartSession)
+            {
+                m_OutputFile.close();
+                BeingSession(m_File);
+            }
+        }
+
         void WriteToProfiler(const ProflierResult& result)
         {
-         
-            //std::stringstream json;
-
-            //std::string name = result.FunctionName;
-            //std::replace(name.begin(), name.end(), '"', '\'');
-
-            //json << std::setprecision(3) << std::fixed;
-            //json << ",{";
-            //json << "\"cat\":\"function\",";
-            //json << "\"dur\":" << (result.Duration.count()) << ',';
-            //json << "\"name\":\"" << name << "\",";
-            //json << "\"ph\":\"X\",";
-            //json << "\"pid\":0,";
-            //json << "\"tid\":" << result.ThreadID << ",";
-            //json << "\"ts\":" << result.Start.count();
-            //json << "}";
-
-            ////std::lock_guard lock(m_Mutex);
-            ////if (m_CurrentSession) {
-            //m_OutputFile << json.str();
-            //m_OutputFile.flush();
-
             std::lock_guard lock(m_Mutex);
             if (m_HasStartSession)
             {
@@ -139,6 +127,8 @@ namespace JSEngine
         std::ofstream m_OutputFile;
         bool m_HasStartSession;
         std::mutex m_Mutex;
+
+        std::string m_File;
 
     };
 

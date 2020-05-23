@@ -5,25 +5,215 @@
 namespace JSEngine
 {
 
+#define MESH_DEBUG_LOG 1
+#if MESH_DEBUG_LOG
+#define JS_MESH_LOG(...) JS_CORE_TRACE(__VA_ARGS__)
+#else
+#define HZ_MESH_LOG(...)
+#endif
+
+    static const uint32_t s_MeshImportFlags =
+        aiProcess_CalcTangentSpace |        // Create binormals/tangents just in case
+        aiProcess_Triangulate |             // Make sure we're triangles
+        aiProcess_SortByPType |             // Split meshes by primitive type
+        aiProcess_GenNormals |              // Make sure we have legit normals
+        aiProcess_GenUVCoords |             // Convert UVs if required 
+        aiProcess_OptimizeMeshes |          // Batch draws where possible
+        aiProcess_ValidateDataStructure;    // Validation
+
+
+    glm::mat4 Mat4FromAssimpMat4(const aiMatrix4x4& matrix)
+    {
+        glm::mat4 result;
+        //the a,b,c,d in assimp is the row ; the 1,2,3,4 is the column
+        result[0][0] = matrix.a1; result[1][0] = matrix.a2; result[2][0] = matrix.a3; result[3][0] = matrix.a4;
+        result[0][1] = matrix.b1; result[1][1] = matrix.b2; result[2][1] = matrix.b3; result[3][1] = matrix.b4;
+        result[0][2] = matrix.c1; result[1][2] = matrix.c2; result[2][2] = matrix.c3; result[3][2] = matrix.c4;
+        result[0][3] = matrix.d1; result[1][3] = matrix.d2; result[2][3] = matrix.d3; result[3][3] = matrix.d4;
+        return result;
+    }
+
     Mesh::Mesh(MeshType meshType) :
         m_MeshType(meshType), m_ModelMat(1.f), m_RotationDegree(0), m_Scale({ 1, 1, 1 }), m_Position({0,0,0})
     {
         m_Texture = g_ResourceMgr.Acquire2DTexture();
-        m_Meterial = Meterial::Create();
+        m_Meterial = Material::Create();
 
         switch (meshType)
         {
-            case JSEngine::TRIANGLE:
+            case TRIANGLE:
                 InitTriangle();
                 break;
-            case JSEngine::QUAD:
+            case QUAD:
                 InitQuad();
                 break;
-            case JSEngine::CUBE:
+            case CUBE:
                 InitCube();
                 break;
+            case MODEL:
+                return;
+        }
+        SetUpMesh();
+    }
+
+    Mesh::Mesh(const std::string& fileName, FILE_TYPE fileType)
+        : m_ModelFile(fileName, fileType, READ),
+          m_ModelMat(1.f), m_RotationDegree(0), m_Scale({ 1, 1, 1 }), m_Position({ 0,0,0 })
+    {
+        JS_MESH_LOG("---------- Loading Model {0} ------------", fileName);
+
+        m_ModelFile.Init(g_ResourceMgr.GetCoreFolderPaths(CoreFolderPath::MODEL));
+
+        Assimp::Importer importer;
+        const aiScene* scene = importer.ReadFile(m_ModelFile.GetFileFullPath(), s_MeshImportFlags);
+        JS_CORE_ASSERT(scene, "Error Reading Model File");
+
+        uint32_t vertexCnt = 0;
+        uint32_t indexCnt = 0;
+        m_SubMeshesVec.reserve(scene->mNumMeshes);
+        for (uint32_t i = 0; i < scene->mNumMeshes; ++i)
+        {
+            auto& subMesh = m_SubMeshesVec.emplace_back();
+            auto& sceneMesh = scene->mMeshes[i];
+            subMesh.BaseVertex = vertexCnt; 
+            subMesh.BaseIndex  = indexCnt;
+            subMesh.IndexCount = sceneMesh->mNumFaces * 3;
+
+            vertexCnt += sceneMesh->mNumVertices;
+            indexCnt  += subMesh.IndexCount;
+
+            //assign vertex to main mesh
+            for (uint32_t j = 0; j < sceneMesh->mNumVertices; ++j)
+            {
+                auto& v = m_VertexVec.emplace_back();
+                v.SetPosition({ sceneMesh->mVertices[j].x, sceneMesh->mVertices[j].y, sceneMesh->mVertices[j].z });
+                v.SetNormal  ({ sceneMesh->mNormals[j].x, sceneMesh->mNormals[j].y, sceneMesh->mNormals[j].z    });
+                if (sceneMesh->mTextureCoords[0])
+                    v.SetTextureCoor({ sceneMesh->mTextureCoords[0][i].x, sceneMesh->mTextureCoords[0][i].y });
+                else
+                    v.SetTextureCoor({ 0.f, 0.f });
+            }
+
+            //assign index to main mesh
+            
+            for (uint32_t j = 0; j < sceneMesh->mNumFaces; ++j)
+            {
+                JS_CORE_ASSERT(sceneMesh->mFaces[i].mNumIndices == 3, "Must have 3 indices.");
+                m_IndicesVec.emplace_back( Index{ sceneMesh->mFaces[j].mIndices[0],sceneMesh->mFaces[j].mIndices[1],sceneMesh->mFaces[j].mIndices[2] } );
+            }
+
+            if (sceneMesh->mMaterialIndex)
+            {
+                JS_MESH_LOG("---------------Materials -------");
+                //for (uint32_t i = 0; i < sceneMesh->mMa; i++)
+                {
+                    auto& aiMaterial = scene->mMaterials[sceneMesh->mMaterialIndex];
+                    const auto& materialName = aiMaterial->GetName();
+                    JS_MESH_LOG("Material Name: {0}", materialName.C_Str());
+
+                    aiString texturePath;
+                    bool hasAlbedoMap = aiMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &texturePath) == AI_SUCCESS;
+                    if (hasAlbedoMap)
+                    {
+                        const std::string& s = texturePath.C_Str();
+                        JS_MESH_LOG("Albedo Map Name: {0}", s);
+                        Ref<Texture> texture = g_ResourceMgr.Acquire2DTexture(s.substr(0, s.find_first_of(".")));
+                        m_Texture2DVec.push_back(texture);
+                        subMesh.AlbedoMapIndex = texture->GetTextureID();
+                    }
+                    else
+                    {
+                        JS_MESH_LOG("Has no Albedomap");
+                    }
+
+                }
+                //get texture
+                //if (sceneMesh->mMaterialIndex > 0)
+                //{
+                //    subMesh.MaterialIndex = sceneMesh->mMaterialIndex;
+                //    aiMaterial* material = scene->mMaterials[sceneMesh->mMaterialIndex];
+
+
+
+                //}
+            }
+        }
+        
+        JS_MESH_LOG("---Total Vertex Count: {0} ------", vertexCnt);
+        JS_MESH_LOG("---Total Index  Count: {0} ------", indexCnt);
+        JS_MESH_LOG("---Total SubMeshes   : {0} ------", m_SubMeshesVec.size());
+
+        JS_MESH_LOG("Start Processing All Nodes");
+        ProcessModelNode(scene->mRootNode);
+        JS_MESH_LOG("End Processing All Nodes");
+
+
+
+
+        //ProcessModelNode(scene, scene->mRootNode);
+
+        SetUpMesh();
+
+    }
+
+    void Mesh::LoadTextureFromMaterial(const Ref<Mesh>& m, aiMaterial* material, aiTextureType aiType)
+    {
+        for (uint32_t i = 0; i < material->GetTextureCount(aiType); ++i)
+        {
+            aiString str;
+            material->GetTexture(aiType, i, &str);
+            std::string s(str.C_Str());
+            Ref<Texture> texture = g_ResourceMgr.Acquire2DTexture(s.substr(0, s.find_first_of(".")));
+            //texture->SetTextureType(GetTextureTypeFromAITextureType(aiType));
+            m_Texture2DVec.push_back(texture);
+        }
+    }
+
+
+    void Mesh::ProcessModelNode(aiNode* node, const glm::mat4& parentTransform, uint32_t level)
+    {
+        glm::mat4 tranform = parentTransform * Mat4FromAssimpMat4(node->mTransformation);
+        for (uint32_t i = 0; i < node->mNumMeshes; ++i)
+        {
+            //m_SubMeshesVec.push_back(ProcessMesh(scene, scene->mMeshes[rootNode->mMeshes[i]]));
+            auto& nodeMesh = node->mMeshes[i];
+            auto& subMesh = m_SubMeshesVec[nodeMesh];
+
+            subMesh.NodeName = node->mName.C_Str();
+            subMesh.Transform = tranform;
+            JS_MESH_LOG("Node Name: {0}", subMesh.NodeName);
+
         }
 
+        for (uint32_t i = 0; i < node->mNumChildren; ++i)
+        {
+            ProcessModelNode(node->mChildren[i], tranform, level + 1);
+        }
+
+    }
+
+    SubMesh Mesh::ProcessMesh(const aiScene* scene, aiMesh* mesh)
+    {
+        //SubMesh subMesh;
+        ////add vertex
+        //for (uint32_t i = 0; i < mesh->mNumVertices; ++i)
+        //{
+        //    Vertex v;
+        //    v.SetPosition({ mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z });
+        //    v.SetNormal({ mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z });
+
+        //    if (mesh->mTextureCoords[0])
+        //        v.SetTextureCoor({ mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y });
+        //    else
+        //        v.SetTextureCoor({ 0.f, 0.f });
+
+        //    m->AddVertex(v);
+        //}
+        return SubMesh();
+    }
+
+    void Mesh::SetUpMesh()
+    {
         m_VAO = VertexArray::Create();
         Ref<VertexBuffer> vbo = VertexBuffer::Create(m_VertexVec[0].GetData(), Vertex::GetSize() * (uint32_t)m_VertexVec.size());
 
@@ -35,13 +225,7 @@ namespace JSEngine
         };
         vbo->SetLayout(layout);
         m_VAO->AddBuffer(vbo);
-
-        m_VAO->AddIndexBuffer(IndexBuffer::Create(m_Indices.GetData(), m_Indices.GetCount()));
-
-    }
-
-    Mesh::~Mesh()
-    {
+        m_VAO->AddIndexBuffer(IndexBuffer::Create((uint32_t*)m_IndicesVec.data(), (uint32_t)m_IndicesVec.size() * 3));
         
     }
 
@@ -112,46 +296,47 @@ namespace JSEngine
         m_VAO->Bind();
         m_VAO->GetIndexBuffer()->Bind();
     }
-
-    Ref<Mesh> Mesh::Create(MeshType meshType)
-    {
-        return std::make_shared<Mesh>(meshType);
-    }
-
     void Mesh::InitTriangle()
     {
         m_VertexVec.reserve(3);
+        m_IndicesVec.reserve(3);
+
         m_VertexVec.push_back({ -0.5f, -0.5f, 0.f,  0.f, 0.f, 1.f,  0.f,  0.f });
         m_VertexVec.push_back({ 0.15f,  -0.5f, 0.f,  0.f, 0.f, 1.f,  1.f,  0.f });
         m_VertexVec.push_back({ 0.f,    0.5f, 0.f,  0.f, 0.f, 1.f,  0.5f, 1.f });
 
-        unsigned int indices[] =
-        {
-            0, 1, 2,
-        };
-        //ini IBO
-        m_Indices.SetData(indices, sizeof(indices) / sizeof(indices[0]));
-    }
+        m_IndicesVec.push_back(Index{  0, 1, 2 });
 
+        SubMesh& mesh = m_SubMeshesVec.emplace_back();
+        mesh.BaseIndex = 0;
+        mesh.BaseVertex = 0;
+        mesh.IndexCount = 3;
+        mesh.VertexCount = 3;
+
+        
+    }
     void Mesh::InitQuad()
     {
         m_VertexVec.reserve(4);
+        m_IndicesVec.reserve(6);
+
         m_VertexVec.push_back({ -0.5f, -0.5f, 0.f, 0.f, 0.f, 1.f,  0.f, 0.f });
         m_VertexVec.push_back({ 0.5f,  -0.5f, 0.f, 0.f, 0.f, 1.f,  1.f, 0.f });
         m_VertexVec.push_back({ 0.5f,   0.5f, 0.f, 0.f, 0.f, 1.f,  1.f, 1.f });
         m_VertexVec.push_back({ -0.5f , 0.5f, 0.f, 0.f, 0.f, 1.f, 0.f, 1.f });
 
-        uint32_t indices[] =
-        {
-            0, 1, 2,
-            0, 2, 3
-        };
-        m_Indices.SetData(indices, sizeof(indices) / sizeof(indices[0]));
-    }
 
+        m_IndicesVec.push_back(Index{ 0, 1, 2 });
+        m_IndicesVec.push_back(Index{ 0, 2, 3 });
+        SubMesh& mesh = m_SubMeshesVec.emplace_back();
+        mesh.IndexCount  = 6;
+        mesh.VertexCount = 4;
+
+    }
     void Mesh::InitCube()
     {
         m_VertexVec.reserve(24);
+        m_IndicesVec.reserve(36);
 
         m_VertexVec.push_back({-0.5f, -0.5f, -0.5f,  0.f, 0.f, -1.f,   0.0f, 0.0f});   
         m_VertexVec.push_back({ 0.5f, -0.5f, -0.5f,  0.f, 0.f, -1.f,   1.0f, 0.0f});   
@@ -183,27 +368,26 @@ namespace JSEngine
         m_VertexVec.push_back({ 0.5f,  0.5f,  0.5f,  0.f, 1.f, 0.f,    1.0f, 0.0f });  
         m_VertexVec.push_back({-0.5f,  0.5f,  0.5f,  0.f, 1.f, 0.f,    0.0f, 0.0f });  
 
-
-        uint32_t indices[] =
+        uint32_t  offset = 0;
+        for (uint32_t i = 0; i < 6; ++i)
         {
-            0, 1, 2,
-            0, 2, 3,
+            m_IndicesVec.emplace_back(Index{ offset + 0,offset + 1, offset + 2 });
+            m_IndicesVec.emplace_back(Index{ offset + 0,offset + 2, offset + 3 });
+            offset += 4;
+        }
+        SubMesh& mesh = m_SubMeshesVec.emplace_back();
+        mesh.IndexCount  = 36;
+        mesh.VertexCount = 24;
+    }
 
-            4, 5, 6,
-            4, 6, 7,
+    Ref<Mesh> Mesh::Create(MeshType meshType)
+    {
+        return CreateRef<Mesh>(meshType);
+    }
 
-            8, 9, 10,
-            8, 10,11,
-            12,13,14,
-            12,14,15,
-            16,17,18,
-            16,18,19,
-            20,21,22,
-            20,22,23,
-        };
-
-        m_Indices.SetData(indices, sizeof(indices) / sizeof(indices[0]));
-
+    Ref<Mesh> Mesh::Create(const std::string& fileName)
+    {
+        return CreateRef<Mesh>(fileName);
     }
 
 }

@@ -6,6 +6,7 @@ namespace JSEngine
 
     JSFile::JSFile(const std::string& fileName, FILE_TYPE fileType, FILE_MODE mode)
         : 
+    m_File(NULL),
     m_FileName(fileName),
     m_FileType(FILETYPE_ARR[fileType]),
     m_FileMode(FILEMODE_ARR[mode])
@@ -22,8 +23,12 @@ namespace JSEngine
 
     JSFile::~JSFile()
     {
-        JS_CORE_ASSERT(m_File, "File is not being initialized");
-        fclose(m_File);
+        if (m_File)
+        {
+            JS_CORE_ASSERT(m_File, "File is not being initialized");
+            fclose(m_File);
+        }
+
     }
 
     void JSFile::SetFile(const std::string& fileName, FILE_TYPE fileType, FILE_MODE mode)

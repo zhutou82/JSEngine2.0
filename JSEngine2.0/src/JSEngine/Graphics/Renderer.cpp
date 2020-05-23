@@ -2,31 +2,126 @@
 #include "Renderer.h"
 #include "JSEngine/Managers/ResourceManager.h"
 #include "JSEngine/Platform/CameraController.h"
+#include "JSEngine/Platform/Opengl/Mesh.h"
+#include "JSEngine/Platform/Opengl/Light.h"
 
 namespace JSEngine
 {
+    Ref<SceneData> Renderer::s_Data;
+
     void Renderer::OnMainWindowMinimized(uint32_t width, uint32_t height)
     {
         RenderCommand::SetMainViewPort(width, height);
     }
     void Renderer::BeginScene(const Ref<SceneData>& sceneData)
     {
-        RenderCommand::SetUpEnviroment(sceneData);
-        RenderCommand::SetUpCamera();
+        s_Data = sceneData;
+        //RenderCommand::SetUpEnviroment(sceneData);
+        //RenderCommand::SetUpCamera();
+
+        const auto& lightVec = sceneData->Lights;
+        for (auto light : lightVec)
+        {
+            const auto& shader = s_Data->Shaders[light->GetAttachedShaderID()];
+            LightType lightType = light->GetLightType();
+            if (lightType == LightType::POINT_LIGHT)
+            {
+                auto& ptLight = CastLightTo<PointLight>(light);
+                shader->AddToUniformVec("ptLight.pos", ptLight->GetPosition());
+                shader->AddToUniformVec("ptLight.ambient", ptLight->GetAmbient());
+                shader->AddToUniformVec("ptLight.color", ptLight->GetColor());
+                shader->AddToUniformVec("ptLight.diffuse", ptLight->GetDiffuse());
+                shader->AddToUniformVec("ptLight.specular", ptLight->GetSpecular());
+
+                shader->AddToUniformVec("ptLight.constant", ptLight->GetConstant());
+                shader->AddToUniformVec("ptLight.linear", ptLight->GetLinear());
+                shader->AddToUniformVec("ptLight.quadratic", ptLight->GetQuadratic());
+
+                s_Data->Meshes.push_back(ptLight->GetMesh());
+            }
+            else if (lightType == LightType::DIRECTIONAL_LIGHT)
+            {
+                auto& dirLight = CastLightTo<DirectionalLight>(light);
+                dirLight->GetLightDirection();
+                shader->AddToUniformVec("directionalLight.direction", dirLight->GetLightDirection());
+                shader->AddToUniformVec("directionalLight.ambient", dirLight->GetAmbient());
+                shader->AddToUniformVec("directionalLight.diffuse", dirLight->GetDiffuse());
+                shader->AddToUniformVec("directionalLight.color", dirLight->GetColor());
+                shader->AddToUniformVec("directionalLight.specular", dirLight->GetSpecular());
+            }
+            else if (lightType == LightType::SPOT_LIGHT)
+            {
+
+
+
+            }
+        }
+
+        for (const auto& elem : s_Data->Shaders)
+        {
+            //elem.second->AddToUniformVec("u_ViewProjMat", m_SceneData->OrthoGraphicsCam->GetCamera().GetViewProjectMatrix());
+            elem.second->AddToUniformVec("u_ViewMat", g_CameraController.ConstructViewMat());
+            elem.second->AddToUniformVec("u_ProjMat", g_CameraController.ConstructProjectMat());
+            elem.second->AddToUniformVec("u_CameraPos", g_CameraController.GetPosition());
+        }
+
     }
     void Renderer::EndScene()
     {
-        RenderCommand::DrawIndex(Ref<Mesh>());
+        //RenderCommand::DrawIndex(Ref<Mesh>());
+        Flush();
     }
     
     void Renderer::Submit(const Ref<Mesh>& mesh)
     {
-        RenderCommand::Submit(mesh); 
+        s_Data->Meshes.push_back(mesh);
+        //RenderCommand::Submit(mesh); 
+    }
+
+    void Renderer::SubmitMesh(const Ref<Mesh>& mesh, const glm::mat4& transform)
+    {
+        s_Data->Meshes.push_back(mesh);
+    }
+
+    void Renderer::DrawMesh()
+    {
+        for (const auto& mesh : s_Data->Meshes)
+        {
+            const auto& shader = s_Data->Shaders[mesh->GetShaderID()];
+            shader->AddToUniformVec("u_ModelMat", mesh->ConstructModelMatrix());
+            //shader->AddToUniformVec("material.shininess", mesh->GetMeterial()->GetShinese());
+            //shader->AddToUniformVec("material.diffuse", mesh->GetMeterial()->GetDiffuse());
+            //shader->AddToUniformVec("material.specular", mesh->GetMeterial()->GetSpecular());
+            shader->Bind();
+            int textureSlots[32] = { 0 };
+            for (const auto& texture : mesh->GetTextures())
+            {
+                //shader->AddToUniformVec(texture->GetTextureName(), (int32_t)texture->GetTextureID());
+                //texture->Bind(texture->GetTextureID());
+                textureSlots[texture->GetTextureID()] = texture->GetTextureID();
+            }
+            shader->SetIntArrary("u_Textures", 32, textureSlots);
+            mesh->Bind();
+            for (const auto& subMesh : mesh->GetSubMeshes())
+            {
+                shader->AddToUniformVec("u_AlbedoMapIndex", (int)subMesh.AlbedoMapIndex);
+                g_ResourceMgr.Acquire2DTexture(subMesh.AlbedoMapIndex)->Bind(subMesh.AlbedoMapIndex);
+                glDrawElementsBaseVertex(GL_TRIANGLES, subMesh.IndexCount, GL_UNSIGNED_INT, (void*)(sizeof(uint32_t) * subMesh.BaseIndex), subMesh.BaseVertex);
+            }
+            shader->UploadUnfiromVec();
+        }
     }
 
     void Renderer::Flush()
     {
-        RenderCommand::ClearScene();
+        DrawMesh();
+        for (const auto& elem : s_Data->Shaders)
+        {
+            elem.second->UnloadUniformVec();
+        }
+        s_Data->Meshes.clear();
+
+        //RenderCommand::ClearScene();
     }
 
 

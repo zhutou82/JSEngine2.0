@@ -1,12 +1,16 @@
 #include "Game2DLayer.h"
 #include "glm/gtc/type_ptr.hpp"
 #include <Random>
+//#include "assimp/"
 //#include "Box2D/Box2D/Collision/b2BroadPhase.h"
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 
 
 Game2DLayer::Game2DLayer() 
     : Layer("Game2DLayer"),
-      m_Camera(JSEngine::CreateRef<JSEngine::OrthographicCameraController>(g_AppWindow->GetAspectRatio(), glm::vec2(0, 0))), m_ParticalSystem(10000)
+    m_Camera(JSEngine::CreateRef<JSEngine::OrthographicCameraController>(g_AppWindow->GetAspectRatio(), glm::vec2(0, 0))), m_ParticalSystem(10000), world({ 0, -0.98f })
 {
     m_ParticleProp.Position = { 0.f, 0.f };
 
@@ -41,6 +45,8 @@ Game2DLayer::~Game2DLayer()
 
 void Game2DLayer::OnAttach()
 {
+    Assimp::Importer importer;
+
     JSEngine::Random::Init();
     JSEngine::Renderer2D::Init();
 
@@ -52,14 +58,60 @@ void Game2DLayer::OnAttach()
 
     m_Animation = JSEngine::CreateRef<JSEngine::Animation2D>(m_Robot, glm::ivec2(9, 5));
 
-    g_Physics.Init({ 0, -0.98f });
-    g_Physics.CreateGround({0, -1}, {10.f, 0.01f});
+    g_Physics.Init({ 0, -9.8f });
+    g_Physics.CreateGround({ 0, -5 }, { 40.f, 1.f });
 
     for (int i = 0; i < 50; ++i)
     {
-        float quadSize = JSEngine::Random::Float(0.1f, 0.25f);
-        g_Physics.AddToBox2DVec(JSEngine::Box2D::Create({ JSEngine::Random::Float(-1.5f, 1.5), JSEngine::Random::Float(1.5, 5.f) }, { quadSize, quadSize }));
+        float quadSize = JSEngine::Random::Float(0.5f, 2.f);
+        g_Physics.AddToBox2DVec(JSEngine::Box2D::Create({ JSEngine::Random::Float(-10.5f, 15.5), JSEngine::Random::Float(10.f, 15.f) }, { quadSize, quadSize }));
     }
+        // Define the gravity vector.
+    // Define the ground body.
+    //b2BodyDef groundBodyDef;
+    //groundBodyDef.position.Set(0.0f, 0.0f);
+
+    //// Call the body factory which allocates memory for the ground body
+    //// from a pool and creates the ground box shape (also from a pool).
+    //// The body is also added to the world.
+    //groundBody = world.CreateBody(&groundBodyDef);
+
+    //// Define the ground box shape.
+    //b2PolygonShape groundBox;
+
+    //groundWH = { 10.f, 1.f };
+    //boxWH = {.1f, .1f };
+
+    //// The extents are the half-widths of the box.
+    //groundBox.SetAsBox(groundWH.x/2, groundWH.y/2);
+
+    //// Add the ground fixture to the ground body.
+    //groundBody->CreateFixture(&groundBox, 0.0f);
+
+    //// Define the dynamic body. We set its position and call the body factory.
+    //b2BodyDef bodyDef;
+    //bodyDef.type = b2_dynamicBody;
+    //bodyDef.position.Set(0.0f, 4.0f);
+    //body = world.CreateBody(&bodyDef);
+
+    //// Define another box shape for our dynamic body.
+    //b2PolygonShape dynamicBox;
+    //dynamicBox.SetAsBox(boxWH.x/2, boxWH.y/2);
+
+    //// Define the dynamic body fixture.
+    //b2FixtureDef fixtureDef;
+    //fixtureDef.shape = &dynamicBox;
+
+    //// Set the box density to be non-zero, so it will be dynamic.
+    //fixtureDef.density = 1.0f;
+
+    //// Override the default friction.
+    //fixtureDef.friction = 0.3f;
+
+    //// Add the shape to the body.
+    //body->CreateFixture(&fixtureDef);
+
+
 }
 
 void Game2DLayer::OnDetach()
@@ -97,10 +149,10 @@ void Game2DLayer::OnUpdate(JSEngine::TimeStep delta)
     m_ParticalSystem.Update(delta);
     m_ParticalSystem.OnRender(m_Camera);
 
-    g_Physics.OnUpdate(delta);
+    
     JSEngine::Renderer2D::BeginScene(m_Camera);
 
-
+    g_Physics.OnUpdate(delta);
     for (const auto& elem : g_Physics.GetBox2DVec())
     {
         glm::vec2 pos = { elem->GetBody()->GetPosition().x , elem->GetBody()->GetPosition().y };
@@ -108,6 +160,13 @@ void Game2DLayer::OnUpdate(JSEngine::TimeStep delta)
         JSEngine::Renderer2D::DrawRotatedQuad(pos, elem->GetSize(), elem->GetBody()->GetAngle(), glm::vec4(1.f), m_Bobo->GetTextureID());
     }
 
+    //world.Step(delta, 3, 1);
+    
+    //JSEngine::Renderer2D::DrawQuad({ groundBody->GetPosition().x, groundBody->GetPosition().y }, groundWH, glm::vec4(1.f), m_AwesomeFace->GetTextureID());
+    //JSEngine::Renderer2D::DrawQuad({ body->GetPosition().x, body->GetPosition().y }, boxWH , glm::vec4(1.f), m_AwesomeFace->GetTextureID());
+
+    //auto pos = { body->GetPosition().x, body->GetPosition().y };
+    //JS_CORE_INFO("{0}, {1}", groundBody->GetPosition().y + groundWH.y/2 , body->GetPosition().y - boxWH.y/2);
 
     //m_groundBody->
     //JSEngine::Renderer2D::DrawQuad({ 0, 0 }, { 0.2f, 0.2f }, glm::vec4(1.f), m_Bobo->GetTextureID());

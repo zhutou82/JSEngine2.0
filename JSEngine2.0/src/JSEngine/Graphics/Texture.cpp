@@ -19,4 +19,16 @@ namespace JSEngine
         return nullptr;
     }
 
+    std::string Texture::GetTextureNameByType(TextureType type)
+    {
+        switch (type)
+        {
+            case DIFFUSE:  return "texture_diffuse";
+            case SPECULAR: return "texture_specular";
+
+        }
+        JS_CORE_ASSERT(false, "Texture type not found");
+        return "";
+    }
+
 }

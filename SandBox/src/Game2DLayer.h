@@ -20,23 +20,29 @@ public:
 private:
 
     JSEngine::Ref<JSEngine::OrthographicCameraController> m_Camera;
-    JSEngine::Ref<JSEngine::Shader> m_Shader2D;
+    JSEngine::Ref<JSEngine::Shader>                       m_Shader2D;
 
-    std::vector<JSEngine::Ref<JSEngine::Mesh>>       m_MeshVec;
-    JSEngine::Ref<JSEngine::SceneData2D>     m_SceneData;
+    std::vector<JSEngine::Ref<JSEngine::Mesh>>            m_MeshVec;
+    JSEngine::Ref<JSEngine::SceneData2D>                  m_SceneData;
 
-    JSEngine::Ref<JSEngine::VertexArray> m_VAO;
+    JSEngine::Ref<JSEngine::VertexArray>                  m_VAO;
 
-    ParticleSystem m_ParticalSystem;
-    ParticleProperty m_ParticleProp;
+    ParticleSystem                                        m_ParticalSystem;
+    ParticleProperty                                      m_ParticleProp;
 
-    JSEngine::Ref<JSEngine::Texture> m_AwesomeFace;
-    JSEngine::Ref<JSEngine::Texture> m_Bobo;
-    JSEngine::Ref<JSEngine::Texture> m_Robot;
+    JSEngine::Ref<JSEngine::Texture>                      m_AwesomeFace;
+    JSEngine::Ref<JSEngine::Texture>                      m_Bobo;
+    JSEngine::Ref<JSEngine::Texture>                      m_Robot;
 
-    JSEngine::Ref<JSEngine::SubTexture2D> m_RobotSub;
+    JSEngine::Ref<JSEngine::SubTexture2D>                 m_RobotSub;
 
-    JSEngine::Ref<JSEngine::Animation2D> m_Animation;
+    JSEngine::Ref<JSEngine::Animation2D>                  m_Animation;
 
 
+    b2World world;
+    b2Body* groundBody;
+    b2Body* body;
+
+    glm::vec2 boxWH;
+    glm::vec2 groundWH;
 };

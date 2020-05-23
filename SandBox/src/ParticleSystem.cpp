@@ -4,7 +4,7 @@ ParticleSystem::ParticleSystem(uint32_t maxNumOfParticles)
     : m_MaxNumberOfParticales(maxNumOfParticles)
 {
     m_ParticelPool.resize(maxNumOfParticles);
-    m_Index = m_ParticelPool.size() - 1;
+    m_Index = (uint32_t)m_ParticelPool.size() - 1;
 }
 
 void ParticleSystem::Update(JSEngine::TimeStep delta)

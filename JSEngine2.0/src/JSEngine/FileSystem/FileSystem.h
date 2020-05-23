@@ -17,6 +17,8 @@ namespace JSEngine
         FS,
         GLSL,
         JSON,
+        OBJ,
+        FBX,
         NUM_OF_FILE_TYPE
     };
     static constexpr const char* FILETYPE_ARR[NUM_OF_FILE_TYPE] =
@@ -29,7 +31,9 @@ namespace JSEngine
         ".vs",
         ".fs",
         ".glsl",
-        ".json"
+        ".json",
+        ".obj",
+        ".fbx"
 
     };
 
@@ -54,7 +58,7 @@ namespace JSEngine
     class JSFile
     {
     public:
-        JSFile() {}
+        JSFile() : m_File(NULL) {}
         JSFile(const std::string& fileName, FILE_TYPE fileType, FILE_MODE mode = WRITE);
         ~JSFile();
 
@@ -67,6 +71,7 @@ namespace JSEngine
         const std::string& GetFileMode()      const { return m_FileMode;     }
         const std::string& GetFileFullPath()  const { return m_FileFullPath; }
         void Init(const std::string& folderPath);
+
 
     private:
         FILE*        m_File;

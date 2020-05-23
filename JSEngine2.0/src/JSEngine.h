@@ -14,6 +14,7 @@
 #include "JSEngine/Graphics/Camera.h"
 #include "JSEngine/Graphics/Meterial.h"
 #include "JSEngine/Graphics/SubTexture2D.h"
+#include "JSEngine/Platform/Opengl/Model.h"
 #include "JSEngine/Graphics/Animation.h"
 #include "JSEngine/Platform/CameraController.h"
 #include "JSEngine/Platform/Opengl/Mesh.h"

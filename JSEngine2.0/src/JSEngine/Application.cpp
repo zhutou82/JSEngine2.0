@@ -3,12 +3,7 @@
 #include "Core/Window.h"
 #include "Platform/WindowsInput.h"
 #include "Managers/InputManager.h"
-#include "JSEngine/Serializer/Xml.h"
 #include "Graphics/Renderer.h"
-#include "JSEngine/Managers/ResourceManager.h"
-
-
-
 
 namespace JSEngine
 {
@@ -70,6 +65,11 @@ namespace JSEngine
         return true;
     }
 
+    void Application::ProfileUpdateLoop()
+    {
+
+    }
+
     void Application::PushLayer(Layer* layer)
     {
         m_LayerStack.PushLayer(layer);
@@ -115,7 +115,14 @@ namespace JSEngine
     { 
         while (m_Running)
         {
-            
+            JS_PROFILE_FUNCTION();
+
+            if (m_CurrentFrameCount >= m_FrameCountToFlushProfiler)
+            {
+                JS_FLUSH_PROFILE_FILE();
+                m_CurrentFrameCount = 0;
+            }
+
             float currentTime = (float)glfwGetTime();
             TimeStep delta(currentTime - m_LastTime);
 
@@ -142,8 +149,9 @@ namespace JSEngine
             m_Window->OnUpdate();
             m_ImguiLayer->End();
 
-
+            
             glfwSwapBuffers(g_AppWindowHandle);
+            ++m_CurrentFrameCount;
         }
     }
 }

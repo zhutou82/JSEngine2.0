@@ -81,12 +81,19 @@ namespace JSEngine
         uint32_t GetSlot() const { return m_Slot; }
         void SetSlot(uint32_t val) { m_Slot = val; }
 
+        virtual TextureType GetTextureType() const override  { return m_TextureType; }
+        virtual void SetTextureType(TextureType type) override { m_TextureType = type; m_TextureName = Texture::GetTextureNameByType(type) + std::to_string(m_TexutureID); }
+        virtual const std::string& GetTextureName() const override { return m_TextureName;  }
+
     private:
 
         TextureData m_TextureData;
         unsigned m_RendererID;
         uint32_t m_Slot;
         uint32_t m_TexutureID;
+
+        TextureType m_TextureType;
+        std::string m_TextureName;
 
         std::unordered_map<uint32_t, glm::vec2*> m_SubTextureCoordVec;
         glm::ivec2 m_Dim;

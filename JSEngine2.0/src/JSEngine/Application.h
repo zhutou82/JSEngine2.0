@@ -84,6 +84,9 @@ namespace JSEngine
         const float GetDeltaTime() const                    { return m_AppDeltaTime;  }
 
 
+    private:
+
+        void ProfileUpdateLoop();
 
     private:
 
@@ -100,6 +103,8 @@ namespace JSEngine
         EngineSettingStruct      m_EngineSetting;
         std::vector<std::string> m_WindowSettingVec;
         
+        int32_t m_CurrentFrameCount = 0;
+        int32_t m_FrameCountToFlushProfiler = 60;
 
 
     };

@@ -30,7 +30,7 @@ namespace JSEngine
 
 
     PointLight::PointLight() :
-        Light(), m_Mesh(Mesh::Create(MeshType::CUBE)), m_Pos({0,0,0})
+        Light(), m_Mesh(Mesh::Create(MeshType::CUBE)), m_Pos({0,0,0}), m_Constant(1.f), m_Linear(0.09f), m_Quadratic(0.032f)
     {
         m_LightType = LightType::POINT_LIGHT;
     }

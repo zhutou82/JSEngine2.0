@@ -12,7 +12,7 @@ namespace JSEngine
         m_Up = { 0, 1, 0 };
         m_Front = { 0, 0, -1 };
 
-        m_CameraSensitivity = 0.05f;
+        m_CameraSensitivity = 0.25f;
         m_CameraScrollSpeed = 5.f;
         m_CameraMoveSpeed = 5.f;
 
@@ -124,9 +124,9 @@ namespace JSEngine
         m_Pos(pos.x, pos.y, 1.f),
         m_EnableRotation(false),
         m_AspecRatio(aspectRatio),
-        m_ZoonLevel(1.f),
+        m_ZoonLevel(5.f),
         m_Camera(-m_AspecRatio * m_ZoonLevel, m_AspecRatio* m_ZoonLevel, -m_ZoonLevel, m_ZoonLevel),
-        m_CameraMoveSpeed(1.f),
+        m_CameraMoveSpeed(m_ZoonLevel),
         m_CameraRotationSpeed(glm::radians(120.f)),
         m_Bound{ -m_AspecRatio * m_ZoonLevel, m_AspecRatio * m_ZoonLevel, -m_ZoonLevel, m_ZoonLevel }
     {

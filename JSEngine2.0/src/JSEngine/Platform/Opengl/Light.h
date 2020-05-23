@@ -89,12 +89,23 @@ namespace JSEngine
         void SetPosition(const glm::vec3& val);
 
         const glm::mat4& ConstructModelMatrix() const;
-
         const Ref<Mesh>& GetMesh() const;
 
+        float GetConstant() const { return m_Constant; }
+        void SetConstant(float val) { m_Constant = val; }
+
+        float GetLinear() const { return m_Linear; }
+        void SetLinear(float val) { m_Linear = val; }
+
+        float GetQuadratic() const { return m_Quadratic; }
+        void SetQuadratic(float val) { m_Quadratic = val; }
     private:
         glm::vec3 m_Pos;
         Ref<Mesh> m_Mesh;
+
+        float m_Constant;
+        float m_Linear;
+        float m_Quadratic; 
     };
 
     class SpotLight : public Light

@@ -10,8 +10,8 @@ class SandBox : public JSEngine::Application
 public:
     SandBox()
     {
-        PushLayer(new Game2DLayer());
-        //PushLayer(new Game3DLayer());
+        //PushLayer(new Game2DLayer());
+        PushLayer(new Game3DLayer());
         PushOverLay(new JSEngine::imguiLayer());
 
     }

@@ -5,6 +5,7 @@
 <ASSETS>../Resource/Assets/</ASSETS>
 <SHADER>../Resource/Shader/</SHADER> 
 <PROFILER>../Resource/Profiler/</PROFILER>
+<MODEL>../Resource/Model/</MODEL>
 </CoreFolderPath>
 
 <CoreFilerName>

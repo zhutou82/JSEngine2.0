@@ -25,52 +25,6 @@ namespace JSEngine
 
     void OpenGLRendererAPI::DrawIndexd(const Ref<Mesh>& m)
     {
-        //for (const auto& shader : shaders)
-        //{
-        //    const auto& gameObjects = g_GameObjMgr.GetGameObjects(shader.ID);
-
-        //    shader.Bind();
-        //    shader.UploadUniforms(); //enviroment
-
-        //    for (const auto& texture : textures)
-        //    {
-        //        texture.Bind();
-        //        for (const auto& gameObj : gameObjects)
-        //        {
-        //            shader->SetUniform("u_ModelMat", gameObj->ConstructModelMatrix());
-        //            shader->SetUniform("material.color", gameObj->GetMeterial()->GetColor());
-        //            shader->SetUniform("material.shinese", gameObj->GetMeterial()->GetShinese());
-        //            shader->SetUniform("u_TextureID", 0);
-
-        //            gameObj.Bind();
-        //            glDrawElements(GL_TRIANGLES, mesh->GetVAO()->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
-        //        }
-
-        //    }
-        //}
-
-        //for (const auto& shaderPtr : m_IDShaderMap)
-        //{
-        //    const auto& shader = shaderPtr.second;
-        //    shader->Bind();
-        //    for (const auto& mesh : m_SceneData->Meshes)
-        //    {
-        //        if (mesh->GetShaderID() == shader->GetShaderID())
-        //        {
-        //            shader->AddToUniformVec("u_ModelMat", mesh->ConstructModelMatrix());
-        //            shader->AddToUniformVec("material.color", mesh->GetMeterial()->GetColor());
-        //            shader->AddToUniformVec("material.shinese", mesh->GetMeterial()->GetShinese());
-        //            shader->AddToUniformVec("u_TextureID", 0);
-
-
-        //        }
-
-
-        //    }
-        //    
-
-        //}
-        
 
         for (const auto& mesh : m_SceneData->Meshes)
         {
@@ -177,8 +131,10 @@ namespace JSEngine
     {
         VAO->Bind();
         VAO->GetIndexBuffer()->Bind();
-        uint32_t vertexCount = count ? VAO->GetIndexBuffer()->GetCount() : count;
+        uint32_t vertexCount = count ? count : VAO->GetIndexBuffer()->GetCount();
         glDrawElements(GL_TRIANGLES, vertexCount, GL_UNSIGNED_INT, nullptr);
+
+
     }
 
 
