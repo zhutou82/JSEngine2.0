@@ -12,7 +12,7 @@ workspace "JSEngine2.0"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
--- Include directories relative to root folder (solution directory)
+-- Include directories relative t    root folder (solution directory)
 IncludeDir = {}
 IncludeDir["GLFW"]      = "JSEngine2.0/vendor/GLFW/include"
 IncludeDir["Glad"]      = "JSEngine2.0/vendor/Glad/include"
@@ -21,6 +21,7 @@ IncludeDir["glm"]       = "JSEngine2.0/vendor/glm"
 IncludeDir["tinyXML"]   = "JSEngine2.0/vendor/tinyXML" 
 IncludeDir["stb_image"] = "JSEngine2.0/vendor/stb_image" 
 IncludeDir["box2D"]     = "JSEngine2.0/vendor/box2D/include" 
+IncludeDir["assimp"]     = "JSEngine2.0/vendor/assimp/include" 
 
 include "JSEngine2.0/vendor/GLFW"
 include "JSEngine2.0/vendor/Glad"
@@ -35,7 +36,7 @@ project "JSEngine2.0"
     cppdialect "C++17"
     staticruntime "on"
     
-    -- Enable Visual Studio to use multiple compiler processes when building
+    -- Enable Visual Studi    t    use multiple compiler processes when building
     flags { "MultiProcessorCompile" }
 
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
@@ -68,9 +69,11 @@ project "JSEngine2.0"
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.tinyXML}",
         "%{IncludeDir.stb_image}",
-        "%{IncludeDir.box2D}"
+        "%{IncludeDir.box2D}",
+        "%{IncludeDir.assimp}"
     }
-
+    libdirs { "%{prj.name}/vendor/assimp/lib/Debug" }
+    
     links 
     { 
         "GLFW",
@@ -78,7 +81,8 @@ project "JSEngine2.0"
         "imgui",
         "opengl32.lib",
 		'tinyxml2',
-        'box2D'
+        'box2D',
+        'assimp-vc142-mtd.lib'
     }
 
     filter "system:windows"
@@ -112,7 +116,7 @@ project "Sandbox"
     cppdialect "C++17"
     staticruntime "on"
     
-    -- Enable Visual Studio to use multiple compiler processes when building
+    -- Enable Visual Studi    t    use multiple compiler processes when building
     flags { "MultiProcessorCompile" }
 
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
@@ -135,7 +139,8 @@ project "Sandbox"
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.tinyXML}",
         "%{IncludeDir.stb_image}",
-        "%{IncludeDir.box2D}"
+        "%{IncludeDir.box2D}",
+        "%{IncludeDir.assimp}"
     }
 
     links
