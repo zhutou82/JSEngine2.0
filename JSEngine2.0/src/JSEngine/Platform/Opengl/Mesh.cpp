@@ -34,7 +34,7 @@ namespace JSEngine
     }
 
     Mesh::Mesh(MeshType meshType) :
-        m_MeshType(meshType), m_ModelMat(1.f), m_RotationDegree(0), m_Scale({ 1, 1, 1 }), m_Position({0,0,0})
+        m_MeshType(meshType)
     {
         m_Texture = g_ResourceMgr.Acquire2DTexture();
         m_Meterial = Material::Create();
@@ -57,8 +57,7 @@ namespace JSEngine
     }
 
     Mesh::Mesh(const std::string& fileName, FILE_TYPE fileType)
-        : m_ModelFile(fileName, fileType, READ),
-          m_ModelMat(1.f), m_RotationDegree(0), m_Scale({ 1, 1, 1 }), m_Position({ 0,0,0 })
+        : m_ModelFile(fileName, fileType, READ)
     {
         JS_MESH_LOG("---------- Loading Model {0} ------------", fileName);
 

@@ -167,10 +167,10 @@ namespace JSEngine
         Ref<Texture> m_Texture;
         Ref<Texture2D> m_2DTexture;
 
-        glm::mat4 m_ModelMat;
-        glm::vec3 m_Scale;
-        glm::vec3 m_Position;
-        glm::vec3 m_RotationAxis;
+        glm::mat4 m_ModelMat{1};
+        glm::vec3 m_Scale{1};
+        glm::vec3 m_Position{1};
+        glm::vec3 m_RotationAxis{0,0,1};
 
         float m_RotationDegree;
 

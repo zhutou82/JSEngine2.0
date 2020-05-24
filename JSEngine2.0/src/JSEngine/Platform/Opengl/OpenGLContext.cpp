@@ -18,8 +18,27 @@ namespace JSEngine
     {
 
         JS_CORE_INFO("---------------------opengl-callback-start------------");
-        JS_CORE_INFO("message: {0}", message);
+        JS_CORE_INFO("source: {0}", source);
         JS_CORE_INFO("type: ");
+        JS_CORE_INFO("id: {0}", id);
+
+        JS_CORE_INFO("severity: ");
+        switch (severity) {
+        case GL_DEBUG_SEVERITY_NOTIFICATION:
+            JS_CORE_INFO("NOTIFICATION");
+            break;
+        case GL_DEBUG_SEVERITY_LOW:
+            JS_CORE_INFO("LOW");
+            break;
+        case GL_DEBUG_SEVERITY_MEDIUM:
+            JS_CORE_INFO("MEDIUM");
+            break;
+        case GL_DEBUG_SEVERITY_HIGH:
+            JS_CORE_INFO("HIGH");
+            break;
+        }
+
+        JS_CORE_INFO("message: {0}", message);
         switch (type) {
         case GL_DEBUG_TYPE_ERROR:
             JS_CORE_INFO("ERROR");
@@ -41,22 +60,6 @@ namespace JSEngine
             break;
         }
 
-        JS_CORE_INFO("id: {0}", id);
-        JS_CORE_INFO("severity: ");
-        switch (severity) {
-        case GL_DEBUG_SEVERITY_NOTIFICATION:
-            JS_CORE_INFO("NOTIFICATION");
-            break;
-        case GL_DEBUG_SEVERITY_LOW:
-            JS_CORE_INFO("LOW");
-            break;
-        case GL_DEBUG_SEVERITY_MEDIUM:
-            JS_CORE_INFO("MEDIUM");
-            break;
-        case GL_DEBUG_SEVERITY_HIGH:  
-            JS_CORE_INFO("HIGH");
-            break;
-        }
         JS_CORE_INFO("---------------------opengl-callback-end--------------");
 
         // dont assert for notifications
@@ -83,6 +86,7 @@ namespace JSEngine
     {
         glBlendFunc(source, dest);
     }
+
     OpenGLContext::OpenGLContext()
     {
 
@@ -99,11 +103,6 @@ namespace JSEngine
         glfwMakeContextCurrent(m_WindowHandle);
         int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
         JS_CORE_ASSERT(status, "Failed to initialized Glad");
-
-        // TODO: control below based on specific render passes' needs
-        EnableDepthTest(true);
-        EnableBlending(true);
-        SetBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         glEnable(GL_DEBUG_OUTPUT);
         glDebugMessageCallback(openglCallbackFunction, nullptr);

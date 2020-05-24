@@ -17,8 +17,8 @@
 #define JS_ASSERT(x, ...)      
 
 #else
-#define JS_CORE_ASSERT(x, ...) if(!x) { JS_CORE_ERROR("Assert Failed : {0}", __VA_ARGS__); __debugbreak(); }
-#define JS_ASSERT(x, ...)      if(!x) { JS_ERROR("Assert Failed : {0}", __VA_ARGS__);      __debugbreak(); }
+#define JS_CORE_ASSERT(x, ...) if(!(x)) { JS_CORE_ERROR("Assert Failed : {0}", __VA_ARGS__); __debugbreak(); }
+#define JS_ASSERT(x, ...)      if(!(x)) { JS_ERROR("Assert Failed : {0}", __VA_ARGS__);      __debugbreak(); }
 
 #endif
 
@@ -39,6 +39,9 @@ namespace JSEngine
 
     template <typename T>
     using Ref = std::shared_ptr<T>;
+
+    template <typename T>
+    using SoftRef = std::weak_ptr<T>;
 
     template <class T, class... Args>
     constexpr Ref<T> CreateRef(Args&&... args)

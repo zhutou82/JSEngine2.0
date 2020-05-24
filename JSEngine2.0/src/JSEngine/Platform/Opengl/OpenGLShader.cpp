@@ -91,7 +91,7 @@ namespace JSEngine
             {
                 if (shaderTitleFound)
                 {
-                    JS_CORE_TRACE("{0}", shaderSrc);
+                    //JS_CORE_TRACE("{0}", shaderSrc);
                     m_ShaderTypeShaderSrcMap[GetGLShaderTypeByShaderType(shaderName)] = shaderSrc;
                     memset(shaderSrc, 0, bufsize);
                     memset(shaderName, 0, bufsize);
@@ -107,79 +107,5 @@ namespace JSEngine
             }
             strcat(shaderSrc, line);
         }
-
     }
-
-
-    void OpenGLShader::UploadUnfiromVec()
-    {
-        for (const auto& val : m_Uniforms.IntVec)   SetUnifrom1i(val.first, val.second);
-        for (const auto& val : m_Uniforms.FloatVec) SetUnifrom1f(val.first, val.second);
-        for (const auto& val : m_Uniforms.Vec3Vec)  SetUnifrom3f(val.first, val.second);
-        for (const auto& val : m_Uniforms.Vec4Vec)  SetUnifrom4f(val.first, val.second);
-        for (const auto& val : m_Uniforms.Mat4Vec)  SetUnifromMat4f(val.first, val.second);
-    }
-
-    void OpenGLShader::UnloadUniformVec()
-    {
-        m_Uniforms.FloatVec.clear();
-        m_Uniforms.Vec3Vec.clear();
-        m_Uniforms.Vec4Vec.clear();
-        m_Uniforms.Mat4Vec.clear();
-        m_Uniforms.IntVec.clear();
-    }
-
-    void OpenGLShader::SetUnifromMat4f(const std::string& name, const glm::mat4& mat)
-    {
-        glUniformMatrix4fv(GetUnifromLocation(name), 1, GL_FALSE, glm::value_ptr(mat));
-    }
-
-    void OpenGLShader::SetUnifrom4f(const std::string & name, float v0, float v1, float v2, float v3)
-    {
-        glUniform4f(GetUnifromLocation(name), v0, v1, v2, v3);
-    }
-
-    void OpenGLShader::SetUnifrom4f(const std::string& name, const glm::vec4& vec4)
-    {
-        SetUnifrom4f(name, vec4.x, vec4.y, vec4.z, vec4.w);
-    }
-
-    void OpenGLShader::SetUnifrom3f(const std::string& name, float v0, float v1, float v2)
-    {
-        glUniform3f(GetUnifromLocation(name), v0, v1, v2);
-    }
-
-    void OpenGLShader::SetUnifrom3f(const std::string& name, const glm::vec3& vec3)
-    {
-        SetUnifrom3f(name, vec3.x, vec3.y, vec3.z);
-    }
-
-    void OpenGLShader::SetUnifrom1i(const std::string& name, int value)
-    {
-        glUniform1i(GetUnifromLocation(name), value);
-    }
-
-    void OpenGLShader::SetUnifrom1f(const std::string& name, float value)
-    {
-        glUniform1f(GetUnifromLocation(name), value);
-    }
-
-    void OpenGLShader::SetIntArrary(const std::string& name, uint32_t count, int* val)
-    {
-        glUniform1iv(GetUnifromLocation(name), count, val);
-    }
-
-    int OpenGLShader::GetUnifromLocation(const std::string & name)
-    {
-        if (m_UnfiromNameIDMap.find(name) == m_UnfiromNameIDMap.end())
-        {
-            m_UnfiromNameIDMap[name] = glGetUniformLocation(m_RendererID, name.c_str());
-            if (m_UnfiromNameIDMap[name] == -1)
-                JS_CORE_INFO("Uniform name not exist {0}, {1}", name, m_GlslFile.GetFileName());
-        }
-
-        return m_UnfiromNameIDMap[name];
-    }
-
-
 }

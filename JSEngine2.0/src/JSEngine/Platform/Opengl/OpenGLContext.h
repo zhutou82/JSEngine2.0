@@ -8,7 +8,7 @@ namespace JSEngine
 {
     class Mesh;
 
-#define g_GraphicsConext Singleton<OpenGLContext>::GetInstance()
+#define g_GraphicsContext Singleton<OpenGLContext>::GetInstance()
 
     class OpenGLContext : public GraphicsConext, public Singleton<OpenGLContext>
     {

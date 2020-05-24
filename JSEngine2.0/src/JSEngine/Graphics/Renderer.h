@@ -19,12 +19,12 @@ namespace JSEngine
 
     struct SceneData
     {
+        std::vector<Ref<Light>> Lights;
+        std::vector<Ref<Mesh>> Meshes;
 
-        std::vector<Ref<Light>>  Lights;
-        std::vector <Ref<Mesh>>  Meshes;
-        std::unordered_map<uint32_t, Ref<Shader> > Shaders;
-        
-
+        // Changed container to hold weak_ptrs instead. Renderers do need to hold any hard references to the shaders themselves
+        // They should be managed appropriately by the RecourcesManager. You should do the same for every other Refs.
+        std::unordered_map<uint32_t, SoftRef<Shader> > Shaders;
     };
 
 

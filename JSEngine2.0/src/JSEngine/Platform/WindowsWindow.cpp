@@ -54,7 +54,7 @@ namespace JSEngine
         SetWindowsEventCallBack();
 
         //init graphics context
-        g_GraphicsConext.Init(m_Window);
+        g_GraphicsContext.Init(m_Window);
 
     }
 

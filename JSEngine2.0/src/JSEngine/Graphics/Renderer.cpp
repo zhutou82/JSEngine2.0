@@ -1,5 +1,8 @@
 #include "PCH.h"
 #include "Renderer.h"
+
+#include "glm/gtc/type_ptr.hpp"
+
 #include "JSEngine/Managers/ResourceManager.h"
 #include "JSEngine/Platform/CameraController.h"
 #include "JSEngine/Platform/Opengl/Mesh.h"
@@ -22,7 +25,9 @@ namespace JSEngine
         const auto& lightVec = sceneData->Lights;
         for (auto light : lightVec)
         {
-            const auto& shader = s_Data->Shaders[light->GetAttachedShaderID()];
+            Ref<Shader> shader = s_Data->Shaders[light->GetAttachedShaderID()].lock();
+            assert(shader); // why is JS_ASSERT macro failing to compile?
+
             LightType lightType = light->GetLightType();
             if (lightType == LightType::POINT_LIGHT)
             {
@@ -51,18 +56,7 @@ namespace JSEngine
             }
             else if (lightType == LightType::SPOT_LIGHT)
             {
-
-
-
             }
-        }
-
-        for (const auto& elem : s_Data->Shaders)
-        {
-            //elem.second->AddToUniformVec("u_ViewProjMat", m_SceneData->OrthoGraphicsCam->GetCamera().GetViewProjectMatrix());
-            elem.second->AddToUniformVec("u_ViewMat", g_CameraController.ConstructViewMat());
-            elem.second->AddToUniformVec("u_ProjMat", g_CameraController.ConstructProjectMat());
-            elem.second->AddToUniformVec("u_CameraPos", g_CameraController.GetPosition());
         }
 
     }
@@ -85,41 +79,59 @@ namespace JSEngine
 
     void Renderer::DrawMesh()
     {
-        for (const auto& mesh : s_Data->Meshes)
+        // set some render states
+        g_GraphicsContext.EnableDepthTest(true);
+        g_GraphicsContext.EnableBlending(false);
+
+        // TODO: use constant buffers instead of uniform to save tons of OpenGL driver overhead
+        //       Have a buffer for "per-frame" constants, another for "per-render pass", another for "per draw call"
+        //       You can have more, but the buffer rebinding granularity must make sense
+        for (const Ref<Mesh>& mesh : s_Data->Meshes)
         {
-            const auto& shader = s_Data->Shaders[mesh->GetShaderID()];
-            shader->AddToUniformVec("u_ModelMat", mesh->ConstructModelMatrix());
-            //shader->AddToUniformVec("material.shininess", mesh->GetMeterial()->GetShinese());
-            //shader->AddToUniformVec("material.diffuse", mesh->GetMeterial()->GetDiffuse());
-            //shader->AddToUniformVec("material.specular", mesh->GetMeterial()->GetSpecular());
+            Ref<Shader> shader = s_Data->Shaders[mesh->GetShaderID()].lock();
+            assert(shader);
+
+            // TODO: Reduce calls to bind shaders. You can do so by sorting draw calls by material.
+            //       The same concept applies for constant buffers. Have minimal OpenGL function calls.
             shader->Bind();
-            int textureSlots[32] = { 0 };
-            for (const auto& texture : mesh->GetTextures())
-            {
-                //shader->AddToUniformVec(texture->GetTextureName(), (int32_t)texture->GetTextureID());
-                //texture->Bind(texture->GetTextureID());
-                textureSlots[texture->GetTextureID()] = texture->GetTextureID();
-            }
-            shader->SetIntArrary("u_Textures", 32, textureSlots);
+
+            OpenGLShader* openGLShader = (OpenGLShader*)&(*shader);
+
+            // Set View/Proj matrices
+            glUniformMatrix4fv(glGetUniformLocation(openGLShader->GetProgramID(), "u_ViewMat"), 1, false, (float*)&g_CameraController.ConstructViewMat());
+            glUniformMatrix4fv(glGetUniformLocation(openGLShader->GetProgramID(), "u_ProjMat"), 1, false, (float*)&g_CameraController.ConstructProjectMat());
+
+            // Set Model matrix
+            const glm::mat4 modelMatrix = mesh->ConstructModelMatrix();
+
+            assert(!std::isnan(modelMatrix[0].x));
+            assert(!std::isinf(modelMatrix[0].x));
+
+            glUniformMatrix4fv(glGetUniformLocation(openGLShader->GetProgramID(), "u_ModelMat"), 1, GL_FALSE, glm::value_ptr(modelMatrix));
+
             mesh->Bind();
+
             for (const auto& subMesh : mesh->GetSubMeshes())
             {
-                shader->AddToUniformVec("u_AlbedoMapIndex", (int)subMesh.AlbedoMapIndex);
-                g_ResourceMgr.Acquire2DTexture(subMesh.AlbedoMapIndex)->Bind(subMesh.AlbedoMapIndex);
+                Ref<Texture2D> subMeshTexRef = g_ResourceMgr.Acquire2DTexture(subMesh.AlbedoMapIndex);
+                assert(subMeshTexRef);
+
+                // Set Diffuse Texture
+                subMeshTexRef->Bind(glGetUniformLocation(openGLShader->GetProgramID(), "u_DiffuseTexture"));
+
                 glDrawElementsBaseVertex(GL_TRIANGLES, subMesh.IndexCount, GL_UNSIGNED_INT, (void*)(sizeof(uint32_t) * subMesh.BaseIndex), subMesh.BaseVertex);
             }
-            shader->UploadUnfiromVec();
         }
     }
 
     void Renderer::Flush()
     {
         DrawMesh();
-        for (const auto& elem : s_Data->Shaders)
-        {
-            elem.second->UnloadUniformVec();
-        }
         s_Data->Meshes.clear();
+
+        // OpenGL does NOT draw immediately upon any draw calls. It does syncronization behind the scenes.
+        // Uncomment below to block the CPU & force OpenGL to finish drawing the mesh before continuing.
+        //glFinish();
 
         //RenderCommand::ClearScene();
     }

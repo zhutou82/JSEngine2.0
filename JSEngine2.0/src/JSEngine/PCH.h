@@ -28,3 +28,6 @@
 //JSEngine
 #include "Core/Log.h"
 #include "Debug/SimpleProfiler.h"
+
+#define JS_OPTIMIZE_OFF __pragma(optimize("", off));
+#define JS_OPTIMIZE_ON __pragma(optimize("", on))

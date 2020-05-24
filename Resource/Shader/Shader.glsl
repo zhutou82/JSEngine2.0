@@ -8,9 +8,10 @@ out vec2 v_TexCoord;
 out vec3 v_Normal;
 out vec3 v_FragPos;
 
-uniform mat4 u_ModelMat;
 uniform mat4 u_ViewMat;
 uniform mat4 u_ProjMat; 
+uniform mat4 u_ModelMat;
+
 void main()
 {
     gl_Position = u_ProjMat * u_ViewMat * u_ModelMat * vec4(pos, 1.0);
@@ -22,10 +23,6 @@ void main()
 //type fragment
 #version 460 core
 out vec4 fragcolor;
-
-//uniform
-uniform vec4 u_Color;
-uniform sampler2D u_TextureID;
 
 //in from other shaders
 in vec2 v_TexCoord;
@@ -83,8 +80,7 @@ uniform sampler2D texture_specular0;
 uniform sampler2D texture_specular1;
 uniform sampler2D texture_specular2;
 
-uniform sampler2D u_Textures[32]; 
-uniform int u_AlbedoMapIndex;
+uniform sampler2D u_DiffuseTexture; 
 uniform int u_SpecularMapIndex;
 
 //functions
@@ -95,15 +91,17 @@ vec3 ComputeSpotLight(vec3 norm, Light spLight);
 //helper function
 vec3 ComputeAmbient(vec3 lightAmbient)
 {
-    return lightAmbient * vec3(texture(u_Textures[u_AlbedoMapIndex], v_TexCoord));
+    return lightAmbient * vec3(texture(u_DiffuseTexture, v_TexCoord)); // Dont keep sampling the same texture. sample once and pass in the value in the function.
     return lightAmbient * material.diffuse;
 }
+
 vec3 ComputeDiffuse(vec3 norm, vec3 LightDir, vec3 lightDiffuse)
 {
     float diff = max(dot(norm, LightDir), 0);
-    return lightDiffuse * (diff * vec3(texture(u_Textures[u_AlbedoMapIndex], v_TexCoord)));
+    return lightDiffuse * (diff * vec3(texture(u_DiffuseTexture, v_TexCoord))); // Dont keep sampling the same texture. sample once and pass in the value in the function.
     return lightDiffuse * (diff * material.diffuse);
 }
+
 vec3 ComputeSpecular(vec3 norm, vec3 LightDir, vec3 lightSpecular)
 {
     vec3 viewDir = normalize(u_CameraPos - v_FragPos);
@@ -165,10 +163,8 @@ vec3 ComputeSpotLight(vec3 norm, Light spLight)
     return ambient + diffuse + speculation;
 }
 
-
-
 void main()
-{   
+{
     vec3 norm = normalize(v_Normal);
     
     //vec3 result = ComputeDirectionalLight(norm, directionalLight);
@@ -182,8 +178,8 @@ void main()
     //result += spotLightVal;
 
 
-	fragcolor = vec4(result, 1.0);
-	fragcolor = texture(u_Textures[u_AlbedoMapIndex], v_TexCoord);
+    fragcolor = vec4(result, 1.0);
+    fragcolor = texture(u_DiffuseTexture, v_TexCoord);
     //fragcolor = vec4(1,1,1,1);
 }
 
