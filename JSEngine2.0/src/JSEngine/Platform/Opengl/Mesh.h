@@ -37,7 +37,7 @@ namespace JSEngine
                float s = 0.f, float t = 0.f) :
             m_Pos(posX, posY ,posZ),
             m_Normal(normX, normY, normZ),
-            m_TextCoor(s, t)
+            m_TextCoord(s, t)
         {
             
         }
@@ -45,7 +45,7 @@ namespace JSEngine
     public:
         void SetPosition    (const glm::vec3& pos)   { m_Pos = pos; }
         void SetNormal      (const glm::vec3& norm)  { m_Normal= norm; }
-        void SetTextureCoor(const glm::vec2& textCoor) { m_TextCoor = textCoor; }
+        void SetTextureCoord(const glm::vec2& textCoor) { m_TextCoord = textCoor; }
         const float* GetData() const                 { return &m_Pos[0]; }
 
 
@@ -56,9 +56,9 @@ namespace JSEngine
 
     private:
 
-        glm::vec3 m_Pos;
-        glm::vec3 m_Normal;
-        glm::vec2 m_TextCoor;
+        glm::vec3 m_Pos{ 0 };
+        glm::vec3 m_Normal{ 0 };
+        glm::vec2 m_TextCoord{ 0 };
         
     };
 

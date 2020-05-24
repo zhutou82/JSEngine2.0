@@ -84,13 +84,23 @@ namespace JSEngine
             //assign vertex to main mesh
             for (uint32_t j = 0; j < sceneMesh->mNumVertices; ++j)
             {
-                auto& v = m_VertexVec.emplace_back();
-                v.SetPosition({ sceneMesh->mVertices[j].x, sceneMesh->mVertices[j].y, sceneMesh->mVertices[j].z });
-                v.SetNormal  ({ sceneMesh->mNormals[j].x, sceneMesh->mNormals[j].y, sceneMesh->mNormals[j].z    });
-                if (sceneMesh->mTextureCoords[0])
-                    v.SetTextureCoor({ sceneMesh->mTextureCoords[0][i].x, sceneMesh->mTextureCoords[0][i].y });
-                else
-                    v.SetTextureCoor({ 0.f, 0.f });
+                Vertex& v = m_VertexVec.emplace_back();
+
+                if (sceneMesh->HasPositions())
+                {
+                    v.SetPosition({ sceneMesh->mVertices[j].x, sceneMesh->mVertices[j].y, sceneMesh->mVertices[j].z });
+                }
+
+                if (sceneMesh->HasNormals())
+                {
+                    v.SetNormal({ sceneMesh->mNormals[j].x, sceneMesh->mNormals[j].y, sceneMesh->mNormals[j].z });
+                }
+
+                // TODO: Support multiple UV channels
+                if (sceneMesh->HasTextureCoords(0))
+                {
+                    v.SetTextureCoord({ sceneMesh->mTextureCoords[0][j].x, sceneMesh->mTextureCoords[0][j].y });
+                }
             }
 
             //assign index to main mesh

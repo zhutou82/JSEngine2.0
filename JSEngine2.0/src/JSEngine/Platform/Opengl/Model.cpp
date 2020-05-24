@@ -109,21 +109,31 @@ namespace JSEngine
         for (uint32_t  i = 0; i < mesh->mNumVertices; ++i)
         {
             Vertex v;
-            v.SetPosition({ mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z});
-            v.SetNormal({ mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z });
 
-            if (mesh->mTextureCoords[0])
-                v.SetTextureCoor({ mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y });
-            else
-                v.SetTextureCoor({ 0.f, 0.f });
+            if (mesh->HasPositions())
+            {
+                v.SetPosition({ mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z });
+            }
+
+            if (mesh->HasNormals())
+            {
+                v.SetNormal({ mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z });
+            }
+
+            // TODO: Support multiple UV channels
+            if (mesh->HasTextureCoords(0))
+            {
+                v.SetTextureCoord({ mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y });
+            }
 
             m->AddVertex(v);
         }
+
         //add texture
         for (uint32_t  i = 0; i < mesh->mNumFaces; ++i)
         {
             auto face = mesh->mFaces[i];
-            for (int j = 0; j < face.mNumIndices; ++j)
+            for (uint32_t j = 0; j < face.mNumIndices; ++j)
             {
                 //m->AddIndex(face.mIndices[j]);
             }
