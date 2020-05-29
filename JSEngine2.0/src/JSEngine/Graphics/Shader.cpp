@@ -18,6 +18,8 @@ namespace JSEngine
     //    return nullptr;
     //}
 
+
+    //for multi-platform, will be comment out for now, only focus on OPENGL
     Ref<Shader> Shader::Create(const std::string& glslShaderFileName)
     {
         switch (Renderer::GetGraphicsAPI())

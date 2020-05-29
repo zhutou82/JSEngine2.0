@@ -38,9 +38,16 @@ namespace JSEngine
 
         virtual void SetIntArrary(const std::string& name, uint32_t count, int* val) override {}
 
+        void SetFloat(const std::string& name, float value);
+        void SetFloat3(const std::string& name, const glm::vec3& value);
+        void SetInt(const std::string& name, int value);
+        void SetMat4(const std::string& name, const glm::mat4& value);
+        //void SetMat4FromRenderThread(const std::string& name, const glm::mat4& value, bool bind = true);
+
     private:
         void GetShaderSrc();
         GLenum GetGLShaderTypeByShaderType(const std::string& shaderType);
+        int32_t GetUniformLocation(const std::string& name) const;
 
     private:
         JSFile m_GlslFile;

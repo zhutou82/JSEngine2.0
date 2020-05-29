@@ -37,9 +37,6 @@
     <Filter Include="src\JSEngine\Platform\Opengl">
       <UniqueIdentifier>{F70C3CC5-E3C7-2B71-8C7F-A4BB78197601}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\JSEngine\Platform\Profiler">
-      <UniqueIdentifier>{956D6DA1-8193-3708-6AD9-BCD3569E5CD4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\JSEngine\Serializer">
       <UniqueIdentifier>{5845C405-C47C-0C9D-CD86-70C0393D3396}</UniqueIdentifier>
     </Filter>
@@ -1473,6 +1470,9 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
+    <ClInclude Include="src\JSEngine\Scene\Scene.h" />
+    <ClInclude Include="src\JSEngine\Renderer\SceneRenderer.h" />
+    <ClInclude Include="src\JSEngine\Scene\Entity.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\JSEngine\Application.cpp">
@@ -1616,5 +1616,8 @@
     <ClCompile Include="src\JSEngine\imGui\imguiLayer.cpp">
       <Filter>src\JSEngine\imGui</Filter>
     </ClCompile>
+    <ClCompile Include="src\JSEngine\Scene\Scene.cpp" />
+    <ClCompile Include="src\JSEngine\Renderer\SceneRenderer.cpp" />
+    <ClCompile Include="src\JSEngine\Scene\Entity.cpp" />
   </ItemGroup>
 </Project>

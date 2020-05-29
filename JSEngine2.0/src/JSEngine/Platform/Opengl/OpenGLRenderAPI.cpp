@@ -19,8 +19,6 @@ namespace JSEngine
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(color.r, color.g, color.b, color.a);
-        
-        
     }
 
     void OpenGLRendererAPI::DrawIndexd(const Ref<Mesh>& m)
@@ -30,8 +28,7 @@ namespace JSEngine
         {
             const auto& shader = m_IDShaderMap[mesh->GetShaderID()];
             shader->AddToUniformVec("u_ModelMat", mesh->ConstructModelMatrix());
-            shader->AddToUniformVec("material.color", mesh->GetMeterial()->GetColor());
-            shader->AddToUniformVec("material.shinese", mesh->GetMeterial()->GetShinese());
+            shader->AddToUniformVec("material.shinese", mesh->GetMaterial()->GetShinese());
             shader->AddToUniformVec("u_TextureID", 0);
 
             shader->UploadUnfiromVec();
@@ -64,49 +61,12 @@ namespace JSEngine
 
     void OpenGLRendererAPI::SetUpCamera()
     {
-        for (const auto& elem : m_IDShaderMap)
-        {
-            //elem.second->AddToUniformVec("u_ViewProjMat", m_SceneData->OrthoGraphicsCam->GetCamera().GetViewProjectMatrix());
-            elem.second->AddToUniformVec("u_ViewMat", g_CameraController.ConstructViewMat());
-            elem.second->AddToUniformVec("u_ProjMat", g_CameraController.ConstructProjectMat());
-            elem.second->AddToUniformVec("u_CameraPos", g_CameraController.GetPosition());
-        }
+
     }
 
     void OpenGLRendererAPI::SetUpEnviroment(const Ref<SceneData>& sceneData)
     {
-        m_SceneData = sceneData;
-        //m_IDShaderMap = g_ResourceMgr.GetShaders();
-        const auto& lightVec = sceneData->Lights;
-        for (auto light : lightVec)
-        {
-            const auto& shader = m_IDShaderMap[light->GetAttachedShaderID()];
-            LightType lightType = light->GetLightType();
-            if (lightType == LightType::POINT_LIGHT)
-            {
-                auto& ptLight = CastLightTo<PointLight>(light);
-                shader->AddToUniformVec("ptLight.pos", ptLight->GetPosition());
-                shader->AddToUniformVec("ptLight.ambient", ptLight->GetAmbient());
-                shader->AddToUniformVec("ptLight.color", ptLight->GetColor());
-                shader->AddToUniformVec("ptLight.specular", ptLight->GetSpecular());
-                m_SceneData->Meshes.push_back(ptLight->GetMesh());
-            }
-            else if (lightType == LightType::DIRECTIONAL_LIGHT)
-            {
-                auto& dirLight = CastLightTo<DirectionalLight>(light);
-                dirLight->GetLightDirection();
-                shader->AddToUniformVec("directionalLight.direction", dirLight->GetLightDirection());
-                shader->AddToUniformVec("directionalLight.ambient", dirLight->GetAmbient());
-                shader->AddToUniformVec("directionalLight.color", dirLight->GetColor());
-                shader->AddToUniformVec("directionalLight.specular", dirLight->GetSpecular());
-            }
-            else if(lightType == LightType::SPOT_LIGHT)
-            {
 
-
-
-            }
-        }
     }
 
     void OpenGLRendererAPI::ClearSceneData()

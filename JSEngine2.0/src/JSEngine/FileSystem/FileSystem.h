@@ -66,7 +66,7 @@ namespace JSEngine
 
         void SetFile(const std::string& fileName, FILE_TYPE fileType, FILE_MODE mode = WRITE);
         FILE* GetFile() const                       { return m_File;         }
-        const std::string& GetFileName()            { return m_FileName;     }
+        const std::string& GetFileName()      const { return m_FileName;     }
         const std::string& GetFileExtension() const { return m_FileType;     }
         const std::string& GetFileMode()      const { return m_FileMode;     }
         const std::string& GetFileFullPath()  const { return m_FileFullPath; }

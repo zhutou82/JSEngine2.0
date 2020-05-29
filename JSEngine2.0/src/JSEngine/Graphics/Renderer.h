@@ -6,7 +6,7 @@
 #include "RenderCommand.h"
 #include "JSEngine/Graphics/SubTexture2D.h"
 #include "JSEngine/Graphics/Animation.h"
-
+#include "JSEngine/Graphics/Camera.h"
 
 
 namespace JSEngine
@@ -37,6 +37,8 @@ namespace JSEngine
         static void BeginScene(const Ref<SceneData>& sceneData);
         static void EndScene();
         static void Submit(const Ref<Mesh>& mesh);
+        //should be submit environment object instead, now we only have light, so put lights as temp argument 
+        static void SubmitEnvironment(const std::vector<Ref<Light>>& Lights, Camera cam);
         static void SubmitMesh(const Ref<Mesh>& mesh, const glm::mat4& transform);//, const Ref<MaterialInstance>& overrideMateria)
         static void DrawMesh();
         static void Flush();

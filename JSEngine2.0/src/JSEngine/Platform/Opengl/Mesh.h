@@ -91,8 +91,8 @@ namespace JSEngine
         
     public:
 
-        Mesh(MeshType = TRIANGLE);
-        Mesh(const std::string& fileName, FILE_TYPE f = FILE_TYPE::OBJ);
+        Mesh(MeshType = CUBE, const std::string& shaderName = "Shader");
+        Mesh(const std::string& fileName, FILE_TYPE f = FILE_TYPE::OBJ,  const std::string& shaderName = "Shader");
         ~Mesh() = default;
 
         void SetUpMesh();
@@ -103,7 +103,7 @@ namespace JSEngine
         uint32_t GetMeterialID() const;
 
         void AttachMeterial(const Ref < Material>& meterial) { m_Meterial = meterial;  }
-        const Ref<Material>& GetMeterial() const {  return m_Meterial; }
+        const Ref<Material>& GetMaterial() const {  return m_Meterial; }
 
         void SetScale(const glm::vec3& scaleV);
         void SetScale(float x, float y, float z);
@@ -135,11 +135,11 @@ namespace JSEngine
         //void AddIndex(uint32_t index) { m_IndicesVec.push_back(index); }
 
         const std::vector<SubMesh>& GetSubMeshes() const { return m_SubMeshesVec; }
-
+        
     public:
 
-        static Ref<Mesh> Create(MeshType meshType = TRIANGLE);
-        static Ref<Mesh> Create(const std::string& fileName);
+        static Ref<Mesh> Create(MeshType meshType = TRIANGLE, const std::string& shaderName = "Shader");
+        static Ref<Mesh> Create(const std::string& fileName , const std::string& shaderName = "Shader");
 
     private:
 
@@ -156,11 +156,11 @@ namespace JSEngine
 
     private:
 
-        MeshType            m_MeshType;
-        std::vector<SubMesh> m_SubMeshesVec;
-        std::vector<Vertex>  m_VertexVec;
-        std::vector<Ref<Texture> > m_Texture2DVec;
-        std::vector<Index> m_IndicesVec;
+        MeshType                   m_MeshType;
+        std::vector<SubMesh>       m_SubMeshesVec;
+        std::vector<Vertex>        m_VertexVec;
+        std::vector< Ref<Texture> > m_Texture2DVec;
+        std::vector<Index>         m_IndicesVec;
 
         Ref<VertexArray>   m_VAO;
 
@@ -172,10 +172,10 @@ namespace JSEngine
         glm::vec3 m_Position{1};
         glm::vec3 m_RotationAxis{0,0,1};
 
-        float m_RotationDegree;
+        float m_RotationDegree{ 0.f };
 
-        uint32_t m_AttachedShaderID;
-        uint32_t m_AttachedMeterialID;
+        uint32_t m_AttachedShaderID = 0;
+        uint32_t m_AttachedMeterialID = 0;
 
         Ref<Material> m_Meterial;
         Ref<Shader> m_Shader;

@@ -8,10 +8,10 @@ namespace JSEngine
 ///////////////////////////////////////////////3DCameraController/////////////////////////////////////////////////////////
     void CameraController::Init(const glm::vec3& camStartPos, float aspecRatio, float fov, float nearPlane, float farPlane)
     {
-        m_Pos = camStartPos;
-        m_Up = { 0, 1, 0 };
+        m_Pos   = camStartPos;
+        m_Up    = { 0, 1, 0 };
         m_Front = { 0, 0, -1 };
-
+        
         m_CameraSensitivity = 0.25f;
         m_CameraScrollSpeed = 5.f;
         m_CameraMoveSpeed = 5.f;
@@ -88,27 +88,36 @@ namespace JSEngine
             firstMouse = false;
         }
 
-        float xOffset = xPos - m_PreXpos;
-        float yOffset = -(yPos - m_PreYpos);
+        if (g_Input.IsKeyPressed(JS_KEY_LEFT_ALT))
+        {
+            float xOffset = xPos - m_PreXpos;
+            float yOffset = -(yPos - m_PreYpos);
 
-        m_PreXpos = xPos;
-        m_PreYpos = yPos;
+            m_PreXpos = xPos;
+            m_PreYpos = yPos;
 
-        xOffset *= m_CameraSensitivity;
-        yOffset *= m_CameraSensitivity;
+            xOffset *= m_CameraSensitivity;
+            yOffset *= m_CameraSensitivity;
 
-        m_Yaw += xOffset;
-        m_Pictch += yOffset;
+            m_Yaw += xOffset;
+            m_Pictch += yOffset;
 
-        if (m_Pictch > s_MaxUpAngle) m_Pictch = s_MaxUpAngle;
-        if (m_Pictch < s_MaxDownAngle) m_Pictch = s_MaxDownAngle;
+            if (m_Pictch > s_MaxUpAngle) m_Pictch = s_MaxUpAngle;
+            if (m_Pictch < s_MaxDownAngle) m_Pictch = s_MaxDownAngle;
 
-        glm::vec3 direction;
-        direction.x = cos(glm::radians(m_Yaw)) * cos(glm::radians(m_Pictch));
-        direction.y = sin(glm::radians(m_Pictch));
-        direction.z = sin(glm::radians(m_Yaw)) * cos(glm::radians(m_Pictch));
+            glm::vec3 direction;
+            direction.x = cos(glm::radians(m_Yaw)) * cos(glm::radians(m_Pictch));
+            direction.y = sin(glm::radians(m_Pictch));
+            direction.z = sin(glm::radians(m_Yaw)) * cos(glm::radians(m_Pictch));
 
-        m_Front = glm::normalize(direction);
+            m_Front = glm::normalize(direction);
+        }
+        else 
+        {
+            firstMouse = true;
+        }
+
+
         return true;
     }
 

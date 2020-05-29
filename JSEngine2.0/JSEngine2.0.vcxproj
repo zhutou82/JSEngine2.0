@@ -91,7 +91,7 @@
     </Link>
     <Lib>
       <AdditionalDependencies>opengl32.lib;assimp-vc142-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>vendor/assimp/lib/Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>vendor\assimp\lib\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -100,7 +100,7 @@
       <PrecompiledHeaderFile>PCH.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLFW_INCLUDE_NONE;JSENGINE_PLATFORM_WINDOWS;JS_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\tinyXML;vendor\stb_image;vendor\box2D\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\tinyXML;vendor\stb_image;vendor\box2D\include;vendor\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -116,7 +116,8 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;assimp-vc142-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>vendor\assimp\lib\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
@@ -125,7 +126,7 @@
       <PrecompiledHeaderFile>PCH.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLFW_INCLUDE_NONE;JSENGINE_PLATFORM_WINDOWS;JS_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\tinyXML;vendor\stb_image;vendor\box2D\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\tinyXML;vendor\stb_image;vendor\box2D\include;vendor\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -141,7 +142,8 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;assimp-vc142-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>vendor\assimp\lib\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -201,6 +203,9 @@
     <ClInclude Include="src\JSEngine\Platform\Opengl\OpenGLVertexArray.h" />
     <ClInclude Include="src\JSEngine\Platform\WindowsInput.h" />
     <ClInclude Include="src\JSEngine\Platform\WindowsWindow.h" />
+    <ClInclude Include="src\JSEngine\Renderer\SceneRenderer.h" />
+    <ClInclude Include="src\JSEngine\Scene\Entity.h" />
+    <ClInclude Include="src\JSEngine\Scene\Scene.h" />
     <ClInclude Include="src\JSEngine\Serializer\Binary.h" />
     <ClInclude Include="src\JSEngine\Serializer\Serializer.h" />
     <ClInclude Include="src\JSEngine\Serializer\Xml.h" />
@@ -659,6 +664,9 @@
     <ClCompile Include="src\JSEngine\Platform\Opengl\std_image.cpp" />
     <ClCompile Include="src\JSEngine\Platform\WindowsInput.cpp" />
     <ClCompile Include="src\JSEngine\Platform\WindowsWindow.cpp" />
+    <ClCompile Include="src\JSEngine\Renderer\SceneRenderer.cpp" />
+    <ClCompile Include="src\JSEngine\Scene\Entity.cpp" />
+    <ClCompile Include="src\JSEngine\Scene\Scene.cpp" />
     <ClCompile Include="src\JSEngine\Serializer\Binary.cpp" />
     <ClCompile Include="src\JSEngine\Serializer\Serializer.cpp" />
     <ClCompile Include="src\JSEngine\Serializer\Xml.cpp" />

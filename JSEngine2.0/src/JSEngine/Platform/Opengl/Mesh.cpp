@@ -33,11 +33,11 @@ namespace JSEngine
         return result;
     }
 
-    Mesh::Mesh(MeshType meshType) :
+    Mesh::Mesh(MeshType meshType, const std::string& shaderName) :
         m_MeshType(meshType)
     {
-        m_Texture = g_ResourceMgr.Acquire2DTexture();
-        m_Meterial = Material::Create();
+        m_Shader = g_ResourceMgr.AcquireShader(shaderName);
+        m_Meterial = Material::Create(m_Shader);
 
         switch (meshType)
         {
@@ -56,9 +56,12 @@ namespace JSEngine
         SetUpMesh();
     }
 
-    Mesh::Mesh(const std::string& fileName, FILE_TYPE fileType)
+    Mesh::Mesh(const std::string& fileName, FILE_TYPE fileType, const std::string& shaderName)
         : m_ModelFile(fileName, fileType, READ)
     {
+        m_Shader = g_ResourceMgr.AcquireShader(shaderName);
+        m_Meterial = Material::Create(m_Shader);
+
         JS_MESH_LOG("---------- Loading Model {0} ------------", fileName);
 
         m_ModelFile.Init(g_ResourceMgr.GetCoreFolderPaths(CoreFolderPath::MODEL));
@@ -132,9 +135,22 @@ namespace JSEngine
                     }
                     else
                     {
-                        JS_MESH_LOG("Has no Albedomap");
+                        JS_MESH_LOG("Has no Albedo Map");
                     }
 
+                    bool hasSpecularMap = aiMaterial->GetTexture(aiTextureType_SPECULAR, 0, &texturePath) == AI_SUCCESS;
+                    if (hasSpecularMap)
+                    {
+                        const std::string& s = texturePath.C_Str();
+                        JS_MESH_LOG("Specular Map Name: {0}", s);
+                        Ref<Texture> texture = g_ResourceMgr.Acquire2DTexture(s.substr(0, s.find_first_of(".")));
+                        m_Texture2DVec.push_back(texture);
+                        subMesh.SpecularMapIndex = texture->GetTextureID();
+                    }
+                    else
+                    {
+                        JS_MESH_LOG("Has no Specular Map");
+                    }
                 }
                 //get texture
                 //if (sceneMesh->mMaterialIndex > 0)
@@ -156,10 +172,6 @@ namespace JSEngine
         ProcessModelNode(scene->mRootNode);
         JS_MESH_LOG("End Processing All Nodes");
 
-
-
-
-        //ProcessModelNode(scene, scene->mRootNode);
 
         SetUpMesh();
 
@@ -184,7 +196,6 @@ namespace JSEngine
         glm::mat4 tranform = parentTransform * Mat4FromAssimpMat4(node->mTransformation);
         for (uint32_t i = 0; i < node->mNumMeshes; ++i)
         {
-            //m_SubMeshesVec.push_back(ProcessMesh(scene, scene->mMeshes[rootNode->mMeshes[i]]));
             auto& nodeMesh = node->mMeshes[i];
             auto& subMesh = m_SubMeshesVec[nodeMesh];
 
@@ -334,7 +345,6 @@ namespace JSEngine
         m_VertexVec.push_back({ 0.5f,   0.5f, 0.f, 0.f, 0.f, 1.f,  1.f, 1.f });
         m_VertexVec.push_back({ -0.5f , 0.5f, 0.f, 0.f, 0.f, 1.f, 0.f, 1.f });
 
-
         m_IndicesVec.push_back(Index{ 0, 1, 2 });
         m_IndicesVec.push_back(Index{ 0, 2, 3 });
         SubMesh& mesh = m_SubMeshesVec.emplace_back();
@@ -344,6 +354,8 @@ namespace JSEngine
     }
     void Mesh::InitCube()
     {
+        JS_MESH_LOG("---------- Loading Cube ------------");
+
         m_VertexVec.reserve(24);
         m_IndicesVec.reserve(36);
 
@@ -384,19 +396,31 @@ namespace JSEngine
             m_IndicesVec.emplace_back(Index{ offset + 0,offset + 2, offset + 3 });
             offset += 4;
         }
+
         SubMesh& mesh = m_SubMeshesVec.emplace_back();
         mesh.IndexCount  = 36;
         mesh.VertexCount = 24;
+        
+        auto diffuse = g_ResourceMgr.Acquire2DTexture("container2");
+        auto specular = g_ResourceMgr.Acquire2DTexture("container2_specular");
+
+        m_Texture2DVec.push_back(diffuse);
+        m_Texture2DVec.push_back(specular);
+
+        mesh.AlbedoMapIndex = diffuse->GetTextureID();
+        mesh.SpecularMapIndex = specular->GetTextureID();
+
+        JS_MESH_LOG("---------- End Loading Cube ------------");
     }
 
-    Ref<Mesh> Mesh::Create(MeshType meshType)
+    Ref<Mesh> Mesh::Create(MeshType meshType, const std::string& shader)
     {
-        return CreateRef<Mesh>(meshType);
+        return CreateRef<Mesh>(meshType, shader);
     }
 
-    Ref<Mesh> Mesh::Create(const std::string& fileName)
+    Ref<Mesh> Mesh::Create(const std::string& fileName, const std::string& shader)
     {
-        return CreateRef<Mesh>(fileName);
+        return CreateRef<Mesh>(fileName, FILE_TYPE::OBJ, shader);
     }
 
 }

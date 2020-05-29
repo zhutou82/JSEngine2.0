@@ -12,94 +12,23 @@ void Game3DLayer::OnAttach()
     //init camera
     g_CameraController.Init({ 0, 1, 3 }, g_AppWindow->GetAspectRatio());
     m_SceneData = JSEngine::CreateRef<JSEngine::SceneData>();
-    
-
-    m_Shader            = g_ResourceMgr.AcquireShader("Shader");
-    m_LightShader       = g_ResourceMgr.AcquireShader("Light");
                           
-    m_Container         = g_ResourceMgr.Acquire2DTexture("container2");
-    m_ContainerSpecular = g_ResourceMgr.Acquire2DTexture("container2_specular");
-    //m_Matrix            = g_ResourceMgr.Acquire2DTexture("matrix");
 
-    m_Container->SetTextureType(JSEngine::DIFFUSE);
-    m_ContainerSpecular->SetTextureType(JSEngine::SPECULAR);
+    //body scene
+    {
+        m_Scene = JSEngine::CreateRef<JSEngine::Scene3D>("body scene"); 
+        m_Scene->Init(JSEngine::Camera(glm::perspectiveFov(glm::radians(45.0f), 1280.0f, 720.0f, 0.1f, 10000.0f)));
 
-    //m_Model = JSEngine::Model::Create("body/nanosuit.obj");
-    JSEngine::Ref<JSEngine::Mesh> m = JSEngine::Mesh::Create("Body/nanosuit");
-    m->AttachShader(m_Shader->GetShaderID());
-    m_MeshVec.push_back(m);
+        JSEngine::Entity* bodyEntity = m_Scene->CreateEntity("Body");
+        bodyEntity->SetMesh(JSEngine::Mesh::Create("Body/nanosuit"));
 
-    //m_MeshVec = m_Model->GetMeshVec();
-    //for (const auto& elem : m_MeshVec)
-    //{
-    //    elem->AttachShader(m_Shader->GetShaderID());
-    //}
-    
-    m_SceneData->Shaders.insert({ m_Shader->GetShaderID(), m_Shader });
-    m_SceneData->Shaders.insert({ m_LightShader->GetShaderID(), m_LightShader });
+        JSEngine::Entity* cubeEntity = m_Scene->CreateEntity("Cube");
+        cubeEntity->SetMesh(JSEngine::Mesh::Create(JSEngine::MeshType::CUBE));
+        cubeEntity->SetScale({ 50.f, 0.1f, 50.f });
 
-    m_CubeMeterial = JSEngine::Material::Create();
-    m_CubeMeterial->SetColor({ 1.0f, 0.5f, 0.31f });
+        m_Scene->CreatePointLight({ 1.2f, 1.0f, 2.0f });
 
-    JSEngine::Ref<JSEngine::Mesh> m2 = JSEngine::Mesh::Create(JSEngine::MeshType::TRIANGLE);
-    m2->AttachShader(m_Shader->GetShaderID());
-    m2->AttachMeterial(m_CubeMeterial);
-
-    m_MeshVec.push_back(m2);
-
-#if 0
-    JSEngine::Ref<JSEngine::Mesh> m = JSEngine::Mesh::Create(JSEngine::MeshType::CUBE);
-    m->SetPosition(0, 0, 0);
-    m->SetScale(1);
-    m->AttachShader(m_Shader->GetShaderID());
-    m->AttachMeterial(m_CubeMeterial);
-    m->AddTexture(m_Container);
-    m->AddTexture(m_ContainerSpecular);
-
-    JSEngine::Ref<JSEngine::Mesh> m3 = JSEngine::Mesh::Create(JSEngine::MeshType::CUBE);
-    m3->SetPosition(0, -1, -2);
-    m3->SetScale(1);
-    m3->AttachShader(m_Shader->GetShaderID());
-    m3->AddTexture(m_Container);
-    m3->AddTexture(m_ContainerSpecular);
-
-    JSEngine::Ref<JSEngine::Mesh> m2 = JSEngine::Mesh::Create(JSEngine::MeshType::CUBE);
-    m2->SetPosition(-2, -2, -2);
-    m2->SetScale(1);
-    m2->AttachShader(m_Shader->GetShaderID());
-    m2->AddTexture(m_Container);
-    m2->AddTexture(m_ContainerSpecular);
-
-    JSEngine::Ref<JSEngine::Mesh> m4 = JSEngine::Mesh::Create(JSEngine::MeshType::CUBE);
-    m4->SetPosition(0, 1, -2);
-    m4->SetScale(1);
-    m4->AttachShader(m_Shader->GetShaderID());
-    m4->AddTexture(m_Container);
-    m4->AddTexture(m_ContainerSpecular);
-
-    m_MeshVec.push_back(m);
-    m_MeshVec.push_back(m2);
-    m_MeshVec.push_back(m3);
-    m_MeshVec.push_back(m4);
-
-    //set up light
-    glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
-    JSEngine::Ref<JSEngine::Light> m_PointLight = JSEngine::Light::Create(JSEngine::LightType::POINT_LIGHT);
-    auto& pointLight = std::static_pointer_cast<JSEngine::Ref<JSEngine::PointLight>::element_type>(m_PointLight);
-    pointLight->SetPosition(lightPos);
-    pointLight->GetMesh()->AttachShader(m_LightShader->GetShaderID());
-    pointLight->GetMesh()->SetScale(0.25);
-    pointLight->SetAttachedShaderID(m_Shader->GetShaderID());
-    m_SceneData->Lights.push_back(pointLight);
-
-    glm::vec3 lightDirection(-0.2f, -1.f, -0.3f);
-    JSEngine::Ref<JSEngine::Light> dirLight = JSEngine::Light::Create(JSEngine::LightType::DIRECTIONAL_LIGHT);
-    auto& directionalLight = std::static_pointer_cast<JSEngine::Ref<JSEngine::DirectionalLight>::element_type>(dirLight);
-    directionalLight->SetLightDirection(lightDirection);
-    directionalLight->SetAttachedShaderID(m_Shader->GetShaderID());
-    m_SceneData->Lights.push_back(directionalLight);
-
-#endif
+    }
 }
 
 void Game3DLayer::OnDetach()
@@ -115,54 +44,56 @@ void Game3DLayer::OnUpdate(JSEngine::TimeStep delta)
     //ProfileStart("Examplelayer::Renderer");
     JSEngine::RenderCommand::Clear({ 0.1, 0.1, 0.0, 1 });
 
-    //m_SceneData->OrthoGraphicsCam = m_Camera;
-    JSEngine::Renderer::BeginScene(m_SceneData);
+    m_Scene->OnUpdate(delta);
 
-    for (const auto& mesh : m_MeshVec)
-        JSEngine::Renderer::SubmitMesh(mesh, glm::mat4(1.f));
+    ////m_SceneData->OrthoGraphicsCam = m_Camera;
+    //JSEngine::Renderer::BeginScene(m_SceneData);
 
-    JSEngine::Renderer::EndScene();
-    //ProfilerEnd
+    //for (const auto& mesh : m_MeshVec)
+    //    JSEngine::Renderer::SubmitMesh(mesh, glm::mat4(1.f));
+
+    //JSEngine::Renderer::EndScene();
+    ////ProfilerEnd
 }
 
 void Game3DLayer::OnRenderUpdate(JSEngine::TimeStep delta)
 {
-    ImGui::Begin("Light properties");
+    //ImGui::Begin("Light properties");
 
-    for (int i = 0; i < m_SceneData->Lights.size(); ++i)
-    {
-        const auto& light = m_SceneData->Lights[i];
-        std::string uniqueID = std::to_string(i);
-        if (light->GetLightType() == JSEngine::LightType::DIRECTIONAL_LIGHT)
-        {
-            ImGui::Text(std::string("DirectionalLight " + uniqueID).c_str());
-            ImGui::Separator();
-            const auto& pointLight = JSEngine::CastLightTo<JSEngine::DirectionalLight>(light);
-            auto color = pointLight->GetColor();
-            ImGui::ColorEdit3("Color1", &color[0]);
-            pointLight->SetColor(color);
+    //for (int i = 0; i < m_SceneData->Lights.size(); ++i)
+    //{
+    //    const auto& light = m_SceneData->Lights[i];
+    //    std::string uniqueID = std::to_string(i);
+    //    if (light->GetLightType() == JSEngine::LightType::DIRECTIONAL_LIGHT)
+    //    {
+    //        ImGui::Text(std::string("DirectionalLight " + uniqueID).c_str());
+    //        ImGui::Separator();
+    //        const auto& pointLight = JSEngine::CastLightTo<JSEngine::DirectionalLight>(light);
+    //        auto color = pointLight->GetColor();
+    //        ImGui::ColorEdit3("Color1", &color[0]);
+    //        pointLight->SetColor(color);
 
-            auto pos = pointLight->GetLightDirection();
-            ImGui::DragFloat3("Pos1", &pos[0], 0.1f, -5.f, 5.f);
-            pointLight->SetLightDirection(pos);
-            ImGui::Separator();
-        }
-        else if (light->GetLightType() == JSEngine::LightType::POINT_LIGHT)
-        {
-            ImGui::Text(std::string("PointLight " + uniqueID).c_str());
-            ImGui::Separator();
-            const auto& pointLight = JSEngine::CastLightTo<JSEngine::PointLight>(light);
-            auto color = pointLight->GetColor();
-            ImGui::ColorEdit3("Color", &color[0]);
-            pointLight->SetColor(color);
+    //        auto pos = pointLight->GetLightDirection();
+    //        ImGui::DragFloat3("Pos1", &pos[0], 0.1f, -5.f, 5.f);
+    //        pointLight->SetLightDirection(pos);
+    //        ImGui::Separator();
+    //    }
+    //    else if (light->GetLightType() == JSEngine::LightType::POINT_LIGHT)
+    //    {
+    //        ImGui::Text(std::string("PointLight " + uniqueID).c_str());
+    //        ImGui::Separator();
+    //        const auto& pointLight = JSEngine::CastLightTo<JSEngine::PointLight>(light);
+    //        auto color = pointLight->GetColor();
+    //        ImGui::ColorEdit3("Color", &color[0]);
+    //        pointLight->SetColor(color);
 
-            auto pos = pointLight->GetPosition();
-            ImGui::DragFloat3("Pos", &pos[0], 0.1f, -5.f, 5.f);
-            pointLight->SetPosition(pos);
-            ImGui::Separator();
-        }
-    }
-    ImGui::End();
+    //        auto pos = pointLight->GetPosition();
+    //        ImGui::DragFloat3("Pos", &pos[0], 0.1f, -5.f, 5.f);
+    //        pointLight->SetPosition(pos);
+    //        ImGui::Separator();
+    //    }
+    //}
+    //ImGui::End();
 
 
 
@@ -199,7 +130,7 @@ void Game3DLayer::OnRenderUpdate(JSEngine::TimeStep delta)
 
 void Game3DLayer::OnEvent(JSEngine::Event& e)
 {
-    g_CameraController.OnEvent(e);
+    m_Scene->OnEvent(e);
 }
 
 

@@ -19,9 +19,9 @@ namespace JSEngine
     {
         switch (type)
         {
-            case JSEngine::LightType::DIRECTIONAL_LIGHT: return std::make_shared<DirectionalLight>();
-            case JSEngine::LightType::POINT_LIGHT: return  std::make_shared<PointLight>();
-            case JSEngine::LightType::SPOT_LIGHT: return std::make_shared<Light>();
+            case JSEngine::LightType::DIRECTIONAL_LIGHT: return CreateRef<DirectionalLight>();
+            case JSEngine::LightType::POINT_LIGHT:       return CreateRef<PointLight>();
+            case JSEngine::LightType::SPOT_LIGHT:        return CreateRef<SpotLight>();
         }
 
         JS_CORE_ASSERT(false, "Unknow light type");
@@ -30,7 +30,7 @@ namespace JSEngine
 
 
     PointLight::PointLight() :
-        Light(), m_Mesh(Mesh::Create(MeshType::CUBE)), m_Pos({0,0,0}), m_Constant(1.f), m_Linear(0.09f), m_Quadratic(0.032f)
+        Light(), m_Pos({0,0,0}), m_Constant(1.f), m_Linear(0.09f), m_Quadratic(0.032f)
     {
         m_LightType = LightType::POINT_LIGHT;
     }
@@ -38,26 +38,7 @@ namespace JSEngine
     const glm::vec3& PointLight::GetPosition() const
     {
         return m_Pos;
-        return m_Mesh->GetPosition();
     }
-
-    const glm::mat4& PointLight::ConstructModelMatrix() const
-    {
-        return m_Mesh->ConstructModelMatrix();
-    }
-
-    const Ref<Mesh>& PointLight::GetMesh() const
-    {
-        return m_Mesh;
-    }
-
-    void PointLight::SetPosition(const glm::vec3& val)
-    {
-        m_Pos = val;
-        m_Mesh->SetPosition(val);
-    }
-
-    
 
     DirectionalLight::DirectionalLight()
         : Light()

@@ -19,46 +19,6 @@ namespace JSEngine
     void Renderer::BeginScene(const Ref<SceneData>& sceneData)
     {
         s_Data = sceneData;
-        //RenderCommand::SetUpEnviroment(sceneData);
-        //RenderCommand::SetUpCamera();
-
-        const auto& lightVec = sceneData->Lights;
-        for (auto light : lightVec)
-        {
-            Ref<Shader> shader = s_Data->Shaders[light->GetAttachedShaderID()].lock();
-            assert(shader); // why is JS_ASSERT macro failing to compile?
-
-            LightType lightType = light->GetLightType();
-            if (lightType == LightType::POINT_LIGHT)
-            {
-                auto& ptLight = CastLightTo<PointLight>(light);
-                shader->AddToUniformVec("ptLight.pos", ptLight->GetPosition());
-                shader->AddToUniformVec("ptLight.ambient", ptLight->GetAmbient());
-                shader->AddToUniformVec("ptLight.color", ptLight->GetColor());
-                shader->AddToUniformVec("ptLight.diffuse", ptLight->GetDiffuse());
-                shader->AddToUniformVec("ptLight.specular", ptLight->GetSpecular());
-
-                shader->AddToUniformVec("ptLight.constant", ptLight->GetConstant());
-                shader->AddToUniformVec("ptLight.linear", ptLight->GetLinear());
-                shader->AddToUniformVec("ptLight.quadratic", ptLight->GetQuadratic());
-
-                s_Data->Meshes.push_back(ptLight->GetMesh());
-            }
-            else if (lightType == LightType::DIRECTIONAL_LIGHT)
-            {
-                auto& dirLight = CastLightTo<DirectionalLight>(light);
-                dirLight->GetLightDirection();
-                shader->AddToUniformVec("directionalLight.direction", dirLight->GetLightDirection());
-                shader->AddToUniformVec("directionalLight.ambient", dirLight->GetAmbient());
-                shader->AddToUniformVec("directionalLight.diffuse", dirLight->GetDiffuse());
-                shader->AddToUniformVec("directionalLight.color", dirLight->GetColor());
-                shader->AddToUniformVec("directionalLight.specular", dirLight->GetSpecular());
-            }
-            else if (lightType == LightType::SPOT_LIGHT)
-            {
-            }
-        }
-
     }
     void Renderer::EndScene()
     {
@@ -69,12 +29,113 @@ namespace JSEngine
     void Renderer::Submit(const Ref<Mesh>& mesh)
     {
         s_Data->Meshes.push_back(mesh);
-        //RenderCommand::Submit(mesh); 
+    }
+
+    void Renderer::SubmitEnvironment(const std::vector<Ref<Light>>& Lights, Camera cam)
+    {
+        //TODO: send shader as part of the Environment
+        Ref<Shader> shader = g_ResourceMgr.AcquireShader("Shader");
+        OpenGLShader* mainShader = (OpenGLShader*)&(*shader);
+
+        mainShader->Bind();
+        // Set View/Proj matrices
+        mainShader->SetMat4  ("u_ViewMat", cam.GetViewMatrix());
+        mainShader->SetMat4  ("u_ProjMat", cam.GetProjectionMatrix());
+        mainShader->SetFloat3("u_CameraPos", cam.GetPos());
+
+        //TODO: send shader as part of the Environment
+        shader = g_ResourceMgr.AcquireShader("Light");
+        OpenGLShader* lightShader = (OpenGLShader*)&(*shader);
+
+        lightShader->Bind();
+        // Set View/Proj matrices
+        lightShader->SetMat4("u_ViewMat", cam.GetViewMatrix());
+        lightShader->SetMat4("u_ProjMat", cam.GetProjectionMatrix());
+
+        mainShader->Bind();
+        for (auto light : Lights)
+        {
+            //Ref<Shader> shader = s_Data->Shaders[light->GetAttachedShaderID()].lock();
+           
+            JS_CORE_ASSERT(shader, "No shader found"); 
+            LightType lightType = light->GetLightType();
+           
+            if (lightType == LightType::POINT_LIGHT)
+            {
+                auto& ptLight = CastLightTo<PointLight>(light);
+                mainShader->SetFloat3("ptLight.pos", ptLight->GetPosition());
+                mainShader->SetFloat3("ptLight.ambient", ptLight->GetAmbient());
+                mainShader->SetFloat3("ptLight.color", ptLight->GetColor());
+                mainShader->SetFloat3("ptLight.diffuse", ptLight->GetDiffuse());
+                mainShader->SetFloat3("ptLight.specular", ptLight->GetSpecular());
+                
+                mainShader->SetFloat("ptLight.constant", ptLight->GetConstant());
+                mainShader->SetFloat("ptLight.linear", ptLight->GetLinear());
+                mainShader->SetFloat("ptLight.quadratic", ptLight->GetQuadratic());
+
+            }
+            else if (lightType == LightType::DIRECTIONAL_LIGHT)
+            {
+                auto& dirLight = CastLightTo<DirectionalLight>(light);
+                dirLight->GetLightDirection();
+                mainShader->SetFloat3("directionalLight.direction", dirLight->GetLightDirection());
+                mainShader->SetFloat3("directionalLight.ambient", dirLight->GetAmbient());
+                mainShader->SetFloat3("directionalLight.diffuse", dirLight->GetDiffuse());
+                mainShader->SetFloat3("directionalLight.color", dirLight->GetColor());
+                mainShader->SetFloat3("directionalLight.specular", dirLight->GetSpecular());
+            }
+            else if (lightType == LightType::SPOT_LIGHT)
+            {
+            }
+        }
     }
 
     void Renderer::SubmitMesh(const Ref<Mesh>& mesh, const glm::mat4& transform)
     {
-        s_Data->Meshes.push_back(mesh);
+        // set some render states
+        g_GraphicsContext.EnableDepthTest(true);
+        g_GraphicsContext.EnableBlending(false);
+
+        // TODO: use constant buffers instead of uniform to save tons of OpenGL driver overhead
+        //       Have a buffer for "per-frame" constants, another for "per-render pass", another for "per draw call"
+        //       You can have more, but the buffer rebinding granularity must make sense
+        //for (const Ref<Mesh>& mesh : s_Data->Meshes)
+        {
+            const Ref<Shader>& shader = mesh->GetMaterial()->GetShader();
+            JS_CORE_ASSERT(shader, "No shader found");
+
+            // TODO: Reduce calls to bind shaders. You can do so by sorting draw calls by material.
+            //       The same concept applies for constant buffers. Have minimal OpenGL function calls.
+            shader->Bind();
+            OpenGLShader* openGLShader = (OpenGLShader*)&(*shader);
+
+            // Set Model matrix
+            JS_CORE_ASSERT(!std::isnan(transform[0].x), "Model Matrix is nan");
+            JS_CORE_ASSERT(!std::isinf(transform[0].x), "Model Matrix is inf");
+
+            openGLShader->SetMat4("u_ModelMat", transform);
+            mesh->Bind();
+            openGLShader->SetFloat("material.shininess", mesh->GetMaterial()->GetShinese());
+            for (const auto& subMesh : mesh->GetSubMeshes())
+            {
+                Ref<Texture2D> subMeshTexRef = g_ResourceMgr.Acquire2DTexture(subMesh.AlbedoMapIndex);
+                Ref<Texture2D> subMeshSpecularTexRef = g_ResourceMgr.Acquire2DTexture(subMesh.SpecularMapIndex);
+
+                JS_CORE_ASSERT(subMeshTexRef, "Albedo Map not found");
+                JS_CORE_ASSERT(subMeshSpecularTexRef, "Specular Map not found");
+
+                glUniform1i(glGetUniformLocation(openGLShader->GetProgramID(), "u_DiffuseTexture"), subMesh.AlbedoMapIndex);
+                glUniform1i(glGetUniformLocation(openGLShader->GetProgramID(), "u_SpecularTexture"), subMesh.SpecularMapIndex);
+
+                // Set Diffuse Texture
+                subMeshTexRef->Bind(subMesh.AlbedoMapIndex);
+                // Set Specular Texture
+                subMeshSpecularTexRef->Bind(subMesh.SpecularMapIndex);
+                //subMeshTexRef->Bind(glGetUniformLocation(openGLShader->GetProgramID(), "u_DiffuseTexture"));
+
+                glDrawElementsBaseVertex(GL_TRIANGLES, subMesh.IndexCount, GL_UNSIGNED_INT, (void*)(sizeof(uint32_t) * subMesh.BaseIndex), subMesh.BaseVertex);
+            }
+        }
     }
 
     void Renderer::DrawMesh()
@@ -88,8 +149,8 @@ namespace JSEngine
         //       You can have more, but the buffer rebinding granularity must make sense
         for (const Ref<Mesh>& mesh : s_Data->Meshes)
         {
-            Ref<Shader> shader = s_Data->Shaders[mesh->GetShaderID()].lock();
-            assert(shader);
+            Ref<Shader> shader = mesh->GetMaterial()->GetShader();
+            JS_CORE_ASSERT(shader, "No shader found");
 
             // TODO: Reduce calls to bind shaders. You can do so by sorting draw calls by material.
             //       The same concept applies for constant buffers. Have minimal OpenGL function calls.
@@ -104,20 +165,29 @@ namespace JSEngine
             // Set Model matrix
             const glm::mat4 modelMatrix = mesh->ConstructModelMatrix();
 
-            assert(!std::isnan(modelMatrix[0].x));
-            assert(!std::isinf(modelMatrix[0].x));
+            JS_CORE_ASSERT(!std::isnan(modelMatrix[0].x), "Model Matrix is nan");
+            JS_CORE_ASSERT(!std::isinf(modelMatrix[0].x), "Model Matrix is inf");
 
             glUniformMatrix4fv(glGetUniformLocation(openGLShader->GetProgramID(), "u_ModelMat"), 1, GL_FALSE, glm::value_ptr(modelMatrix));
 
             mesh->Bind();
-
+            openGLShader->SetFloat("material.shininess", mesh->GetMaterial()->GetShinese());
             for (const auto& subMesh : mesh->GetSubMeshes())
             {
-                Ref<Texture2D> subMeshTexRef = g_ResourceMgr.Acquire2DTexture(subMesh.AlbedoMapIndex);
-                assert(subMeshTexRef);
+                Ref<Texture2D> subMeshTexRef         = g_ResourceMgr.Acquire2DTexture(subMesh.AlbedoMapIndex);
+                Ref<Texture2D> subMeshSpecularTexRef = g_ResourceMgr.Acquire2DTexture(subMesh.SpecularMapIndex);
+
+                JS_CORE_ASSERT(subMeshTexRef, "Albedo Map not found");
+                JS_CORE_ASSERT(subMeshSpecularTexRef, "Specular Map not found");
+
+                glUniform1i(glGetUniformLocation(openGLShader->GetProgramID(), "u_DiffuseTexture"), subMesh.AlbedoMapIndex);
+                glUniform1i(glGetUniformLocation(openGLShader->GetProgramID(), "u_SpecularTexture"), subMesh.SpecularMapIndex);
 
                 // Set Diffuse Texture
-                subMeshTexRef->Bind(glGetUniformLocation(openGLShader->GetProgramID(), "u_DiffuseTexture"));
+                subMeshTexRef->Bind(subMesh.AlbedoMapIndex);
+                // Set Specular Texture
+                subMeshSpecularTexRef->Bind(subMesh.SpecularMapIndex);
+                //subMeshTexRef->Bind(glGetUniformLocation(openGLShader->GetProgramID(), "u_DiffuseTexture"));
 
                 glDrawElementsBaseVertex(GL_TRIANGLES, subMesh.IndexCount, GL_UNSIGNED_INT, (void*)(sizeof(uint32_t) * subMesh.BaseIndex), subMesh.BaseVertex);
             }

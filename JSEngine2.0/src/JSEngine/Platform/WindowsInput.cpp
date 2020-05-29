@@ -41,6 +41,10 @@ namespace JSEngine
     {
         return IsButtonDown(JS_MOUSE_BUTTON_RIGHT, glfwGetMouseButton);
     }
+    bool WindowsInput::IsMouseMiddleButtonPressedImp()
+    {
+        return IsButtonDown(JS_MOUSE_BUTTON_MIDDLE, glfwGetMouseButton);
+    }
 
     bool WindowsInput::IsButtonDown(int code, const std::function<int(GLFWwindow*, int)>& fn)
     {
@@ -59,6 +63,11 @@ namespace JSEngine
     bool WindowsInput::IsMouseRightButtonToggledImp()
     {
         return IsButtonToggled(m_MouseKey, JS_MOUSE_BUTTON_RIGHT, glfwGetMouseButton);
+    }
+
+    bool WindowsInput::IsMouseMiddleButtonToggledImp()
+    {
+        return  IsButtonToggled(m_MouseKey, JS_MOUSE_BUTTON_MIDDLE, glfwGetMouseButton);
     }
     bool WindowsInput::IsButtonToggled(bool* array, int code,const std::function<int    (GLFWwindow*, int)>& fn)
     {

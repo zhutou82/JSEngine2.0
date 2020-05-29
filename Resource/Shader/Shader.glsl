@@ -67,21 +67,10 @@ uniform Light ptLight;
 uniform Light spotLight;
 uniform Material material;
 
-uniform vec3 u_ObjectColor;
 uniform vec3 u_CameraPos;
 
-
-uniform sampler2D texture_diffuse0;
-uniform sampler2D texture_diffuse1;
-uniform sampler2D texture_diffuse2;
-uniform sampler2D texture_diffuse3;
-
-uniform sampler2D texture_specular0;
-uniform sampler2D texture_specular1;
-uniform sampler2D texture_specular2;
-
 uniform sampler2D u_DiffuseTexture; 
-uniform int u_SpecularMapIndex;
+uniform sampler2D u_SpecularTexture;
 
 //functions
 vec3 ComputeDirectionLight(vec3 norm, Light directionalLight);
@@ -107,7 +96,7 @@ vec3 ComputeSpecular(vec3 norm, vec3 LightDir, vec3 lightSpecular)
     vec3 viewDir = normalize(u_CameraPos - v_FragPos);
     vec3 reflectDir = reflect(-LightDir, norm);
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
-    return lightSpecular * (spec * vec3(texture(texture_specular1, v_TexCoord)));
+    return lightSpecular * (spec * vec3(texture(u_SpecularTexture, v_TexCoord)));
     return lightSpecular * (spec * material.specular);
 }
 
@@ -167,19 +156,14 @@ void main()
 {
     vec3 norm = normalize(v_Normal);
     
-    //vec3 result = ComputeDirectionalLight(norm, directionalLight);
-    //result += ComputePointLight(norm, ptLight);
-
-
     vec3 result = ComputeDirectionLight(norm, directionalLight);
     result += ComputePointLight(norm, ptLight);
     
     //vec3 spotLightVal = ComputeSpotLight(norm, spotLight);
     //result += spotLightVal;
 
-
     fragcolor = vec4(result, 1.0);
-    fragcolor = texture(u_DiffuseTexture, v_TexCoord);
+    //fragcolor = texture(u_DiffuseTexture, v_TexCoord);
     //fragcolor = vec4(1,1,1,1);
 }
 

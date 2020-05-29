@@ -28,6 +28,8 @@ namespace JSEngine
         bool IsMouseRightButtonPressedImp()      override;
         bool IsMouseLeftButtonToggledImp()       override;
         bool IsMouseRightButtonToggledImp()      override;
+        bool IsMouseMiddleButtonPressedImp()     override;
+        bool IsMouseMiddleButtonToggledImp()     override;
         float GetMouseXposImp()                  override;
         float GetMouseYposImp()                  override;
         std::pair<float, float> GetMousePosImp() override;

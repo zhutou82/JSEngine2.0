@@ -11,44 +11,24 @@ namespace JSEngine
 {
     class Material
     {
-        static uint32_t s_UniqueID;
-
     public:
 
-        Material(const glm::vec3& color    = { 1, 1, 1 }, 
-                 const glm::vec3& ambient  = { 0.1f, 0.1f, 0.1f },
-                 const glm::vec3& diffuse  = { 0.1f, 0.1f, 0.1f },
-                 const glm::vec3& specular = { 0.1f, 0.1f, 0.1f },
-                 float shinese = 32);
-
-        const glm::vec3& GetColor() const      { return m_Color;    }
-        void SetColor(const glm::vec3& val)    { m_Color = val;     }
-
-        const glm::vec3& GetAmbient() const    { return m_Ambient;  }
-        void SetAmbient(const glm::vec3& val)  { m_Ambient = val;   }
-
-        const glm::vec3& GetSpecular() const   { return m_Specular; }
-        void SetSpecular(const glm::vec3& val) { m_Specular = val;  }
-
-        const glm::vec3& GetDiffuse() const    { return m_Diffuse;  }
-        void SetDiffuse(const glm::vec3& val)  { m_Diffuse = val;   }
+        Material(const Ref<Shader>& shader);
 
         float GetShinese() const               { return m_Shinese;  }
         void SetShinese(float val)             { m_Shinese = val;   }
 
-        uint32_t GetID() const                 { return m_ID;       }
+        void AddTexture(const Ref<Texture>& texture) { m_TextureVec.push_back(texture); }
+        const Ref<Shader>& GetShader() const { return m_Shader; }
 
-        static Ref<Material> Create();
+        void Bind() const;
 
-        
+    public:
+        static Ref<Material> Create(const Ref<Shader>& shader);
+
     private:
 
-        glm::vec3 m_Color;
-        glm::vec3 m_Ambient;
-        glm::vec3 m_Diffuse;
-        glm::vec3 m_Specular;
-
-        float m_Shinese;
+        float m_Shinese = 32.f;
         uint32_t m_ID;
 
         std::vector<Ref<Texture>> m_TextureVec;

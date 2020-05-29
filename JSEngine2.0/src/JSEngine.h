@@ -19,6 +19,7 @@
 #include "JSEngine/Platform/CameraController.h"
 #include "JSEngine/Platform/Opengl/Mesh.h"
 #include "JSEngine/Platform/Opengl/Light.h"
+#include "JSEngine/Scene/Scene.h"
 //--------------------------------------------
 
 //----------------Physics---------------------

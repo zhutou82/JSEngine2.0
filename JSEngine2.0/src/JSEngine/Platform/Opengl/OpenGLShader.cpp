@@ -23,6 +23,15 @@ namespace JSEngine
         return 0;
     }
 
+    int32_t OpenGLShader::GetUniformLocation(const std::string& name) const
+    {
+        int32_t result = glGetUniformLocation(m_RendererID, name.c_str());
+        //if (result == -1)
+        //    JS_CORE_WARN("Could not find uniform '{0}' in shader {1} ", name, m_GlslFile.GetFileName());
+
+        return result;
+    }
+
     OpenGLShader::OpenGLShader(const std::string& glslFileName) 
         : m_GlslFile(glslFileName, GLSL, READ)
     {
@@ -73,6 +82,21 @@ namespace JSEngine
     void OpenGLShader::SetShaderID(uint32_t val)
     {
         m_ShaderID = val;
+    }
+
+    void OpenGLShader::SetFloat(const std::string& name, float value)
+    {
+        glUniform1f(GetUniformLocation(name), value);
+    }
+
+    void OpenGLShader::SetFloat3(const std::string& name, const glm::vec3& value)
+    {
+        glUniform3f(GetUniformLocation(name), value.x, value.y, value.z);
+    }
+
+    void OpenGLShader::SetMat4(const std::string& name, const glm::mat4& value)
+    {
+        glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, value_ptr(value));
     }
 
     void OpenGLShader::GetShaderSrc()
