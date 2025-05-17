@@ -48,7 +48,7 @@ void ParticleSystem::OnRender(const JSEngine::Ref<JSEngine::OrthographicCameraCo
         glm::vec4 color = glm::lerp(particle.ColorEnd, particle.ColorBegin, life);
         glm::vec2 size = glm::lerp(particle.SizeEnd, particle.SizeStart, life);
         float rotation = glm::radians(particle.Rotation);
-        JSEngine::Renderer2D::DrawRotatedQuad(particle.Position, size, rotation, color, 1);
+        JSEngine::Renderer2D::DrawRotatedQuad(particle.Position, size, rotation, color, 0);
     }
 
     JSEngine::Renderer2D::EndScene();

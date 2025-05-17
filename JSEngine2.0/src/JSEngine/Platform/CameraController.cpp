@@ -55,6 +55,7 @@ namespace JSEngine
         {
             m_Pos -= glm::normalize(m_Up) * (m_CameraMoveSpeed * delta);
         }
+        Camera::OnUpdate(delta);
     }
 
     void CameraController::OnEvent(Event& e)

@@ -99,6 +99,34 @@ namespace JSEngine
         glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, value_ptr(value));
     }
 
+    void OpenGLShader::SetIntArrary(const std::string& name, uint32_t count, int* val)
+    {
+        glUniform1iv(GetUniformLocation(name), count, val);
+    }
+
+    void OpenGLShader::AddToUniformVec(const std::string& name, int val)
+    {
+        glUniform1f(GetUniformLocation(name), val);
+    }
+    void OpenGLShader::AddToUniformVec(const std::string& name, float val)
+    {
+        glUniform1f(GetUniformLocation(name), val);
+    }
+    void OpenGLShader::AddToUniformVec(const std::string& name, const glm::vec3& val)
+    {
+        glUniform3f(GetUniformLocation(name), val.x, val.y, val.z);
+
+    }
+    void OpenGLShader::AddToUniformVec(const std::string& name, const glm::vec4& val)
+    {
+        glUniform4f(GetUniformLocation(name), val.x, val.y, val.z, val.w);
+
+    }
+    void OpenGLShader::AddToUniformVec(const std::string& name, const glm::mat4& val)
+    {
+        glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, value_ptr(val));
+    }
+
     void OpenGLShader::GetShaderSrc()
     {
         FILE* vs = m_GlslFile.GetFile();

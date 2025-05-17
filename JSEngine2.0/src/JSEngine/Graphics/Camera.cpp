@@ -38,6 +38,8 @@ namespace JSEngine
 
     void Camera::OnUpdate(TimeStep delta)
     {
+
+
         if (g_Input.IsKeyPressed(JS_KEY_LEFT_ALT))
         {
             glm::vec2 currentMousePos = { g_Input.GetMousePos().first, g_Input.GetMousePos().second };

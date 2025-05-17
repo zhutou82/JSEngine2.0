@@ -148,6 +148,7 @@ project "Sandbox"
         "JSEngine2.0"
     }
 
+
     filter "system:windows"
         systemversion "latest"
         defines
@@ -160,11 +161,20 @@ project "Sandbox"
         defines "JS_DEBUG"
         runtime "Debug"
         symbols "on"
+        postbuildcommands {
+            '{ECHO} Creating symlink for Assimp DLL...',
+            'if not exist "%{cfg.targetdir}\\assimp-vc142-mtd.dll" mklink "%{cfg.targetdir}\\assimp-vc142-mtd.dll" "%{wks.location}JSEngine2.0\\vendor\\assimp\\lib\\Debug\\assimp-vc142-mtd.dll"'
+        }
+
 
     filter "configurations:Release"
         defines "JS_RELEASE"
         runtime "Release"
         optimize "on"
+        postbuildcommands {
+            '{ECHO} Creating symlink for Assimp DLL...',
+            'if not exist "%{cfg.targetdir}\\assimp-vc142-mtd.dll" mklink "%{cfg.targetdir}\\assimp-vc142-mtd.dll" "%{wks.location}JSEngine2.0\\vendor\\assimp\\lib\\Debug\\assimp-vc142-mtd.dll"'
+        }
 
     filter "configurations:Dist"
         defines "JS_DIST"

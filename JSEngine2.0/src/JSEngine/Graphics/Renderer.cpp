@@ -266,6 +266,7 @@ namespace JSEngine
 
     void Renderer2D::BeginScene(const Ref<OrthographicCameraController>& camera) 
     {
+        s_Data.Shader2D->Bind();
         s_Data.Shader2D->UnloadUniformVec();
 
         s_Data.Shader2D->AddToUniformVec("u_ViewProjMat", camera->GetCamera().GetViewProjectMatrix());

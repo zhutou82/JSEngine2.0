@@ -30,13 +30,13 @@ namespace JSEngine
         // TODO: These are all bullshit. Remove them.
         virtual void UploadUnfiromVec() override {}
         virtual void UnloadUniformVec() override {}
-        virtual void AddToUniformVec(const std::string& name, int val) override {}
-        virtual void AddToUniformVec(const std::string& name, float val) override {}
-        virtual void AddToUniformVec(const std::string& name, const glm::vec3& val) override {}
-        virtual void AddToUniformVec(const std::string& name, const glm::vec4& val) override {}
-        virtual void AddToUniformVec(const std::string& name, const glm::mat4& val) override {}
+        virtual void AddToUniformVec(const std::string& name, int val) override;
+        virtual void AddToUniformVec(const std::string& name, float val) override;
+        virtual void AddToUniformVec(const std::string& name, const glm::vec3& val) override;
+        virtual void AddToUniformVec(const std::string& name, const glm::vec4& val) override;
+        virtual void AddToUniformVec(const std::string& name, const glm::mat4& val) override;
 
-        virtual void SetIntArrary(const std::string& name, uint32_t count, int* val) override {}
+        virtual void SetIntArrary(const std::string& name, uint32_t count, int* val) override;
 
         void SetFloat(const std::string& name, float value);
         void SetFloat3(const std::string& name, const glm::vec3& value);

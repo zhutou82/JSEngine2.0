@@ -29,8 +29,9 @@ namespace JSEngine
         void OnEvent(Event& event);
 
         void CreatePointLight(const glm::vec3& pos);
-        //const DirectionalLight& GetEnvironmentLight() const { return m_DirectionLight; }
-        //const std::vector<PointLight>& GetPointLights() const { return m_PointLights; }
+        // const Ref<DirectionalLight>& GetEnvironmentLight() const { return m_DirectionLight; }
+        // const std::vector<Ref<PointLight>>& GetPointLights() const { return m_PointLights; }
+        const std::vector<Ref<Light>>& GetLights() const { return m_Lights; }
 
         Entity* CreateEntity(const std::string& name = "testObj");
         void AddEntity(Entity* entity);

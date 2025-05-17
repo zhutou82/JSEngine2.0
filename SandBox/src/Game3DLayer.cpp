@@ -45,55 +45,46 @@ void Game3DLayer::OnUpdate(JSEngine::TimeStep delta)
     JSEngine::RenderCommand::Clear({ 0.1, 0.1, 0.0, 1 });
 
     m_Scene->OnUpdate(delta);
-
-    ////m_SceneData->OrthoGraphicsCam = m_Camera;
-    //JSEngine::Renderer::BeginScene(m_SceneData);
-
-    //for (const auto& mesh : m_MeshVec)
-    //    JSEngine::Renderer::SubmitMesh(mesh, glm::mat4(1.f));
-
-    //JSEngine::Renderer::EndScene();
-    ////ProfilerEnd
 }
 
 void Game3DLayer::OnRenderUpdate(JSEngine::TimeStep delta)
 {
-    //ImGui::Begin("Light properties");
+    ImGui::Begin("Light properties");
 
-    //for (int i = 0; i < m_SceneData->Lights.size(); ++i)
-    //{
-    //    const auto& light = m_SceneData->Lights[i];
-    //    std::string uniqueID = std::to_string(i);
-    //    if (light->GetLightType() == JSEngine::LightType::DIRECTIONAL_LIGHT)
-    //    {
-    //        ImGui::Text(std::string("DirectionalLight " + uniqueID).c_str());
-    //        ImGui::Separator();
-    //        const auto& pointLight = JSEngine::CastLightTo<JSEngine::DirectionalLight>(light);
-    //        auto color = pointLight->GetColor();
-    //        ImGui::ColorEdit3("Color1", &color[0]);
-    //        pointLight->SetColor(color);
-
-    //        auto pos = pointLight->GetLightDirection();
-    //        ImGui::DragFloat3("Pos1", &pos[0], 0.1f, -5.f, 5.f);
-    //        pointLight->SetLightDirection(pos);
-    //        ImGui::Separator();
-    //    }
-    //    else if (light->GetLightType() == JSEngine::LightType::POINT_LIGHT)
-    //    {
-    //        ImGui::Text(std::string("PointLight " + uniqueID).c_str());
-    //        ImGui::Separator();
-    //        const auto& pointLight = JSEngine::CastLightTo<JSEngine::PointLight>(light);
-    //        auto color = pointLight->GetColor();
-    //        ImGui::ColorEdit3("Color", &color[0]);
-    //        pointLight->SetColor(color);
-
-    //        auto pos = pointLight->GetPosition();
-    //        ImGui::DragFloat3("Pos", &pos[0], 0.1f, -5.f, 5.f);
-    //        pointLight->SetPosition(pos);
-    //        ImGui::Separator();
-    //    }
-    //}
-    //ImGui::End();
+    for (int i = 0; i < m_SceneData->Lights.size(); ++i)
+    {
+        const auto& light = m_SceneData->Lights[i];
+        std::string uniqueID = std::to_string(i);
+        if (light->GetLightType() == JSEngine::LightType::DIRECTIONAL_LIGHT)
+        {
+            ImGui::Text(std::string("DirectionalLight " + uniqueID).c_str());
+            ImGui::Separator();
+            const auto& pointLight = JSEngine::CastLightTo<JSEngine::DirectionalLight>(light);
+            auto color = pointLight->GetColor();
+            ImGui::ColorEdit3("Color1", &color[0]);
+            pointLight->SetColor(color);
+    
+            auto pos = pointLight->GetLightDirection();
+            ImGui::DragFloat3("Pos1", &pos[0], 0.1f, -5.f, 5.f);
+            pointLight->SetLightDirection(pos);
+            ImGui::Separator();
+        }
+        else if (light->GetLightType() == JSEngine::LightType::POINT_LIGHT)
+        {
+            ImGui::Text(std::string("PointLight " + uniqueID).c_str());
+            ImGui::Separator();
+            const auto& pointLight = JSEngine::CastLightTo<JSEngine::PointLight>(light);
+            auto color = pointLight->GetColor();
+            ImGui::ColorEdit3("Color", &color[0]);
+            pointLight->SetColor(color);
+    
+            auto pos = pointLight->GetPosition();
+            ImGui::DragFloat3("Pos", &pos[0], 0.1f, -5.f, 5.f);
+            pointLight->SetPosition(pos);
+            ImGui::Separator();
+        }
+    }
+    ImGui::End();
 
 
 
