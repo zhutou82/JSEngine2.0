@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<CoreFolderPath>
+<RESOURCE>../Resource/</RESOURCE>
+<XML>../Resource/XML/</XML>
+<ASSETS>../Resource/Assets/</ASSETS>
+<SHADER>../Resource/Shader/</SHADER> 
+<PROFILER>../Resource/Profiler/</PROFILER>
+<MODEL>../Resource/Model/</MODEL>
+</CoreFolderPath>
+
+<CoreFilerName>
+<ENGINEXML>EngineSetting</ENGINEXML>
+<SHADER>Shader,Light</SHADER>
+<ASSERTS>awesomeface, Bobo, wall, Xiaobei, Xxz</ASSERTS>
+</CoreFilerName>
