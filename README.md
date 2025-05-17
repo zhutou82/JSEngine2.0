@@ -6,12 +6,15 @@ Update the Engine Structure from JSEnigne1.0, there are two layers (2D Layer and
 3D Layer: A basic rendering scene with dynamic lighting, Textured models, ImGui-powered entity control, and transform manipulation. Includes directional and point light support for real-time lighting effects.
 
 Checkout:
+
 git clone --recursive https://github.com/zhutou82/JSEngine2.0.git
 
 To generate SLN:
+
 Double click "GenerateProject.bat" (but this is running for visual studio 2019, you might need to retarget the SLN)
 
 To start:
+
 Under SandBox.cpp
 - Uncomment "PushLayer(new Game2DLayer())" to run 2D world
   * Controls:
