@@ -15,7 +15,6 @@ namespace JSEngine
         SPOT_LIGHT
     };
 
-     //CastLightTo<DirectionalLight>(light)
 
     class Light
     {

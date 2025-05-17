@@ -32,6 +32,7 @@ namespace JSEngine
         // const Ref<DirectionalLight>& GetEnvironmentLight() const { return m_DirectionLight; }
         // const std::vector<Ref<PointLight>>& GetPointLights() const { return m_PointLights; }
         const std::vector<Ref<Light>>& GetLights() const { return m_Lights; }
+        const std::vector<Entity*>& GetEntities() const { return m_Entities; }
 
         Entity* CreateEntity(const std::string& name = "testObj");
         void AddEntity(Entity* entity);

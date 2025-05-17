@@ -34,8 +34,6 @@ namespace JSEngine
         s_Data.Environment.ActiveCamera = scene->m_Camera;
         s_Data.Environment.Lights = scene->m_Lights;
 
-
-
         Renderer::SubmitEnvironment(scene->m_Lights, scene->m_Camera);
     }
 

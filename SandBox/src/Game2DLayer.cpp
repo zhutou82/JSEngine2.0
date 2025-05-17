@@ -56,10 +56,10 @@ void Game2DLayer::OnAttach()
 
     m_Animation = JSEngine::CreateRef<JSEngine::Animation2D>(m_Robot, glm::ivec2(9, 5));
     
-    g_Physics.Init({ 0, -0.98f });
+    g_Physics.Init({ 0, -0.9f });
     g_Physics.CreateGround({ 0, -5 }, { 40.f, 1.f });
 
-    for (int i = 0; i < 50; ++i)
+    for (int i = 0; i < 350; ++i)
     {
         float quadSize = JSEngine::Random::Float(0.1f, 1.f);
         g_Physics.AddToBox2DVec(JSEngine::Box2D::Create({ JSEngine::Random::Float(-10.5f, 15.5), JSEngine::Random::Float(10.f, 15.f) }, { quadSize, quadSize }));

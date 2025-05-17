@@ -33,12 +33,12 @@ namespace JSEngine
         Entity* newEntity = CreateEntity("diretionalLight"); 
         Ref<Light> dirLight = Light::Create(LightType::DIRECTIONAL_LIGHT);
         auto& directionalLight = std::static_pointer_cast<Ref<DirectionalLight>::element_type>(dirLight);
-        directionalLight->SetLightDirection({ -0.2f, -1.f, -0.3f });
+        directionalLight->SetLightDirection({ -0.0f, -1.f, -0.0f });
 
         newEntity->SetLight(dirLight);
         newEntity->SetMesh(CreateRef<Mesh>(MeshType::CUBE, "Light"));
 
-        newEntity->SetPosition({1,1,1});
+        newEntity->SetPosition({0,200,0});
         newEntity->SetScale(0.25f);
 
         m_Lights.push_back(dirLight);
@@ -66,7 +66,8 @@ namespace JSEngine
 
     void Scene3D::CreatePointLight(const glm::vec3& pos)
     {
-        Entity* newEntity = CreateEntity("ptLight");
+        static int id = 0;
+        Entity* newEntity = CreateEntity("ptLight" + std::to_string(id++));
         Ref<Light> light = Light::Create(LightType::POINT_LIGHT);
 
         newEntity->SetLight(light);

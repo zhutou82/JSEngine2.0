@@ -20,7 +20,6 @@ namespace JSEngine
         TRIANGLE,
         QUAD,
         CUBE,
-        SPHARE,
         MODEL,
         MAX_NUM_OF_MESH_TYPE
     };

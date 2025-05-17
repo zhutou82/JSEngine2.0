@@ -19,10 +19,10 @@ void Game3DLayer::OnAttach()
         m_Scene = JSEngine::CreateRef<JSEngine::Scene3D>("body scene"); 
         m_Scene->Init(JSEngine::Camera(glm::perspectiveFov(glm::radians(45.0f), 1280.0f, 720.0f, 0.1f, 10000.0f)));
 
-        JSEngine::Entity* bodyEntity = m_Scene->CreateEntity("Body");
+        JSEngine::Entity* bodyEntity = m_Scene->CreateEntity("Person");
         bodyEntity->SetMesh(JSEngine::Mesh::Create("Body/nanosuit"));
 
-        JSEngine::Entity* cubeEntity = m_Scene->CreateEntity("Cube");
+        JSEngine::Entity* cubeEntity = m_Scene->CreateEntity("Box");
         cubeEntity->SetMesh(JSEngine::Mesh::Create(JSEngine::MeshType::CUBE));
         cubeEntity->SetScale({ 50.f, 0.1f, 50.f });
 
@@ -51,9 +51,9 @@ void Game3DLayer::OnRenderUpdate(JSEngine::TimeStep delta)
 {
     ImGui::Begin("Light properties");
 
-    for (int i = 0; i < m_SceneData->Lights.size(); ++i)
+    for (int i = 0; i < m_Scene->GetLights().size(); ++i)
     {
-        const auto& light = m_SceneData->Lights[i];
+        const auto& light = m_Scene->GetLights()[i];
         std::string uniqueID = std::to_string(i);
         if (light->GetLightType() == JSEngine::LightType::DIRECTIONAL_LIGHT)
         {
@@ -69,6 +69,7 @@ void Game3DLayer::OnRenderUpdate(JSEngine::TimeStep delta)
             pointLight->SetLightDirection(pos);
             ImGui::Separator();
         }
+        /*
         else if (light->GetLightType() == JSEngine::LightType::POINT_LIGHT)
         {
             ImGui::Text(std::string("PointLight " + uniqueID).c_str());
@@ -83,20 +84,38 @@ void Game3DLayer::OnRenderUpdate(JSEngine::TimeStep delta)
             pointLight->SetPosition(pos);
             ImGui::Separator();
         }
+        */
     }
     ImGui::End();
 
 
 
     ImGui::Begin("Mesh properties");
-    for (int i = 0; i < m_MeshVec.size(); ++i)
+    for (int i = 0; i < m_Scene->GetEntities().size(); ++i)
     {
         std::string uniqueID = std::to_string(i);
-        ImGui::Text(std::string("Mesh ID: " + uniqueID).c_str());
-        const auto& mesh = m_MeshVec[i];
+        
+        auto& meshVec = m_Scene->GetEntities();
+        auto* mesh = meshVec[i];
+        const auto& meshName = mesh->GetName();
+
+        if (meshName == "diretionalLight")
+            continue;
+
         auto pos = mesh->GetPosition();
+        ImGui::Text(mesh->GetName().c_str());
         ImGui::DragFloat3(std::string("Pos " + uniqueID).c_str(), &pos[0], 0.1f, -5.f, 5.f);
         mesh->SetPosition(pos);
+        
+        if (auto light = mesh->GetLight())
+        {
+            auto pointLight = JSEngine::CastLightTo<JSEngine::PointLight>(light);
+            if (pointLight)
+            {
+                pointLight->SetPosition(pos);
+            }
+        }
+        
         ImGui::Separator();
     }
     ImGui::End();
