@@ -161,20 +161,18 @@ project "Sandbox"
         defines "JS_DEBUG"
         runtime "Debug"
         symbols "on"
-        postbuildcommands {
-            '{ECHO} Creating symlink for Assimp DLL...',
-            'if not exist "%{cfg.targetdir}\\assimp-vc142-mtd.dll" mklink "%{cfg.targetdir}\\assimp-vc142-mtd.dll" "%{wks.location}JSEngine2.0\\vendor\\assimp\\lib\\Debug\\assimp-vc142-mtd.dll"'
-        }
+		postbuildcommands {
+			'{COPY} "%{wks.location}JSEngine2.0/vendor/assimp/lib/Debug/assimp-vc142-mtd.dll" "%{cfg.targetdir}"'
+		}
 
 
     filter "configurations:Release"
         defines "JS_RELEASE"
         runtime "Release"
         optimize "on"
-        postbuildcommands {
-            '{ECHO} Creating symlink for Assimp DLL...',
-            'if not exist "%{cfg.targetdir}\\assimp-vc142-mtd.dll" mklink "%{cfg.targetdir}\\assimp-vc142-mtd.dll" "%{wks.location}JSEngine2.0\\vendor\\assimp\\lib\\Debug\\assimp-vc142-mtd.dll"'
-        }
+		postbuildcommands {
+			'{COPY} "%{wks.location}JSEngine2.0/vendor/assimp/lib/Debug/assimp-vc142-mtd.dll" "%{cfg.targetdir}"'
+		}
 
     filter "configurations:Dist"
         defines "JS_DIST"
